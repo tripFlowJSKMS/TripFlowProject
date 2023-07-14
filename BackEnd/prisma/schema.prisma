@@ -4,8 +4,30 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
 }
+
+model Information {
+  id           Int     @id @default(autoincrement())
+  name         String
+  preferences  String
+  wakeUpTime   String
+  sleepTime    String
+}
+
+model ItineraryMatrix {
+  id               Int      @id @default(autoincrement())
+  locationName     String
+  openingTime      String
+  closingTime      String
+  timeRequired     Int
+  characteristics  String
+  distanceFrom1    Float
+  distanceFrom2    Float
+  distanceFrom3    Float
+  distanceFrom4    Float
+}
+
