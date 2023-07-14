@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-export type PreferenceType = "Sports" | "Music";
+export type PreferenceType =
+  | "Sports"
+  | "Music"
+  | "Outdoors"
+  | "Food"
+  | "Art"
+  | "Shopping";
 
 export interface Preference {
   name: PreferenceType;
@@ -28,6 +34,22 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
     },
     {
       name: "Music",
+      selected: false,
+    },
+    {
+      name: "Outdoors",
+      selected: false,
+    },
+    {
+      name: "Food",
+      selected: false,
+    },
+    {
+      name: "Art",
+      selected: false,
+    },
+    {
+      name: "Shopping",
       selected: false,
     },
   ],

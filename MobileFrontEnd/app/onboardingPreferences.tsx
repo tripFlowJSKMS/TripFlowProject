@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import PreferenceItem from "@/components/onboarding/PreferenceItem";
 import useOnboardingStore from "@/store/onboardingStore";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import tw from "twrnc";
 import { Entypo } from "@expo/vector-icons";
 
@@ -12,9 +12,12 @@ export default function OnboardingPage() {
   const togglePreference = onboardingStore.togglePreference;
 
   return (
-    <View style={tw`bg-slate-800 flex flex-col relative h-full w-full`}>
+    <View style={tw`bg-slate-800 relative h-full w-full`}>
+      <Text style={tw`mt-20 text-slate-200 text-center text-3xl font-medium`}>
+        Select Preferences
+      </Text>
       <View
-        style={tw`flex flex-row gap-10 items-center justify-center bg-slate-800 flex-1 w-full`}
+        style={tw`mt-10 flex flex-row flex-wrap items-start gap-10 justify-center bg-slate-800 w-full`}
       >
         {preferences.map((preference) => {
           return (
