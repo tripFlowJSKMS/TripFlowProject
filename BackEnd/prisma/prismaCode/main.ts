@@ -21,6 +21,19 @@ async function main() {
         return allInformation;
     }
 
+    async function createItinerary(name: string, preferences: string, wakeUpTime: string, sleepTime: string) {
+      const newInformation = await prisma.information.create({
+        data: {
+          name,
+          preferences,
+          wakeUpTime,
+          sleepTime,
+        },
+      });
+    
+      return newInformation;
+  }
+
     const createdInformation = await createInformation('John Doe', 'Shopping', '08:00', '22:00');
     console.log('Created information:', createdInformation);
 
