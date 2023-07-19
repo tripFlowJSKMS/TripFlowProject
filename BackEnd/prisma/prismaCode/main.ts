@@ -20,14 +20,19 @@ async function main() {
         const allInformation= await prisma.information.findMany();
         return allInformation;
     }
-
-    async function createItinerary(name: string, preferences: string, wakeUpTime: string, sleepTime: string) {
+    
+    async function createItinerary(locationName: string, openingTime: number, 
+      closingTime: number, timeRequired: number, characteristics: string,
+      longitude: number, latitude: number ) {
       const newInformation = await prisma.information.create({
         data: {
-          name,
-          preferences,
-          wakeUpTime,
-          sleepTime,
+          locationName,
+          openingTime,
+          closingTime,
+          timeRequired,
+          characteristics,
+          longitude,
+          latitude,
         },
       });
     

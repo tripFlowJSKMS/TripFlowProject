@@ -25,9 +25,7 @@ model ItineraryMatrix {
   closingTime      String
   timeRequired     Int
   characteristics  String
-  distanceFrom1    Float
-  distanceFrom2    Float
-  distanceFrom3    Float
-  distanceFrom4    Float
+  longitude        Float
+  latitude         Float
 }
 
