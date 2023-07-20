@@ -14,15 +14,15 @@ model Information {
   id           Int     @id @default(autoincrement())
   name         String
   preferences  String
-  wakeUpTime   String
-  sleepTime    String
+  startTime    Int
+  endTime      Int
 }
 
 model ItineraryMatrix {
   id               Int      @id @default(autoincrement())
   locationName     String
-  openingTime      String
-  closingTime      String
+  openingTime      Int
+  closingTime      Int
   timeRequired     Int
   characteristics  String
   longitude        Float

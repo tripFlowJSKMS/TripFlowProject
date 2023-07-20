@@ -1,55 +1,52 @@
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
-    async function createInformation(name: string, preferences: string, wakeUpTime: string, sleepTime: string) {
-        const newInformation = await prisma.information.create({
-          data: {
-            name,
-            preferences,
-            wakeUpTime,
-            sleepTime,
-          },
-        });
-      
-        return newInformation;
-    }
+// run "npx primsa generate" when editing schema.prisma to reflect changes here
+// run in terminal npx ts-node prisma\prismaCode\main.ts to run the file
 
-    async function getAllInformation() {
-        const allInformation= await prisma.information.findMany();
-        return allInformation;
-    }
-    
-    async function createItinerary(locationName: string, openingTime: number, 
-      closingTime: number, timeRequired: number, characteristics: string,
-      longitude: number, latitude: number ) {
-      const newInformation = await prisma.information.create({
-        data: {
-          locationName,
-          openingTime,
-          closingTime,
-          timeRequired,
-          characteristics,
-          longitude,
-          latitude,
-        },
-      });
-    
-      return newInformation;
-  }
-
-    const createdInformation = await createInformation('John Doe', 'Shopping', '08:00', '22:00');
-    console.log('Created information:', createdInformation);
-
-    const allInformation = await getAllInformation();
-    console.log('All Information:', allInformation);
+function createInformation(name: string, preferences: string, 
+  startTime: number, endTime: number) {
+    const newInformation = prisma.information.create({
+      data: {
+        name,
+        preferences,
+        startTime,
+        endTime,
+      },
+    });
+  
+    return newInformation;
 }
 
-main()
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
+function getAllInformation() {
+    const allInformation = prisma.information.findMany();
+    return allInformation;
+}
+
+function createItinerary(locationName: string, openingTime: number, 
+  closingTime: number, timeRequired: number, characteristics: string,
+  longitude: number, latitude: number ) {
+  const newInformation = prisma.itineraryMatrix.create({
+    data: {
+      locationName,
+      openingTime,
+      closingTime,
+      timeRequired,
+      characteristics,
+      longitude,
+      latitude,
+    },
   });
+
+  return newInformation;
+}
+
+function getAllItinerary() {
+  const allItinerary = prisma.itineraryMatrix.findMany();
+  return allItinerary;
+}
+
+export { getAllItinerary };
+
