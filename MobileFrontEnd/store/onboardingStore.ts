@@ -1,12 +1,5 @@
 import { create } from "zustand";
-
-export type PreferenceType =
-  | "Sports"
-  | "Music"
-  | "Outdoors"
-  | "Food"
-  | "Art"
-  | "Shopping";
+import type { PreferenceType } from "shared/types";
 
 export interface Preference {
   name: PreferenceType;
