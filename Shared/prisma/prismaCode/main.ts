@@ -20,7 +20,7 @@ function createInformation(name: string, preferences: string,
     return newInformation;
 }
 
-function getAllInformation() {
+export function getAllInformation() {
     const allInformation = prisma.information.findMany();
     return allInformation;
 }
@@ -43,10 +43,8 @@ function createItinerary(locationName: string, openingTime: number,
   return newInformation;
 }
 
-function getAllItinerary() {
+export function getAllItinerary() {
   const allItinerary = prisma.itineraryMatrix.findMany();
   return allItinerary;
 }
-
-export { getAllItinerary };
 
