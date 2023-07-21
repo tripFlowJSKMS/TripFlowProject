@@ -1,4 +1,7 @@
-class DestinationNode {
+import { Destination } from "./Destination";
+import { Edge } from "./Edge";
+
+export class DestinationNode {
     private destination: Destination;
     private startTime: number;
     private endTime: number;

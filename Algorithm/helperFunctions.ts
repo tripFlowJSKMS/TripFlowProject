@@ -1,27 +1,34 @@
-export const TIME_SLOT: number = 30;
-export var earliestNodes: DestinationNode[] = [];
-export var allPaths: Object[];
+import { Destination } from "./Destination";
+import { DestinationNode } from "./DestinationNode";
+import { Edge } from "./Edge";
+
+const TIME_SLOT: number = 30;
+const DIST_TIME_RATIO: number = 1; // We assume it takes 1 min to travel 1 km
+var earliestNodes: DestinationNode[] = [];
+var allPaths: [DestinationNode[], number][] = [];
  
 // Declare the functions in the global namespace
-declare global {
-    function calculateWeights(preferences: string[], destinations: Destination[]): void;
-    function calculateNumTimeSlots(destination: Destination): number;
-    function createNodes(destinations: Destination[]): DestinationNode[];
-    function createEdges(destinationNodes: DestinationNode[], sleepTime: number): void;
-    function isFeasibleEdge(source: DestinationNode, destination: DestinationNode): boolean;
-    function addPathToFinaList(pathSoFar: DestinationNode[], weightSoFar: number): void;
-    function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
-      itinerarySoFar: Destination[], weightSoFar: number): void;
-    function quickSelect(arr: Object[], k: number): Object;
-    function generateItinerary(nodes: DestinationNode[]): Object[][];
-    function planItinerary(destinations: Destination[]): Object[][];
-    function createSupernode(sleepTime: number): DestinationNode;
-  }
+// declare global {
+  // function calculateWeights(preferences: string[], destinations: Destination[]): void;
+  // function calculateNumTimeSlots(destination: Destination): number;
+  // function createNodes(destinations: Destination[]): DestinationNode[];
+  // function createEdges(destinationNodes: DestinationNode[], endTime: number): void;
+  // function isFeasibleEdge(source: DestinationNode, destination: DestinationNode, endTime: number): boolean;
+  // function addPathToFinaList(pathSoFar: DestinationNode[], weightSoFar: number): void;
+  // function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
+  //   itinerarySoFar: Destination[], weightSoFar: number): void;
+  // function quickSelect(arr: Object[], k: number): Object;
+  // function generateItinerary(nodes: DestinationNode[]): Object[][];
+  // function planItinerary(destinations: Destination[], endTime: number): Object[][];
+  // function createSupernode(endTime: number): DestinationNode;
+// }
 
-  function planItinerary(destinations: Destination[], sleepTime: number): Object[][] {
+  export function planItinerary(destinations: Destination[], endTime: number, preferences: string[]): Object[][] {
     const nodes: DestinationNode[] = createNodes(destinations);
-    createEdges(nodes, sleepTime);
-    const supernode: DestinationNode = createSuperNode(sleepTime);
+    console.log(nodes);
+    calculateWeights(preferences, destinations);
+    createEdges(nodes, endTime);
+    const supernode: DestinationNode = createSuperNode(endTime);
     traversal(supernode, [], [], 0);
     const heaviestPath: DestinationNode[] = quickSelect(allPaths, allPaths.length - 1) as DestinationNode[];
     const itinerary = generateItinerary(heaviestPath);
@@ -29,7 +36,7 @@ declare global {
   }
 
   function generateItinerary(nodes: DestinationNode[]): Object[][] {
-    const itinerary: Object[][] = new Object[nodes.length][3];
+    const itinerary: [string, number, number][] = [];
     for (let i = 0; i < nodes.length; i++) {
       const node: DestinationNode = nodes[i];
       itinerary[i][0] = node.getDestination().getName();
@@ -39,13 +46,13 @@ declare global {
     return itinerary;
   }
 
-  function quickSelect(arr: Object[], k: number): Object {
+  function quickSelect(arr: [DestinationNode[], number][], k: number): DestinationNode[] {
     const sortedArr = arr.slice();
     const result = partition(sortedArr, 0, sortedArr.length - 1, k - 1);
-    return result;
+    return result[0];
   }
 
-  function partition(arr: Object[], left: number, right: number, k: number): Object {
+  function partition(arr: [DestinationNode[], number][], left: number, right: number, k: number): [DestinationNode[], number] {
     while (left <= right) {
       const pivotIndex = getPivotIndex(arr, left, right);
       const partitionIndex = partitionAroundPivot(arr, left, right, pivotIndex);
@@ -59,15 +66,15 @@ declare global {
       }
     }
 
-    return "Something went wrong";
+    return [[], -1];
   };
 
-  function getPivotIndex(arr: Object[], left: number, right: number): number {
+  function getPivotIndex(arr: [DestinationNode[], number][], left: number, right: number): number {
     const randomIndex = Math.floor(Math.random() * (right - left + 1)) + left;
     return randomIndex;
   };
 
-  function partitionAroundPivot(arr: Object[], left: number, right: number, pivotIndex: number): number {
+  function partitionAroundPivot(arr: [DestinationNode[], number][], left: number, right: number, pivotIndex: number): number {
     const pivotValue = arr[pivotIndex][1];
     swap(arr, pivotIndex, right);
     let partitionIndex = left;
@@ -83,7 +90,7 @@ declare global {
     return partitionIndex;
   };
 
-  function swap(arr: Object[], i: number, j: number): void {
+  function swap(arr: [DestinationNode[], number][], i: number, j: number): void {
     const temp = arr[i];
     arr[i] = arr[j];
     arr[j] = temp;
@@ -115,13 +122,39 @@ declare global {
     }
 
   function addPathToFinalList(pathSoFar: DestinationNode[], weightSoFar: number): void {
-    let finalPath: Object[] = [];
-    finalPath.push(pathSoFar);
-    finalPath.push(weightSoFar);
+    let finalPath: [DestinationNode[], number] = [pathSoFar, weightSoFar];
     allPaths.push(finalPath);
   }
 
-  function isFeasibleEdge(source: DestinationNode, destination: DestinationNode, sleepTime: number): boolean {
+  function getTravelTime(source: Destination, destination: Destination): number {
+    const earthRadiusInKm = 6371; // Earth's radius in kilometers
+  
+    const sourceLatitudeRad = toRadians(source.getLatitude());
+    const sourceLongitudeRad = toRadians(source.getLongitude());
+    const destinationLatitudeRad = toRadians(destination.getLatitude());
+    const destinationLongitudeRad = toRadians(destination.getLongitude());
+  
+    const dLatitude = destinationLatitudeRad - sourceLatitudeRad;
+    const dLongitude = destinationLongitudeRad - sourceLongitudeRad;
+  
+    const a =
+      Math.sin(dLatitude / 2) * Math.sin(dLatitude / 2) +
+      Math.cos(sourceLatitudeRad) *
+        Math.cos(destinationLatitudeRad) *
+        Math.sin(dLongitude / 2) *
+        Math.sin(dLongitude / 2);
+  
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  
+    const distanceInKm = earthRadiusInKm * c;
+    return distanceInKm * DIST_TIME_RATIO;
+  }
+
+  function toRadians(degrees: number): number {
+    return (degrees * Math.PI) / 180;
+  }
+
+  function isFeasibleEdge(source: DestinationNode, destination: DestinationNode, endTime: number): boolean {
     /*
     Check if the edge is feasible based on the time constraints and tour duration.
     Return true if the edge is feasible, false otherwise.
@@ -141,11 +174,11 @@ declare global {
       travellingTime = getTravelTime(source.getDestination(), destination.getDestination());
     }
     const tourDuration: number = destination.getDestination().getTourDuration();
-    const endTime: number = startingTime + travellingTime + tourDuration;
-    return (endTime <= sleepTime) && (endTime <= destination.getDestination().getClosingTime());
+    const totalTime: number = startingTime + travellingTime + tourDuration;
+    return (totalTime <= endTime) && (totalTime <= destination.getDestination().getClosingTime());
   }
 
-  function createSuperNode(sleepTime: number): DestinationNode {
+  function createSuperNode(endTime: number): DestinationNode {
     // Find the earliest start time among all nodes. The supernode only needs to connect
     // to the earliest DestinationNode for each Destination to save computation time.
 
@@ -158,13 +191,13 @@ declare global {
     }
 
     // Create the supernode with the earliest start time
-    const dummyDestination: Destination = new Destination(0, "Supernode", earliestStartTime, earliestStartTime, 0, []);
+    const dummyDestination: Destination = new Destination(0, "Supernode", earliestStartTime, earliestStartTime, 0, [], 0, 0);
     const supernode: DestinationNode = new DestinationNode(dummyDestination, earliestStartTime, earliestStartTime);
 
 
     // Add edges from the supernode to the earliest node of each destination
     for (const startNode of earliestNodes) {
-        if (isFeasibleEdge(supernode, startNode, sleepTime)) {
+        if (isFeasibleEdge(supernode, startNode, endTime)) {
             supernode.addOutgoingEdge(startNode, startNode.getDestination().getWeight());
         }
     }
@@ -172,10 +205,10 @@ declare global {
     return supernode; 
   }
 
-  function createEdges(destinationNodes: DestinationNode[], sleepTime: number): void {
+  function createEdges(destinationNodes: DestinationNode[], endTime: number): void {
     for (const start of destinationNodes) {
         for (const end of destinationNodes) {
-            if (isFeasibleEdge(start, end, sleepTime)) {
+            if (isFeasibleEdge(start, end, endTime)) {
                 start.addOutgoingEdge(end, end.getDestination().getWeight());
             }
         }

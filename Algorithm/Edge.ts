@@ -1,4 +1,6 @@
-class Edge {
+import { DestinationNode } from "./DestinationNode";
+
+export class Edge {
     private source: DestinationNode;
     private destination: DestinationNode;
     private weight: number;
