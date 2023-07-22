@@ -30,6 +30,7 @@ function generateItinerary(nodes: DestinationNode[]): [string, number, number][]
 function quickSelect(arr: [DestinationNode[], number][], k: number): DestinationNode[] {
   const sortedArr = arr.slice();
   const result = partition(sortedArr, 0, sortedArr.length - 1, k - 1);
+  console.log(result[1]);
   return result[0];
 }
 
@@ -83,7 +84,6 @@ function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[],
     const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
 
     if (outgoingEdges.length == 0) {
-      console.log(weightSoFar);
       allPaths.push([pathSoFar, weightSoFar]);
     } else {
       for (const edge of outgoingEdges) {
@@ -91,15 +91,14 @@ function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[],
         const destination: Destination = destinationNode.getDestination();
         //I want to check if destination is a member of itinerarySoFar
         if (itinerarySoFar.includes(destination)) {
-          console.log(weightSoFar);
           allPaths.push([pathSoFar, weightSoFar]);
         } else {
           const updatedPath: DestinationNode[] = [...pathSoFar];
           updatedPath.push(destinationNode);
           const updatedItinerary: Destination[] = [...itinerarySoFar];
           updatedItinerary.push(destination);
-          weightSoFar += destinationNode.getDestination().getWeight();
-          traversal(destinationNode, updatedPath, updatedItinerary, weightSoFar);
+          const updatedWeight: number = weightSoFar + destinationNode.getDestination().getWeight();
+          traversal(destinationNode, updatedPath, updatedItinerary, updatedWeight);
         }
 
       }
