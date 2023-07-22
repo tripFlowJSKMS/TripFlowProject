@@ -45,4 +45,4 @@ export async function tripFlowAlgorithm(
   }
 }
 
-generateItinerary();
+tripFlowAlgorithm("Ming Chun", "Food,Music", 480, 1320);

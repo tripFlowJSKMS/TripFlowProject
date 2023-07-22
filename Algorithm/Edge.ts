@@ -11,11 +11,11 @@ export class Edge {
         this.weight = weight;
     }
 
-    getDestination(): DestinationNode {
+    getDestinationNode(): DestinationNode {
         return this.destination;
     }
 
-    getSource(): DestinationNode {
+    getSourceNode(): DestinationNode {
         return this.source;
     }
 

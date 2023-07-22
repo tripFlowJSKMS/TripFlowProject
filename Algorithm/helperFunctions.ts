@@ -7,41 +7,23 @@ const DIST_TIME_RATIO: number = 1; // We assume it takes 1 min to travel 1 km
 var earliestNodes: DestinationNode[] = [];
 var allPaths: [DestinationNode[], number][] = [];
  
-// Declare the functions in the global namespace
-// declare global {
-  // function calculateWeights(preferences: string[], destinations: Destination[]): void;
-  // function calculateNumTimeSlots(destination: Destination): number;
-  // function createNodes(destinations: Destination[]): DestinationNode[];
-  // function createEdges(destinationNodes: DestinationNode[], endTime: number): void;
-  // function isFeasibleEdge(source: DestinationNode, destination: DestinationNode, endTime: number): boolean;
-  // function addPathToFinaList(pathSoFar: DestinationNode[], weightSoFar: number): void;
-  // function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
-  //   itinerarySoFar: Destination[], weightSoFar: number): void;
-  // function quickSelect(arr: Object[], k: number): Object;
-  // function generateItinerary(nodes: DestinationNode[]): Object[][];
-  // function planItinerary(destinations: Destination[], endTime: number): Object[][];
-  // function createSupernode(endTime: number): DestinationNode;
-// }
+export function planItinerary(destinations: Destination[], endTime: number, preferences: string[]): [string, number, number][] {
+  const nodes: DestinationNode[] = createNodes(destinations);
+  calculateWeights(preferences, destinations);
+  createEdges(nodes, endTime);
+  const supernode: DestinationNode = createSuperNode(endTime);
+  traversal(supernode, [], [], 0);
+  const heaviestPath: DestinationNode[] = quickSelect(allPaths, allPaths.length - 1) as DestinationNode[];
+  const itinerary: [string, number, number][] = generateItinerary(heaviestPath);
+  console.log(itinerary);
+  return itinerary;
+}
 
-  export function planItinerary(destinations: Destination[], endTime: number, preferences: string[]): Object[][] {
-    const nodes: DestinationNode[] = createNodes(destinations);
-    console.log(nodes);
-    calculateWeights(preferences, destinations);
-    createEdges(nodes, endTime);
-    const supernode: DestinationNode = createSuperNode(endTime);
-    traversal(supernode, [], [], 0);
-    const heaviestPath: DestinationNode[] = quickSelect(allPaths, allPaths.length - 1) as DestinationNode[];
-    const itinerary = generateItinerary(heaviestPath);
-    return itinerary;
-  }
-
-  function generateItinerary(nodes: DestinationNode[]): Object[][] {
+  function generateItinerary(nodes: DestinationNode[]): [string, number, number][] {
     const itinerary: [string, number, number][] = [];
     for (let i = 0; i < nodes.length; i++) {
       const node: DestinationNode = nodes[i];
-      itinerary[i][0] = node.getDestination().getName();
-      itinerary[i][1] = node.getStartTime();
-      itinerary[i][2] = node.getEndTime();
+      itinerary[i] = [node.getDestination().getName(), node.getStartTime(), node.getEndTime()];
     }
     return itinerary;
   }
@@ -65,6 +47,8 @@ var allPaths: [DestinationNode[], number][] = [];
         left = partitionIndex + 1;
       }
     }
+
+    console.log("came out");
 
     return [[], -1];
   };
@@ -99,11 +83,12 @@ var allPaths: [DestinationNode[], number][] = [];
   function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
     itinerarySoFar: Destination[], weightSoFar: number): void {
       const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
+
       if (outgoingEdges.length == 0) {
         addPathToFinalList(pathSoFar, weightSoFar);
       } else {
         for (const edge of outgoingEdges) {
-          const destinationNode: DestinationNode = edge.getDestination();
+          const destinationNode: DestinationNode = edge.getDestinationNode();
           const destination: Destination = destinationNode.getDestination();
           //I want to check if destination is a member of itinerarySoFar
           if (itinerarySoFar.includes(destination)) {
@@ -154,7 +139,7 @@ var allPaths: [DestinationNode[], number][] = [];
     return (degrees * Math.PI) / 180;
   }
 
-  function isFeasibleEdge(source: DestinationNode, destination: DestinationNode, endTime: number): boolean {
+  function isFeasibleEdge(sourceNode: DestinationNode, destinationNode: DestinationNode, endTime: number): boolean {
     /*
     Check if the edge is feasible based on the time constraints and tour duration.
     Return true if the edge is feasible, false otherwise.
@@ -162,20 +147,25 @@ var allPaths: [DestinationNode[], number][] = [];
     considering ALL time constraints (endTime of source, travelling time, tourDuration of
     destination).
     */
-    if (source.getDestination() === destination.getDestination()) {
+    if (sourceNode.getDestination() === destinationNode.getDestination()) {
       return false;
     }
-    const startingTime: number = source.getEndTime();
+    const startingTime: number = sourceNode.getEndTime();
     let travellingTime: number = Infinity;
-    if (source.getDestination().getName() == "Supernode") {
+    if (sourceNode.getDestination().getName() == "Supernode") {
       // This is assumed for our MVP. We will set this as the hotel location next time
       travellingTime = 0;
     } else {
-      travellingTime = getTravelTime(source.getDestination(), destination.getDestination());
+      travellingTime = getTravelTime(sourceNode.getDestination(), destinationNode.getDestination());
     }
-    const tourDuration: number = destination.getDestination().getTourDuration();
+    const tourDuration: number = destinationNode.getDestination().getTourDuration();
     const totalTime: number = startingTime + travellingTime + tourDuration;
-    return (totalTime <= endTime) && (totalTime <= destination.getDestination().getClosingTime());
+    // 1. Can finish touring the destination before endTime
+    // 2. Can finish touring the destination before it closes
+    // 3. End time of source + travelling time is before the start time of destination 
+    return (totalTime <= endTime) && 
+      (totalTime <= destinationNode.getDestination().getClosingTime() && 
+      (startingTime + travellingTime <= destinationNode.getStartTime()));
   }
 
   function createSuperNode(endTime: number): DestinationNode {
