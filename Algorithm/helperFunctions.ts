@@ -83,6 +83,7 @@ function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[],
     const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
 
     if (outgoingEdges.length == 0) {
+      console.log(weightSoFar);
       allPaths.push([pathSoFar, weightSoFar]);
     } else {
       for (const edge of outgoingEdges) {
@@ -90,6 +91,7 @@ function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[],
         const destination: Destination = destinationNode.getDestination();
         //I want to check if destination is a member of itinerarySoFar
         if (itinerarySoFar.includes(destination)) {
+          console.log(weightSoFar);
           allPaths.push([pathSoFar, weightSoFar]);
         } else {
           const updatedPath: DestinationNode[] = [...pathSoFar];

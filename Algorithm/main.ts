@@ -45,4 +45,4 @@ export async function tripFlowAlgorithm(
   }
 }
 
-tripFlowAlgorithm("Ming Chun", "Food,Music", 480, 1320);
+tripFlowAlgorithm("Ming Chun", "Nature,Music,Art", 480, 1320);
