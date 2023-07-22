@@ -25,13 +25,24 @@ export class DestinationNode {
         return this.destination;
     }
 
-    addOutgoingEdge(destinationNode: DestinationNode, weight: number): void {
-        const newEdge: Edge = new Edge(this, destinationNode, weight);
-        this.outgoingEdgeList.push(newEdge);
+    addOutgoingEdge(destinationNode: DestinationNode): void {
+        this.outgoingEdgeList.push(new Edge(this, destinationNode));
     }
 
     getOutgoingEdgeList(): Edge[] {
         return this.outgoingEdgeList;
+    }
+
+    noTimeClash(destinationNode: DestinationNode, dayEndTime: number): boolean {
+        return this.destination.isPossiblePlan(this.endTime, destinationNode.startTime, dayEndTime, destinationNode.destination);
+    }
+
+    equals(node: DestinationNode): boolean {
+        return this.destination == node.destination;
+    }
+
+    itineraryFormat(): [string, number, number] {
+        return this.destination.itineraryFormat(this.startTime, this.endTime);
     }
 
 }

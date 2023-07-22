@@ -1,3 +1,5 @@
+import { DestinationNode } from "./DestinationNode";
+
 export class Destination {
     private id: number;
     private name: string;
@@ -8,6 +10,8 @@ export class Destination {
     private characteristics: string[];
     private longitude: number;
     private latitude: number;
+    private readonly TIME_SLOT: number = 30; // We assume 30 min timeslots for our algo
+    private readonly DIST_TIME_RATIO: number = 1; // We assume it takes 1 min to travel 1 km
   
     constructor(id: number, name: string, openingTime: number, 
         closingTime: number, tourDuration: number, characteristics: string[],
@@ -34,8 +38,17 @@ export class Destination {
       return this.weight;
     }
   
-    setWeight(weight: number): void {
-      this.weight = weight;
+    setWeight(preferences: string[]): void {  
+      let matchCount: number = 0;
+      for (const preference of preferences) {
+        if (this.characteristics.includes(preference)) {
+          matchCount++;
+        }
+      }
+  
+      // Calculate the percentage match and store it in the weights map
+      const percentageMatch: number = matchCount / preferences.length;
+      this.weight = percentageMatch;
     }
   
     getCharacteristics(): string[] {
@@ -60,6 +73,69 @@ export class Destination {
 
     getTourDuration(): number {
         return this.tourDuration;
+    }
+
+    calculateNumTimeSlots(): number {
+      let numTimeSlots: number = (this.closingTime - this.openingTime) / this.TIME_SLOT;
+      numTimeSlots -= this.tourDuration / this.TIME_SLOT; 
+      return numTimeSlots
+    }
+
+    generateNode(timeslotMultiplier: number): DestinationNode {
+      const startTime: number = this.openingTime + (timeslotMultiplier * this.TIME_SLOT);
+      const endTime: number = startTime + this.tourDuration;
+      return new DestinationNode(this, startTime, endTime);
+    }
+
+    getTravelTime(destination: Destination): number {
+      const earthRadiusInKm = 6371; // Earth's radius in kilometers
+    
+      const sourceLatitudeRad = this.toRadians(this.latitude);
+      const sourceLongitudeRad = this.toRadians(this.longitude);
+      const destinationLatitudeRad = destination.toRadians(destination.latitude);
+      const destinationLongitudeRad = destination.toRadians(destination.longitude);
+    
+      const dLatitude = destinationLatitudeRad - sourceLatitudeRad;
+      const dLongitude = destinationLongitudeRad - sourceLongitudeRad;
+    
+      const a =
+        Math.sin(dLatitude / 2) * Math.sin(dLatitude / 2) +
+        Math.cos(sourceLatitudeRad) *
+          Math.cos(destinationLatitudeRad) *
+          Math.sin(dLongitude / 2) *
+          Math.sin(dLongitude / 2);
+    
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    
+      const distanceInKm = earthRadiusInKm * c;
+      return distanceInKm * this.DIST_TIME_RATIO;
+    }
+  
+    toRadians(degrees: number): number {
+      return (degrees * Math.PI) / 180;
+    }
+
+    isPossiblePlan(leaveSourceTime: number, reachDestinationTime: number, dayEndTime: number, destination: Destination): boolean {
+      let travellingTime: number = Infinity;
+      if (this.name == "Supernode") {
+        // This is assumed for our MVP. We will set this as the hotel location next time
+            travellingTime = 0;
+      } else {
+          travellingTime = this.getTravelTime(destination);
+      }
+      const tourDuration: number = destination.tourDuration;
+      const totalTime = leaveSourceTime + travellingTime + tourDuration;
+    
+      // 1. Can finish touring the destination before day ends
+      // 2. Can finish touring the destination before it closes
+      // 3. End time of source + travelling time is before the start time of destination 
+      return (totalTime <= dayEndTime) &&
+          (totalTime <= destination.closingTime) &&
+          (leaveSourceTime + travellingTime <= reachDestinationTime);
+    }
+
+    itineraryFormat(startTime: number, endTime: number): [string, number, number] {
+      return [this.name, startTime, endTime];
     }
 
 }

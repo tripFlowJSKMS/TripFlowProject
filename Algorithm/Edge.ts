@@ -1,22 +1,22 @@
 import { DestinationNode } from "./DestinationNode";
 
 export class Edge {
-    private source: DestinationNode;
-    private destination: DestinationNode;
+    private sourceNode: DestinationNode;
+    private destinationNode: DestinationNode;
     private weight: number;
 
-    constructor(source: DestinationNode, destination: DestinationNode, weight: number) {
-        this.source = source;
-        this.destination = destination;
-        this.weight = weight;
+    constructor(sourceNode: DestinationNode, destinationNode: DestinationNode) {
+        this.sourceNode = sourceNode;
+        this.destinationNode = destinationNode;
+        this.weight = this.destinationNode.getDestination().getWeight();
     }
 
     getDestinationNode(): DestinationNode {
-        return this.destination;
+        return this.destinationNode;
     }
 
     getSourceNode(): DestinationNode {
-        return this.source;
+        return this.sourceNode;
     }
 
     getWeight(): number {
