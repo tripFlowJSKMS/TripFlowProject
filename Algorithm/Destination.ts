@@ -48,8 +48,6 @@ export class Destination {
   
       // Calculate the percentage match and store it in the weights map
       const percentageMatch: number = matchCount / preferences.length;
-      console.log(this.name);
-      console.log(percentageMatch);
       this.weight = percentageMatch;
     }
   

@@ -5,7 +5,7 @@ import { Edge } from "./Edge";
 var earliestNodes: DestinationNode[] = [];
 var allPaths: [DestinationNode[], number][] = [];
  
-export function planItinerary(destinations: Destination[], endTime: number, preferences: string[]): [string, number, number][] {
+export function planItinerary(destinations: Destination[], endTime: number, preferences: string[], scheduleType: string): [string, number, number][] {
   const nodes: DestinationNode[] = createNodes(destinations);
   for (const destination of destinations) {
     destination.setWeight(preferences);
@@ -30,7 +30,6 @@ function generateItinerary(nodes: DestinationNode[]): [string, number, number][]
 function quickSelect(arr: [DestinationNode[], number][], k: number): DestinationNode[] {
   const sortedArr = arr.slice();
   const result = partition(sortedArr, 0, sortedArr.length - 1, k - 1);
-  console.log(result[1]);
   return result[0];
 }
 

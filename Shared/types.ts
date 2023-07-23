@@ -9,4 +9,11 @@ const PreferenceEnum = z.enum([
   "Shopping",
 ]);
 
+const scheduleEnum = z.enum([
+  "Relaxed",
+  "Normal",
+  "Packed",
+]);
+
 export type PreferenceType = z.infer<typeof PreferenceEnum>;
+export type scheduleType = z.infer<typeof scheduleEnum>;
