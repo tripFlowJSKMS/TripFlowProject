@@ -16,6 +16,10 @@ const togglePreference = (preferences: Preference[], name: PreferenceType) => {
 
 interface OnboardingStore {
   preferences: Preference[];
+  startTime: number;
+  endTime: number;
+  setStartTime: (time: number) => void;
+  setEndTime: (time: number) => void;
   togglePreference: (name: PreferenceType) => void;
 }
 
@@ -46,6 +50,20 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
       selected: false,
     },
   ],
+  startTime: 600, // 10am to 10pm
+  endTime: 1320,
+  setStartTime: (time: number) => {
+    set((state) => ({
+      ...state,
+      startTime: time,
+    }));
+  },
+  setEndTime: (time: number) => {
+    set((state) => ({
+      ...state,
+      endTime: time,
+    }));
+  },
   togglePreference: (name: PreferenceType) => {
     set((state) => ({
       ...state,

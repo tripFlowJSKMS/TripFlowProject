@@ -36,9 +36,13 @@ export default function Button({
   size,
   className,
   children,
+  ...props
 }: ButtonProps) {
   return (
-    <Pressable style={tw`${cn(buttonVariants({ variant, size, className }))}`}>
+    <Pressable
+      {...props}
+      style={tw`${cn(buttonVariants({ variant, size, className }))}`}
+    >
       {children}
     </Pressable>
   );
