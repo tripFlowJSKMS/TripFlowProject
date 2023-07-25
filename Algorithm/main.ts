@@ -60,4 +60,8 @@ export async function tripFlowAlgorithm(
   }
 }
 
+export async function generateDesirableDestinations(preferences: string, number: number) {
+
+
+}
 tripFlowAlgorithm("Ming Chun", "Nature,Music,Art", 480, 1320, "Packed");
