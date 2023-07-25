@@ -78,6 +78,14 @@ function swap(arr: [DestinationNode[], number][], i: number, j: number): void {
   arr[j] = temp;
 };
 
+/*
+Dijkstra only relaxes the edges of the min-estimate node, but we have to record all possible paths as long as the 
+Destination has not been visited before. The key constraint that causes Dijkstra to fail is that once we visit a particular 
+DestinationNode, the rest of the DestinationNodes in the Destination set all cannot be visited anymore so the "graph" alters. 
+Consequently, Dijkstra would not have considered valid combinations that yield a lower estimate now but will end up with a larger 
+weight sum at the end of the path. 
+*/
+
 function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
   itinerarySoFar: Destination[], weightSoFar: number): void {
     const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
