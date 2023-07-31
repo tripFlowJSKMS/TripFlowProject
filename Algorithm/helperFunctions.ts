@@ -5,17 +5,13 @@ import { Edge } from "./Edge";
 var earliestNodes: DestinationNode[] = [];
 var allPaths: [DestinationNode[], number][] = [];
  
-export function planItinerary(destinations: Destination[], endTime: number, preferences: string[], scheduleType: string): [string, number, number][] {
-  const nodes: DestinationNode[] = createNodes(destinations);
-  for (const destination of destinations) {
-    destination.setWeight(preferences);
-  }
+export function planItinerary(destinations: Destination[], startTime: number, endTime: number): [string, number, number][] {
+  const nodes: DestinationNode[] = createNodes(destinations, startTime);
   createEdges(nodes, endTime);
   const supernode: DestinationNode = createSuperNode(endTime);
   traversal(supernode, [], [], 0);
   const heaviestPath: DestinationNode[] = quickSelect(allPaths, allPaths.length - 1) as DestinationNode[];
   const itinerary: [string, number, number][] = generateItinerary(heaviestPath);
-  console.log(itinerary);
   return itinerary;
 }
 
@@ -165,17 +161,19 @@ function createEdges(destinationNodes: DestinationNode[], endTime: number): void
 
 // The difference between Destination and DestinationNode is that there is only ONE destination.
 // However, each destination will have many nodes because of the timeslot we visit it.
-function createNodes(destinations: Destination[]): DestinationNode[] {
+function createNodes(destinations: Destination[], startTime: number): DestinationNode[] {
   const nodes: DestinationNode[] = [];
   for (const destination of destinations) {
       const numTimeSlots: number = destination.calculateNumTimeSlots();
+      let earliestPossibleNode: boolean = true;
       for (let i = 0; i < numTimeSlots; i++) {
           const node: DestinationNode = destination.generateNode(i); 
           nodes.push(node);
-          if (i === 0) {
+          if (node.getStartTime() >= startTime && earliestPossibleNode) {
             earliestNodes.push(node);
+            earliestPossibleNode = false;
           }
-        }
+      }
   }
   return nodes;
 }

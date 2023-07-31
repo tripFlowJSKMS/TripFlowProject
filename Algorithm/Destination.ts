@@ -108,7 +108,7 @@ export class Destination {
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     
       const distanceInKm = earthRadiusInKm * c;
-      return distanceInKm * this.DIST_TIME_RATIO;
+      return Math.ceil(distanceInKm * this.DIST_TIME_RATIO);
     }
   
     toRadians(degrees: number): number {
@@ -123,14 +123,12 @@ export class Destination {
       } else {
           travellingTime = this.getTravelTime(destination);
       }
-      const tourDuration: number = destination.tourDuration;
-      const totalTime = leaveSourceTime + travellingTime + tourDuration;
-    
-      // 1. Can finish touring the destination before day ends
-      // 2. Can finish touring the destination before it closes
-      // 3. End time of source + travelling time is before the start time of destination 
-      return (totalTime <= dayEndTime) &&
-          (totalTime <= destination.closingTime) &&
+      // this statement bugs out the algo because we no longer respect the 30 minute intervals
+      // const totalTime = leaveSourceTime + travellingTime + tourDuration;
+
+
+
+      return (reachDestinationTime + destination.tourDuration <= dayEndTime) &&
           (leaveSourceTime + travellingTime <= reachDestinationTime);
     }
 
