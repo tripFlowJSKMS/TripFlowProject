@@ -9,6 +9,9 @@ import { planItinerary } from "./helperFunctions";
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
 const destinationMap: { [name: string]: Destination } = {};
+let name: string;
+let startTime: number;
+let endTime: number;
 
 
 export async function tripFlowAlgorithm(
@@ -97,10 +100,18 @@ export async function generateDesirableDestinations(preferences: string[], numbe
   return destinationNameArr;
 }
 
+export async function registrationDetails(username: string, startingTime: number, endingTime: number) {
+  name = username;
+  startTime = startingTime;
+  endTime = endingTime;
+}
+
 async function run() {
   try {
+    registrationDetails("Qing Heng", 600, 1800);
+    // await registrationDetails("Qing Heng", 600, 1800);
     const destinationNames = await generateDesirableDestinations(["Nature", "Music", "Art"], 4, "Packed");
-    const result = await tripFlowAlgorithm(["GHI Exhibition", 'STU Theatre', 'ABC Nature Reserve'], 480, 1320);
+    const result = await tripFlowAlgorithm(destinationNames, startTime, endTime);
     console.log(result);
   } catch (error) {
     console.error("Error:", error);
