@@ -6,6 +6,12 @@ import {
 import { Destination } from "./Destination";
 import { planItinerary } from "./helperFunctions";
 
+/*
+To do before running algo
+  - turn on vpn
+  - pscale connect itineraryplanner main --port 3306
+*/
+
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
 const destinationMap: { [name: string]: Destination } = {};
@@ -109,8 +115,7 @@ export async function registrationDetails(username: string, startingTime: number
 async function run() {
   try {
     registrationDetails("Qing Heng", 600, 1800);
-    // await registrationDetails("Qing Heng", 600, 1800);
-    const destinationNames = await generateDesirableDestinations(["Nature", "Music", "Art"], 4, "Packed");
+    const destinationNames = await generateDesirableDestinations(["Nature", "Music", "Art"], 4, "Normal");
     const result = await tripFlowAlgorithm(destinationNames, startTime, endTime);
     console.log(result);
   } catch (error) {

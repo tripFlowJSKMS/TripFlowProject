@@ -47,4 +47,3 @@ export function getAllItinerary() {
   const allItinerary = prisma.itineraryMatrix.findMany();
   return allItinerary;
 }
-
