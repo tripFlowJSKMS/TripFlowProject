@@ -2,7 +2,7 @@ import "dotenv/config";
 import {
   getAllInformation,
   getAllItinerary,
-} from "../Shared/prisma/prismaCode/main";
+} from "../../Shared/prisma/prismaCode/main";
 import { Destination } from "./Destination";
 import { planItinerary } from "./helperFunctions";
 
@@ -19,13 +19,11 @@ let name: string;
 let startTime: number;
 let endTime: number;
 
-
 export async function tripFlowAlgorithm(
   destinationNameList: string[],
   startTime: number,
-  endTime: number,
+  endTime: number
 ): Promise<[string, number, number][]> {
-
   let itinerary: [string, number, number][] = [];
   try {
     const destinationArr: Destination[] = [];
@@ -34,13 +32,15 @@ export async function tripFlowAlgorithm(
       destinationArr.push(destination);
     }
     itinerary = planItinerary(destinationArr, startTime, endTime);
-    
-  } catch (error) {
-  }
+  } catch (error) {}
   return itinerary;
 }
 
-export async function generateDesirableDestinations(preferences: string[], number: number, scheduleType: string): Promise<string[]> {
+export async function generateDesirableDestinations(
+  preferences: string[],
+  number: number,
+  scheduleType: string
+): Promise<string[]> {
   let destinationArr: Destination[] = [];
 
   try {
@@ -86,7 +86,6 @@ export async function generateDesirableDestinations(preferences: string[], numbe
   } catch (error) {
     console.error("Error fetching itinerary data:", error);
   }
-  
 
   destinationArr.sort((destinationA, destinationB) => {
     const weightA = destinationA.getWeight();
@@ -106,7 +105,11 @@ export async function generateDesirableDestinations(preferences: string[], numbe
   return destinationNameArr;
 }
 
-export async function registrationDetails(username: string, startingTime: number, endingTime: number) {
+export async function registrationDetails(
+  username: string,
+  startingTime: number,
+  endingTime: number
+) {
   name = username;
   startTime = startingTime;
   endTime = endingTime;
@@ -115,8 +118,16 @@ export async function registrationDetails(username: string, startingTime: number
 async function run() {
   try {
     registrationDetails("Qing Heng", 600, 1800);
-    const destinationNames = await generateDesirableDestinations(["Nature", "Music", "Art"], 4, "Normal");
-    const result = await tripFlowAlgorithm(destinationNames, startTime, endTime);
+    const destinationNames = await generateDesirableDestinations(
+      ["Nature", "Music", "Art"],
+      4,
+      "Normal"
+    );
+    const result = await tripFlowAlgorithm(
+      destinationNames,
+      startTime,
+      endTime
+    );
     console.log(result);
   } catch (error) {
     console.error("Error:", error);
