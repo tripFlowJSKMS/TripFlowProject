@@ -44,7 +44,7 @@ export async function generateDesirableDestinations(preferences: string[], numbe
   let destinationArr: Destination[] = [];
 
   try {
-    const itineraryData = await getAllItinerary();
+    const itineraryData: any[] = await getAllItinerary();
     itineraryData.forEach((itinerary) => {
       const {
         id,
