@@ -4,11 +4,13 @@ import tw from "twrnc";
 import Input from "../components/input";
 import Title from "../components/title";
 import Button from "../components/button";
+import TopBar from '../components/topBar'
 
 export default function StartPlanningPage() {
-
-    return (
-      <View style={tw`flex items-center justify-center h-4/6 p-8`}>
+  return (
+    <View style={tw`flex flex-col h-full`}>
+      <TopBar /> 
+      <View style={tw`flex items-center justify-center p-10`}>
         <Title parameter="Your next ideal trip"/>
         <View style={tw`flex-row justify-between p-3`}>
           <Input parameter="Departure" width={25} />
@@ -18,10 +20,11 @@ export default function StartPlanningPage() {
         <Input parameter="Pace" width={15} />
         <View style={tw`p-2`}></View>
         <Button>
-          <Link href="/pages/registrationPage">
+          <Link href="/pages/pickLocationsPage">
             <Text style={tw.style("text-slate-900")}>Start planning!</Text>
           </Link>
         </Button>
       </View>
-    );
-  }
+    </View>
+  );
+}
