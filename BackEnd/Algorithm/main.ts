@@ -6,12 +6,6 @@ import {
 import { Destination } from "./Destination";
 import { planItinerary } from "./helperFunctions";
 
-/*
-To do before running algo
-  - turn on vpn
-  - pscale connect itineraryplanner main --port 3306
-*/
-
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
 const destinationMap: { [name: string]: Destination } = {};

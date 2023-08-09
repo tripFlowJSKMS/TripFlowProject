@@ -5,6 +5,7 @@ import { Text, View } from "react-native";
 import tw from "twrnc";
 
 export default function Page() {
+
   return (
     <View style={tw`flex items-center`}>
       <View
