@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import axios from "axios";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -25,4 +26,9 @@ export function numberToTime(num: number) {
     hours = 12;
   }
   return `${hours}:${minutes.toString().padStart(2, "0")} ${suffix}`;
+}
+
+export async function register(username, startingTime, endingTime) {
+  const response = await axios.post("http://localhost:3000/api/register", {username, startingTime, endingTime});
+  console.log(response);
 }

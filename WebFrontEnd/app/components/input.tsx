@@ -3,8 +3,7 @@ import { useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import tw from "twrnc";
 
-export default function Input({ parameter, width }) {
-  const [value, setValue] = useState("");
+export default function Input({ value, setValue, parameter, width }) {
 
   return (
     <View style={tw`flex-row items-center mb-4`}>
