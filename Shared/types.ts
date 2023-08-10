@@ -15,7 +15,12 @@ const scheduleEnum = z.enum([
   "Packed",
 ]);
 
-const 
+export const registrationDetailsType = z.object({
+  username: z.string(),
+  startingTime: z.number(),
+  endingTime: z.number()
+});
 
 export type PreferenceType = z.infer<typeof PreferenceEnum>;
 export type scheduleType = z.infer<typeof scheduleEnum>;
+export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;

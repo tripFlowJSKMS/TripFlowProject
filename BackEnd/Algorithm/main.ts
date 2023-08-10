@@ -1,3 +1,4 @@
+import z from "zod";
 import "dotenv/config";
 import {
   getAllInformation,
@@ -5,6 +6,7 @@ import {
 } from "../../Shared/prisma/prismaCode/main";
 import { Destination } from "./Destination";
 import { planItinerary } from "./helperFunctions";
+import { registrationDetailsType, RegistrationDetailsType } from "../../Shared/types";
 
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
@@ -99,19 +101,27 @@ export async function generateDesirableDestinations(
   return destinationNameArr;
 }
 
-export async function registrationDetails(
-  username: string,
-  startingTime: number,
-  endingTime: number
-) {
-  name = username;
-  startTime = startingTime;
-  endTime = endingTime;
+export async function registrationDetails(details: RegistrationDetailsType) {
+  try {
+    const validatedDetails = registrationDetailsType.parse(details);
+    name = validatedDetails.username;
+    startTime = validatedDetails.startingTime;
+    endTime = validatedDetails.endingTime;
+  } catch (error) {
+    console.error("Error validating registration details:", error);
+  }
+  
 }
 
 async function run() {
   try {
-    registrationDetails("Qing Heng", 600, 1800);
+    const userDetails: RegistrationDetailsType = {
+      username: "QH",
+      startingTime: 600,
+      endingTime: 1800,
+    };
+    await registrationDetails(userDetails);
+
     const destinationNames = await generateDesirableDestinations(
       ["Nature", "Music", "Art"],
       4,
