@@ -1,4 +1,5 @@
-const express = require('express');
+import 'dotenv/config';
+import express from 'express'
 const app = express();
 
 const { registrationDetails } = require('./Algorithm/main.ts');
@@ -15,3 +16,6 @@ app.post('/api/register', (req, res) => {
 app.listen(3000, () => {
   console.log('Backend server is running on port 3000');
 });
+
+// define type in shared folder, export type, import type in backend, use zod to validate incoming response
+// then if correct, proceed with API

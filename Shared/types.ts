@@ -15,5 +15,7 @@ const scheduleEnum = z.enum([
   "Packed",
 ]);
 
+const 
+
 export type PreferenceType = z.infer<typeof PreferenceEnum>;
 export type scheduleType = z.infer<typeof scheduleEnum>;
