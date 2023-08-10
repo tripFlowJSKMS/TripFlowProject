@@ -6,10 +6,18 @@ import {
 } from "../../Shared/prisma/prismaCode/main";
 import { Destination } from "./Destination";
 import { planItinerary } from "./helperFunctions";
-import { registrationDetailsType, RegistrationDetailsType } from "../../Shared/types";
+import { 
+  registrationDetailsType, 
+  RegistrationDetailsType,
+  generateDesirableDestinationsType,
+  GenerateDesirableDestinationsType
+} from "../../Shared/types";
 
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
+
+// Let's assume for every additional day they are touring, we generate 10 more destinations for them to choose from
+const GENERATE_DESTINATIONS_MULTIPLIER: number = 10;
 const destinationMap: { [name: string]: Destination } = {};
 let name: string;
 let startTime: number;
@@ -32,11 +40,20 @@ export async function tripFlowAlgorithm(
   return itinerary;
 }
 
-export async function generateDesirableDestinations(
-  preferences: string[],
-  number: number,
-  scheduleType: string
-): Promise<string[]> {
+export async function generateDesirableDestinations(details: GenerateDesirableDestinationsType): Promise<Destination[]> {
+  let preferences: string[];
+  let numberOfDays: number = 0;
+  let scheduleType: string;
+
+  try {
+    const validatedDetails = generateDesirableDestinationsType.parse(details);
+    preferences = validatedDetails.preferences;
+    numberOfDays = validatedDetails.numberOfDays;
+    scheduleType = validatedDetails.scheduleType;
+  } catch (error) {
+    console.error("Error validating generate desirable destinations details:", error);
+  }
+  
   let destinationArr: Destination[] = [];
 
   try {
@@ -89,16 +106,11 @@ export async function generateDesirableDestinations(
     return weightB - weightA; // Sort in descending order
   });
 
-  destinationArr = destinationArr.slice(0, number);
+  const totalNumberRecommended: number = numberOfDays * GENERATE_DESTINATIONS_MULTIPLIER;
 
-  const destinationNameArr: string[] = [];
-  for (let i = 0; i < number; i++) {
-    const destination: Destination = destinationArr[i];
-    const name: string = destination.getName();
-    destinationMap[name] = destinationArr[i];
-    destinationNameArr.push(name);
-  }
-  return destinationNameArr;
+  destinationArr = destinationArr.slice(0, totalNumberRecommended);
+  
+  return destinationArr;
 }
 
 export async function registrationDetails(details: RegistrationDetailsType) {
@@ -113,29 +125,29 @@ export async function registrationDetails(details: RegistrationDetailsType) {
   
 }
 
-async function run() {
-  try {
-    const userDetails: RegistrationDetailsType = {
-      username: "QH",
-      startingTime: 600,
-      endingTime: 1800,
-    };
-    await registrationDetails(userDetails);
+// async function run() {
+//   try {
+//     const userDetails: RegistrationDetailsType = {
+//       username: "QH",
+//       startingTime: 600,
+//       endingTime: 1800,
+//     };
+//     await registrationDetails(userDetails);
 
-    const destinationNames = await generateDesirableDestinations(
-      ["Nature", "Music", "Art"],
-      4,
-      "Normal"
-    );
-    const result = await tripFlowAlgorithm(
-      destinationNames,
-      startTime,
-      endTime
-    );
-    console.log(result);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+//     const destinationNames = await generateDesirableDestinations(
+//       ["Nature", "Music", "Art"],
+//       4,
+//       "Normal"
+//     );
+//     const result = await tripFlowAlgorithm(
+//       destinationNames,
+//       startTime,
+//       endTime
+//     );
+//     console.log(result);
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// }
 
 // run();
