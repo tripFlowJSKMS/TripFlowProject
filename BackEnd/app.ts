@@ -1,6 +1,6 @@
 import z from "zod";
 import 'dotenv/config';
-import {registrationDetailsType } from "../Shared/types.js";
+import {registrationDetailsType } from "../Shared/types";
 
 import express from 'express'
 const app = express();
