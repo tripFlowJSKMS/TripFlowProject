@@ -41,7 +41,7 @@ export default function RegistrationPage() {
           </View>
 
           <View>
-            <Button onPress={() => register(username, Number(startingTime), Number(endingTime))}>
+            <Button onPress={() => register(username, Number(startingTime), Number(endingTime), interestedThemes)}>
               <Link href="/pages/startPlanningPage">
                 <Text style={tw.style("text-white")}>Create your account!</Text>
               </Link>
