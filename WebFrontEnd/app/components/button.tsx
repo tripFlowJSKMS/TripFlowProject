@@ -8,12 +8,12 @@ interface ButtonProps extends PressableProps, VariantProps<typeof buttonVariants
 }
 
 const buttonVariants = cva(
-  "flex items-center justify-center px-4 py-2 font-medium rounded-md shadow-sm",
+  "flex items-center justify-center px-4 py-2 w-60 font-medium rounded-md shadow-sm",
   {
     variants: {
       variant: {
-        default: "text-slate-900 bg-transparent border-2 rounded-2xl",
-        primary: "text-white bg-transparent",
+        default: "text-white bg-black rounded-full",
+        primary: "w-30 text-slate-900 border-gray-500 bg-transparent border rounded-full",
       },
       size: {
         default: "h-10",
