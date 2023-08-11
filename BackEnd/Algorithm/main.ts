@@ -10,7 +10,9 @@ import {
   registrationDetailsType, 
   RegistrationDetailsType,
   generateDesirableDestinationsType,
-  GenerateDesirableDestinationsType
+  GenerateDesirableDestinationsType,
+  itineraryDetailsType,
+  ItineraryDetailsType
 } from "../../Shared/types";
 
 const RELAXED_MULTIPLIER: number = 1.25;
@@ -22,6 +24,12 @@ const destinationMap: { [name: string]: Destination } = {};
 let name: string;
 let startTime: number;
 let endTime: number;
+let departureLocation: string;
+let endLocation: string;
+let pace: string;
+let preferences: string[];
+let numberOfDays: number = 0;
+let scheduleType: string;
 
 export async function tripFlowAlgorithm(
   destinationNameList: string[],
@@ -41,13 +49,10 @@ export async function tripFlowAlgorithm(
 }
 
 export async function generateDesirableDestinations(details: GenerateDesirableDestinationsType): Promise<Destination[]> {
-  let preferences: string[];
-  let numberOfDays: number = 0;
-  let scheduleType: string;
+
 
   try {
     const validatedDetails = generateDesirableDestinationsType.parse(details);
-    preferences = validatedDetails.preferences;
     numberOfDays = validatedDetails.numberOfDays;
     scheduleType = validatedDetails.scheduleType;
   } catch (error) {
@@ -113,12 +118,24 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
   return destinationArr;
 }
 
+export async function itineraryDetails(details: ItineraryDetailsType) {
+  try {
+    const validatedDetails = itineraryDetailsType.parse(details);
+    departureLocation = validatedDetails.departureLocation;
+    endLocation = validatedDetails.endLocation;
+    pace = validatedDetails.pace;
+  } catch (error) {
+    console.error("Error validating itinerary details:", error);
+  }
+}
+
 export async function registrationDetails(details: RegistrationDetailsType) {
   try {
     const validatedDetails = registrationDetailsType.parse(details);
     name = validatedDetails.username;
     startTime = validatedDetails.startingTime;
     endTime = validatedDetails.endingTime;
+    preferences = validatedDetails.preferences;
   } catch (error) {
     console.error("Error validating registration details:", error);
   }
