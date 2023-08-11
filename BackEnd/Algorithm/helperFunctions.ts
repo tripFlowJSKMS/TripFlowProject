@@ -5,18 +5,18 @@ import { Edge } from "./Edge";
 var earliestNodes: DestinationNode[] = [];
 var allPaths: [DestinationNode[], number][] = [];
  
-export function planItinerary(destinations: Destination[], startTime: number, endTime: number): [string, number, number][] {
+export function planItinerary(destinations: Destination[], startTime: number, endTime: number): [Destination, number, number][] {
   const nodes: DestinationNode[] = createNodes(destinations, startTime);
   createEdges(nodes, endTime);
   const supernode: DestinationNode = createSuperNode(endTime);
   traversal(supernode, [], [], 0);
   const heaviestPath: DestinationNode[] = quickSelect(allPaths, allPaths.length - 1) as DestinationNode[];
-  const itinerary: [string, number, number][] = generateItinerary(heaviestPath);
+  const itinerary: [Destination, number, number][] = generateItinerary(heaviestPath);
   return itinerary;
 }
 
-function generateItinerary(nodes: DestinationNode[]): [string, number, number][] {
-  const itinerary: [string, number, number][] = [];
+function generateItinerary(nodes: DestinationNode[]): [Destination, number, number][] {
+  const itinerary: [Destination, number, number][] = [];
   for (let i = 0; i < nodes.length; i++) {
     itinerary[i] = nodes[i].itineraryFormat();
   }

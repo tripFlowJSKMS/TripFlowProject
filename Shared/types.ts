@@ -13,6 +13,17 @@ export class Destination {
     ) {} 
 }
 
+export const destinationType = z.object({
+  id: z.number(),
+  name: z.string(),
+  openingTime: z.number(),
+  closingTime: z.number(),
+  tourDuration: z.number(),
+  characteristics: z.array(z.string()),
+  longitude: z.number(),
+  latitude: z.number()
+});
+
 const PreferenceEnum = z.enum([
   "Sports",
   "Music",
@@ -44,7 +55,11 @@ export const generateDesirableDestinationsType = z.object({
 export const itineraryDetailsType = z.object({
   departureLocation: z.string(),
   endLocation: z.string(),
-  pace: z.string()
+  scheduleType: z.string()
+});
+
+export const tripFlowAlgorithmType = z.object({
+  destinationArr: z.array(destinationType)
 });
 
 export type PreferenceType = z.infer<typeof PreferenceEnum>;
@@ -52,3 +67,4 @@ export type scheduleType = z.infer<typeof scheduleEnum>;
 export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;
 export type GenerateDesirableDestinationsType = z.infer<typeof generateDesirableDestinationsType>;
 export type ItineraryDetailsType = z.infer<typeof itineraryDetailsType>;
+export type TripFlowAlgorithmType = z.infer<typeof tripFlowAlgorithmType>;

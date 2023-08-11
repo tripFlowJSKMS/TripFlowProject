@@ -8,6 +8,7 @@ import {
 
 
 import express from 'express'
+import { tripFlowAlgorithm } from './Algorithm/main';
 var cors = require('cors')
 const app = express();
 
@@ -36,27 +37,41 @@ app.post('/api/register', async (req, res) => {
 // Start Planning Page API
 app.post('/api/start-planning', async (req, res) => {
   try {
-    const { departureLocation, endLocation, pace } = req.body;
-    const inputData = {departureLocation, endLocation, pace};
-    itineraryDetails(inputData);
-    res.json({ message: 'Start Planning successful' });
-  } catch (error) {
-    console.error('Validation error:', error);
-    res.status(400).json({ error: 'Invalid input or API errpr '});
-  }
-})
-
-app.post('/api/generate-destinations', async (req, res) => {
-  try {
-    const { preferences, numberOfDays, scheduleType } = req.body;
-    const inputData = { preferences, numberOfDays, scheduleType };
-    const destinations: Destination[] = await generateDesirableDestinations(inputData);
+    const { departureLocation, endLocation, scheduleType } = req.body;
+    const inputData = {departureLocation, endLocation, scheduleType};
+    const destinations: Destination[] = await itineraryDetails(inputData);
     res.json({ destinations });
   } catch (error) {
     console.error('Validation error:', error);
-    res.status(400).json({ error: 'Invalid input or API error' });
+    res.status(400).json({ error: 'Invalid input or API error '});
   }
 });
+
+// Pick Locations Page API
+app.post('/api/pick-locations', async (req, res) => {
+  try {
+    const { destinationArr } = req.body;
+    const inputData = { destinationArr };
+    const itinerary: [Destination, number, number] = await tripFlowAlgorithm(inputData);
+    res.json({ itinerary });
+  } catch (error) {
+    console.error('Validation errror:', error);
+    res.status(400).json({ error: 'Invalid input or API error '});
+  }
+  
+});
+
+// app.post('/api/generate-destinations', async (req, res) => {
+//   try {
+//     const { preferences, numberOfDays, scheduleType } = req.body;
+//     const inputData = { preferences, numberOfDays, scheduleType };
+//     const destinations: Destination[] = await generateDesirableDestinations(inputData);
+//     res.json({ destinations });
+//   } catch (error) {
+//     console.error('Validation error:', error);
+//     res.status(400).json({ error: 'Invalid input or API error' });
+//   }
+// });
 
 app.listen(3000, () => {
   console.log('Backend server is running on port 3000');

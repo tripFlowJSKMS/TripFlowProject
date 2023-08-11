@@ -41,7 +41,7 @@ export class DestinationNode {
         return this.destination == node.destination;
     }
 
-    itineraryFormat(): [string, number, number] {
+    itineraryFormat(): [Destination, number, number] {
         return this.destination.itineraryFormat(this.startTime, this.endTime);
     }
 

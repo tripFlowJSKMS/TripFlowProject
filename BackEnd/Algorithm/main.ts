@@ -12,7 +12,11 @@ import {
   generateDesirableDestinationsType,
   GenerateDesirableDestinationsType,
   itineraryDetailsType,
-  ItineraryDetailsType
+  ItineraryDetailsType,
+  tripFlowAlgorithmType,
+  TripFlowAlgorithmType,
+  // Destination,
+  destinationType,
 } from "../../Shared/types";
 
 const RELAXED_MULTIPLIER: number = 1.25;
@@ -31,25 +35,17 @@ let preferences: string[];
 let numberOfDays: number = 0;
 let scheduleType: string;
 
-export async function tripFlowAlgorithm(
-  destinationNameList: string[],
-  startTime: number,
-  endTime: number
-): Promise<[string, number, number][]> {
-  let itinerary: [string, number, number][] = [];
+export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise<[Destination, number, number][]> {
+  const validatedDetails = tripFlowAlgorithmType.parse(details);
+  // const destinationArr: Destination[] = validatedDetails.destinationArr;
+  let itinerary: [Destination, number, number][] = [];
   try {
-    const destinationArr: Destination[] = [];
-    for (const destinationName of destinationNameList) {
-      const destination: Destination = destinationMap[destinationName];
-      destinationArr.push(destination);
-    }
-    itinerary = planItinerary(destinationArr, startTime, endTime);
+    // itinerary = planItinerary(destinationArr, startTime, endTime);
   } catch (error) {}
   return itinerary;
 }
 
 export async function generateDesirableDestinations(details: GenerateDesirableDestinationsType): Promise<Destination[]> {
-
 
   try {
     const validatedDetails = generateDesirableDestinationsType.parse(details);
@@ -123,7 +119,10 @@ export async function itineraryDetails(details: ItineraryDetailsType) {
     const validatedDetails = itineraryDetailsType.parse(details);
     departureLocation = validatedDetails.departureLocation;
     endLocation = validatedDetails.endLocation;
-    pace = validatedDetails.pace;
+    scheduleType = validatedDetails.scheduleType;
+    const numberOfDays: number = 1; // fixed as 1 for MVP, this will be a parameter passed in from frontend next time
+    const inputData = { numberOfDays, scheduleType };
+    generateDesirableDestinations(inputData);
   } catch (error) {
     console.error("Error validating itinerary details:", error);
   }
