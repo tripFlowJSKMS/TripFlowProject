@@ -11,18 +11,11 @@ import express from 'express'
 var cors = require('cors')
 const app = express();
 
-<<<<<<< HEAD
-const { generateDesirableDestinations } = require('./Algorithm/main.ts');
-const { registrationDetails } = require('./Algorithm/main.ts');
-app.use(express.json());
-app.use(cors())
-=======
 const { 
   generateDesirableDestinations, 
   registrationDetails,
   itineraryDetails
 } = require('./Algorithm/main.ts');
->>>>>>> jinyang
 
 app.use(express.json());
 app.use(cors())
@@ -30,14 +23,8 @@ app.use(cors())
 // Registration Page API
 app.post('/api/register', async (req, res) => {
   try {
-<<<<<<< HEAD
-    const { username, startingTime, endingTime } = req.body;
-    const inputData = {username, startingTime, endingTime};
-    // registrationDetailsType.parse(inputData); // This line validates the type/shape of the input data
-=======
     const { username, startingTime, endingTime, preferences } = req.body;
     const inputData = {username, startingTime, endingTime, preferences };
->>>>>>> jinyang
     registrationDetails(inputData);
     res.json({ message: 'Registration successful' });
   } catch (error) {
