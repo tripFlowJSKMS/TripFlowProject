@@ -28,7 +28,12 @@ export function numberToTime(num: number) {
   return `${hours}:${minutes.toString().padStart(2, "0")} ${suffix}`;
 }
 
-export async function register(username, startingTime, endingTime) {
-  const response = await axios.post("http://localhost:3000/api/register", {username, startingTime, endingTime});
+export async function register(username, startingTime, endingTime, preferences) {
+  const response = await axios.post("http://localhost:3000/api/register", {username, startingTime, endingTime, preferences});
+  console.log(response);
+}
+
+export async function startPlanning(departureLocation, endLocation, pace) {
+  const response = await axios.post("http://localhost:3000/api/start-planning", {departureLocation, endLocation, pace});
   console.log(response);
 }

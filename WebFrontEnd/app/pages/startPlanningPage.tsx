@@ -6,10 +6,12 @@ import Button from "../components/button";
 import TopBar from '../components/topBar'
 import { useState } from "react";
 import Input from "../components/input";
+import { startPlanning } from "../lib/utils";
 
 export default function StartPlanningPage() {
   const [departure, setDeparture] = useState("");
   const [destination, setDestination] = useState("");
+  const [pace, setPace] = useState("");
 
   return (
     <View style={tw`flex flex-col h-full`}>
@@ -25,16 +27,20 @@ export default function StartPlanningPage() {
             <Input parameter="Departure" width={25} value={departure} setValue={setDeparture} />
             <Input parameter="Destination" width={25} value={destination} setValue={setDestination} />
           </View>
+
+          <Input parameter="Pace" width={25} value={pace} setValue={setPace} />
         </View>
 
         <View style={tw`pt-80`}>
-          <Button>
+          <Button onPress={() => startPlanning(departure, destination, pace)}>
             <Link href="/pages/pickLocationsPage">
               <Text style={tw.style("text-white")}>Start Planning</Text>
             </Link>
           </Button>
         </View>
+
       </View>
+
     </View>
   );
 }
