@@ -4,11 +4,12 @@ import { Text, TextInput, View } from "react-native";
 import tw from "twrnc";
 import Button from "./button";
 
-export default function ThemeButtons({ setValue, parameter }) {
+export default function ThemeButtons({ preference, onPress }) {
+
     return (
       <View style={tw`my-2 mr-2`}>
-        <Button variant="primary" onPress={() => {setValue(current => [...current, parameter])}}>
-          <Text>{parameter}</Text>
+        <Button variant={preference.selected ? "selected" : "primary"} onPress={onPress}>
+          <Text style={tw`${preference.selected ? "text-white": "text-black"}`}>{preference.name}</Text>
         </Button>
       </View>
     );

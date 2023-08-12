@@ -33,7 +33,7 @@ export async function register(username, startingTime, endingTime, preferences) 
   console.log(response);
 }
 
-export async function startPlanning(departureLocation, endLocation, pace) {
-  const response = await axios.post("http://localhost:3000/api/start-planning", {departureLocation, endLocation, pace});
+export async function startPlanning(departureLocation, endLocation, scheduleType) {
+  const response = await axios.post("http://localhost:3000/api/start-planning", {departureLocation, endLocation, scheduleType});
   console.log(response);
 }

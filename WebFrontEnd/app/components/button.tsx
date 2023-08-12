@@ -14,6 +14,7 @@ const buttonVariants = cva(
       variant: {
         default: "text-white bg-black rounded-full",
         primary: "w-30 text-slate-900 border-gray-500 bg-transparent border rounded-full",
+        selected: "w-30 text-slate-900 border-gray-500 bg-gray-500 border rounded-full",
       },
       size: {
         default: "h-10",
