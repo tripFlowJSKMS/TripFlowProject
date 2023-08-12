@@ -8,18 +8,22 @@ import { register } from "../lib/utils";
 import { useState } from "react";
 import ThemeButtons from "../components/themeButtons";
 import TopBar from "../components/topBar";
+import useOnboardingStore from "../lib/onboardingStore";
 
 export default function RegistrationPage() {
   const [username, setUsername] = useState("");
   const [startingTime, setStartingTime] = useState("");
   const [endingTime, setEndingTime] = useState("");
-  const [interestedThemes, setInterestedThemes] = useState([])
+
+  const onboardingStore = useOnboardingStore();
 
   return (
     <View>
+      <TopBar isRegistered={false}></TopBar>
+
       <View style={tw`flex flex-row`}>
         <Image source={require('../assets/sand-castle-on-clearwater-beach-photo.jpg')} style={tw`w-50%`} />
-        <View style={tw`flex ml-50 justify-center h-5/6`}>
+        <View style={tw`flex ml-50 justify-center h-4/6`}>
           <Title parameter="Create Your Account"/>
 
           <View>
@@ -31,17 +35,13 @@ export default function RegistrationPage() {
           <View style={tw`my-10 w-150`}>
             <Text style={tw`text-base font-semibold`}>Interested Themes:</Text>
             <View style={tw`flex flex-row flex-wrap`}>
-                <ThemeButtons parameter="Food" setValue={setInterestedThemes} />
-                <ThemeButtons parameter="Family" setValue={setInterestedThemes} />
-                <ThemeButtons parameter="Culture" setValue={setInterestedThemes} />
-                <ThemeButtons parameter="Nature" setValue={setInterestedThemes} />
-                <ThemeButtons parameter="Honeymoon" setValue={setInterestedThemes} />
-                <ThemeButtons parameter="Shopping" setValue={setInterestedThemes} />
+                  {onboardingStore.preferences.map((preference) => 
+                    <ThemeButtons key={preference.name} preference={preference} onPress={() => onboardingStore.togglePreference(preference.name)} />)}
             </View>
           </View>
 
           <View>
-            <Button onPress={() => register(username, Number(startingTime), Number(endingTime), interestedThemes)}>
+            <Button onPress={() => register(username, Number(startingTime), Number(endingTime), onboardingStore.preferences)}>
               <Link href="/pages/startPlanningPage">
                 <Text style={tw.style("text-white")}>Create your account!</Text>
               </Link>

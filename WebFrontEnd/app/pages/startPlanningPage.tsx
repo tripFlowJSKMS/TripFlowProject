@@ -33,7 +33,7 @@ export default function StartPlanningPage() {
 
         <View style={tw`pt-80`}>
           <Button onPress={() => startPlanning(departure, destination, pace)}>
-            <Link href="/pages/pickLocationsPage">
+            <Link href="/pages/homePage">
               <Text style={tw.style("text-white")}>Start Planning</Text>
             </Link>
           </Button>
