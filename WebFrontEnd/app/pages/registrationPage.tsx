@@ -23,18 +23,18 @@ export default function RegistrationPage() {
 
       <View style={tw`flex flex-row`}>
         <Image source={require('../assets/sand-castle-on-clearwater-beach-photo.jpg')} style={tw`w-50%`} />
-        <View style={tw`flex ml-50 justify-center h-4/6`}>
+        <View style={tw`flex w-50% items-center justify-center h-4/6`}>
           <Title parameter="Create Your Account"/>
 
-          <View>
+          <View style={tw`w-50%`}>
             <Input parameter="Name" width={75} value={username} setValue={setUsername} />
             <Input parameter="Prefered Trip Starting Time" width={75} value={startingTime} setValue={setStartingTime} />
             <Input parameter="Prefered Trip Ending Time" width={75} value={endingTime} setValue={setEndingTime} />
           </View>
 
-          <View style={tw`my-10 w-150`}>
+          <View style={tw`my-10 ml-20`}>
             <Text style={tw`text-base font-semibold`}>Interested Themes:</Text>
-            <View style={tw`flex flex-row flex-wrap`}>
+            <View style={tw`flex w-100% flex-row flex-wrap`}>
                   {onboardingStore.preferences.map((preference) => 
                     <ThemeButtons key={preference.name} preference={preference} onPress={() => onboardingStore.togglePreference(preference.name)} />)}
             </View>
