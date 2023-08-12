@@ -15,8 +15,6 @@ import {
   ItineraryDetailsType,
   tripFlowAlgorithmType,
   TripFlowAlgorithmType,
-  // Destination,
-  destinationType,
 } from "../../Shared/types";
 
 const RELAXED_MULTIPLIER: number = 1.25;
@@ -24,24 +22,25 @@ const PACKED_MULTIPLIER: number = 0.75;
 
 // Let's assume for every additional day they are touring, we generate 10 more destinations for them to choose from
 const GENERATE_DESTINATIONS_MULTIPLIER: number = 10;
-const destinationMap: { [name: string]: Destination } = {};
 let name: string;
 let startTime: number;
 let endTime: number;
 let departureLocation: string;
 let endLocation: string;
-let pace: string;
 let preferences: string[];
 let numberOfDays: number = 0;
 let scheduleType: string;
 
 export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise<[Destination, number, number][]> {
   const validatedDetails = tripFlowAlgorithmType.parse(details);
-  // const destinationArr: Destination[] = validatedDetails.destinationArr;
+   // This seems damn sus i dont think im doing any type checking once i add "as any", but if i remove it destinationType in types.ts !== Destination class 
+  const destinationArr: Destination[] = validatedDetails.destinationArr as any; 
   let itinerary: [Destination, number, number][] = [];
   try {
-    // itinerary = planItinerary(destinationArr, startTime, endTime);
-  } catch (error) {}
+    planItinerary(destinationArr, startTime, endTime)
+  } catch (error) {
+    console.error("Error validating itinerary details:", error);
+  }
   return itinerary;
 }
 
@@ -140,30 +139,3 @@ export async function registrationDetails(details: RegistrationDetailsType) {
   }
   
 }
-
-// async function run() {
-//   try {
-//     const userDetails: RegistrationDetailsType = {
-//       username: "QH",
-//       startingTime: 600,
-//       endingTime: 1800,
-//     };
-//     await registrationDetails(userDetails);
-
-//     const destinationNames = await generateDesirableDestinations(
-//       ["Nature", "Music", "Art"],
-//       4,
-//       "Normal"
-//     );
-//     const result = await tripFlowAlgorithm(
-//       destinationNames,
-//       startTime,
-//       endTime
-//     );
-//     console.log(result);
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// }
-
-// run();

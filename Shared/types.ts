@@ -1,18 +1,7 @@
 import { z } from "zod";
 
-export class Destination {
-  constructor(
-    public id: number, 
-    public name: string, 
-    public openingTime: number, 
-    public closingTime: number, 
-    public tourDuration: number, 
-    public characteristics: string[],
-    public longitude: number, 
-    public latitude: number
-    ) {} 
-}
-
+// If there is an error related to this, please look at BackEnd/Algorithm/main.ts tripflowAlgorithm function
+// Am i using zod correctly since Zod's destinationType isnt the same as Destination class
 export const destinationType = z.object({
   id: z.number(),
   name: z.string(),
