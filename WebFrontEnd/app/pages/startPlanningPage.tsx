@@ -20,18 +20,20 @@ export default function StartPlanningPage() {
       <View style={tw`flex items-center justify-center p-10`}>
         <Title parameter="Plan Your Next Ideal Trip"/>
 
-        <View style={tw`w-180`}>
+        <View style={tw`w-70%`}>
           <Text style={tw`text-base font-semibold`}>1. Choose places you will be visiting</Text>
           
-          <View style={tw`flex flex-row justify-between`}>
+          <View style={tw`flex flex-row w-40%`}>
             <Input parameter="Departure" width={25} value={departure} setValue={setDeparture} />
+            <View style={tw`w-30%`}></View>
             <Input parameter="Destination" width={25} value={destination} setValue={setDestination} />
           </View>
-
-          <Input parameter="Pace" width={25} value={pace} setValue={setPace} />
+          <View style={tw`flex w-40% flex-row`}>
+            <Input parameter="Pace" width={25} value={pace} setValue={setPace} />
+          </View>
         </View>
 
-        <View style={tw`pt-80`}>
+        <View style={tw`pt-[10%]`}>
           <Button onPress={() => startPlanning(departure, destination, pace)}>
             <Link href="/pages/homePage">
               <Text style={tw.style("text-white")}>Start Planning</Text>

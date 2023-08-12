@@ -7,9 +7,7 @@ export default function ItineraryComponent() {
     const [value, setValue] = useState("");
   
     return (
-      <TouchableOpacity onPress={() => {}} style={tw`w-50 h-30 m-4 mt-1 border-black rounded-lg bg-gray-300 flex items-center justify-center`} >
-        {/* Replace with an image component */}
-        {/* <Image source={yourImageSource} style={tw`w-6 h-6`} /> */}
+      <TouchableOpacity onPress={() => {}} style={tw`w-120 h-50 mb-3 mr-3 rounded bg-yellow-100 flex items-center justify-center`}>
       </TouchableOpacity>
     );
   }
