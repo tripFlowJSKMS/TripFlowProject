@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { Destination } from "../BackEnd/Algorithm/Destination";
+
+export type DestinationType = Destination;
 
 // If there is an error related to this, please look at BackEnd/Algorithm/main.ts tripflowAlgorithm function
 // Am i using zod correctly since Zod's destinationType isnt the same as Destination class

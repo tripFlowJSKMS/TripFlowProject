@@ -15,6 +15,7 @@ import {
   ItineraryDetailsType,
   tripFlowAlgorithmType,
   TripFlowAlgorithmType,
+  DestinationType,
 } from "../../Shared/types";
 
 const RELAXED_MULTIPLIER: number = 1.25;
