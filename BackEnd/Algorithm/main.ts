@@ -96,6 +96,7 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
       destination.setWeight(preferences);
 
       destinationArr.push(destination);
+      return destinationArr;
     });
   } catch (error) {
     console.error("Error fetching itinerary data:", error);
@@ -122,7 +123,7 @@ export async function itineraryDetails(details: ItineraryDetailsType) {
     scheduleType = validatedDetails.scheduleType;
     const numberOfDays: number = 1; // fixed as 1 for MVP, this will be a parameter passed in from frontend next time
     const inputData = { numberOfDays, scheduleType };
-    generateDesirableDestinations(inputData);
+    return generateDesirableDestinations(inputData);
   } catch (error) {
     console.error("Error validating itinerary details:", error);
   }

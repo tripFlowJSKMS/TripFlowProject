@@ -29,6 +29,7 @@ export function numberToTime(num: number) {
 }
 
 export async function register(username, startingTime, endingTime, preferences) {
+  preferences = preferences.filter(preference => preference.selected).map(preferences => preferences.name);
   const response = await axios.post("http://localhost:3000/api/register", {username, startingTime, endingTime, preferences});
   console.log(response);
 }
