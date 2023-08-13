@@ -96,7 +96,6 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
       destination.setWeight(preferences);
 
       destinationArr.push(destination);
-      return destinationArr;
     });
   } catch (error) {
     console.error("Error fetching itinerary data:", error);
