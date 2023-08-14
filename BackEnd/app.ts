@@ -2,8 +2,15 @@
 import 'dotenv/config';
 import { Destination } from './Algorithm/Destination';
 import { 
+  generateDesirableDestinationsType, 
+  RegistrationDetailsType,
   registrationDetailsType,
-  generateDesirableDestinationsType 
+  ItineraryDetailsType,
+  itineraryDetailsType,
+  TripFlowAlgorithmType,
+  tripFlowAlgorithmType,
+  RecalibrateItineraryType,
+  recalibrateItineraryType
 } from "../Shared/types";
 
 
@@ -12,11 +19,11 @@ import { recalibrate, tripFlowAlgorithm } from './Algorithm/main';
 var cors = require('cors')
 const app = express();
 
-const { 
+import { 
   generateDesirableDestinations, 
   registrationDetails,
   itineraryDetails
-} = require('./Algorithm/main.ts');
+} from './Algorithm/main';
 
 app.use(express.json());
 app.use(cors())
@@ -24,9 +31,8 @@ app.use(cors())
 // Registration Page API
 app.post('/api/register', async (req, res) => {
   try {
-    const { username, startingTime, endingTime, preferences } = req.body;
-    const inputData = {username, startingTime, endingTime, preferences };
-    registrationDetails(inputData);
+    const validatedDetails: RegistrationDetailsType = registrationDetailsType.parse(req.body);
+    registrationDetails(validatedDetails);
     res.json({ message: 'Registration successful' });
   } catch (error) {
     console.error('Validation error:', error);
@@ -37,9 +43,8 @@ app.post('/api/register', async (req, res) => {
 // Start Planning Page API
 app.post('/api/start-planning', async (req, res) => {
   try {
-    const { departureLocation, endLocation, scheduleType } = req.body;
-    const inputData = {departureLocation, endLocation, scheduleType};
-    const destinations: Destination[] = await itineraryDetails(inputData);
+    const validatedDetails: ItineraryDetailsType = itineraryDetailsType.parse(req.body);
+    const destinations: Destination[] = await itineraryDetails(validatedDetails);
     res.json({ destinations });
   } catch (error) {
     console.error('Validation error:', error);
@@ -50,9 +55,8 @@ app.post('/api/start-planning', async (req, res) => {
 // Pick Locations Page API
 app.post('/api/pick-locations', async (req, res) => {
   try {
-    const { destinationArr } = req.body;
-    const inputData = { destinationArr };
-    const itinerary: [Destination, number, number][] = await tripFlowAlgorithm(inputData);
+    const validatedDetails: TripFlowAlgorithmType = tripFlowAlgorithmType.parse(req.body);
+    const itinerary: [Destination, number, number][] = await tripFlowAlgorithm(validatedDetails);
     res.json({ itinerary });
   } catch (error) {
     console.error('Validation error:', error);
@@ -63,9 +67,8 @@ app.post('/api/pick-locations', async (req, res) => {
 // Recalibration API
 app.post('/api/recalibrate', async (req, res) => {
   try {
-    const { issue, destinationsVisitedSoFar, currentTime } = req.body;
-    const inputData = { issue, destinationsVisitedSoFar, currentTime };
-    const itinerary: [Destination, number, number][] = await recalibrate(inputData);
+    const validatedDetails: RecalibrateItineraryType = recalibrateItineraryType.parse(req.body);
+    const itinerary: [Destination, number, number][] = await recalibrate(validatedDetails);
     res.json({ itinerary });
   } catch (error) {
     console.error('Validation error:', error);

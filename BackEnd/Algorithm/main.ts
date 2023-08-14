@@ -36,9 +36,8 @@ let scheduleType: string;
 let desirableDestinations: Destination[];
 
 export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise<[Destination, number, number][]> {
-  const validatedDetails = tripFlowAlgorithmType.parse(details);
   // passed in as JSON, transform it back to Destination class
-  const destinationArr: Destination[] = validatedDetails.destinationArr.map(details => {
+  const destinationArr: Destination[] = details.destinationArr.map(details => {
     const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
     return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
   });  
@@ -54,7 +53,7 @@ export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise
 export async function generateDesirableDestinations(details: GenerateDesirableDestinationsType): Promise<Destination[]> {
 
   try {
-    const validatedDetails = generateDesirableDestinationsType.parse(details);
+    const validatedDetails: GenerateDesirableDestinationsType = generateDesirableDestinationsType.parse(details);
     numberOfDays = validatedDetails.numberOfDays;
     scheduleType = validatedDetails.scheduleType;
   } catch (error) {
@@ -122,10 +121,9 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
 
 export async function itineraryDetails(details: ItineraryDetailsType): Promise<Destination[]> {
   try {
-    const validatedDetails = itineraryDetailsType.parse(details);
-    departureLocation = validatedDetails.departureLocation;
-    endLocation = validatedDetails.endLocation;
-    scheduleType = validatedDetails.scheduleType;
+    departureLocation = details.departureLocation;
+    endLocation = details.endLocation;
+    scheduleType = details.scheduleType;
     const numberOfDays: number = 1; // fixed as 1 for MVP, this will be a parameter passed in from frontend next time
     const inputData = { numberOfDays, scheduleType };
     return generateDesirableDestinations(inputData);
@@ -136,11 +134,10 @@ export async function itineraryDetails(details: ItineraryDetailsType): Promise<D
 
 export async function registrationDetails(details: RegistrationDetailsType) {
   try {
-    const validatedDetails = registrationDetailsType.parse(details);
-    name = validatedDetails.username;
-    startTime = validatedDetails.startingTime;
-    endTime = validatedDetails.endingTime;
-    preferences = validatedDetails.preferences;
+    name = details.username;
+    startTime = details.startingTime;
+    endTime = details.endingTime;
+    preferences = details.preferences;
   } catch (error) {
     console.error("Error validating registration details:", error);
   }
@@ -148,14 +145,13 @@ export async function registrationDetails(details: RegistrationDetailsType) {
 }
 
 export async function recalibrate(details: RecalibrateItineraryType): Promise<[Destination, number, number][]> {
-  const validatedDetails = recalibrateItineraryType.parse(details);
-  const destinationsVisitedSoFar: Destination[] = validatedDetails.destinationsVisitedSoFar.map(details => {
+  const destinationsVisitedSoFar: Destination[] = details.destinationsVisitedSoFar.map(details => {
     const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
     return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
   });  
-  const issue: RecalibrateType = validatedDetails.issue;
+  const issue: RecalibrateType = details.issue;
   if (issue == "EarlyOrLate") {
-    const currentTime: number = validatedDetails.currentTime;
+    const currentTime: number = details.currentTime;
     const remainingDestinations: Destination[] = desirableDestinations.filter(location => !destinationsVisitedSoFar.includes(location));
     let itinerary: [Destination, number, number][] = [];
     try {

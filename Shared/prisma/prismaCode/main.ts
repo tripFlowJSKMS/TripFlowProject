@@ -48,19 +48,19 @@ export function getAllItinerary() {
   return allItinerary;
 }
 
-// async function run() {
-//   const allItinerary = await getAllItinerary();
-//   console.log("All Itineraries:");
-//   console.log(allItinerary);
-// }
+async function run() {
+  const allItinerary = await getAllItinerary();
+  console.log("All Itineraries:");
+  console.log(allItinerary);
+}
 
 // Call the run function to print out all the output
-// run().catch(error => {
-//   console.error("Error occurred:", error);
-// }).finally(() => {
-//   // Disconnect the Prisma client when done
-//   prisma.$disconnect();
-// });
+run().catch(error => {
+  console.error("Error occurred:", error);
+}).finally(() => {
+  // Disconnect the Prisma client when done
+  prisma.$disconnect();
+});
 
 
 
