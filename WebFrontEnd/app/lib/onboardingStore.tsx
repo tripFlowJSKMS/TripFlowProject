@@ -1,5 +1,7 @@
 import { create } from "zustand";
-import type { PreferenceType } from "shared/types";
+import { 
+  type PreferenceType,
+} from "shared/types";
 
 export interface Preference {
   name: PreferenceType;
@@ -23,53 +25,48 @@ interface OnboardingStore {
   togglePreference: (name: PreferenceType) => void;
 }
 
-const useOnboardingStore = create<OnboardingStore>((set) => ({
-  preferences: [
-    {
-      name: "Sports",
-      selected: false,
+const generateInitialPreferences = () => {
+  const allPreferenceValues: PreferenceType[] = [
+    "Sports",
+    "Music",
+    "Outdoors",
+    "Food",
+    "Art",
+    "Shopping",
+  ];
+
+  return allPreferenceValues.map((preference) => ({
+    name: preference,
+    selected: false,
+  }));
+};
+
+const useOnboardingStore = create<OnboardingStore>((set) => {
+
+  const preferences: Preference[] = generateInitialPreferences();
+  return {
+    preferences,
+    startTime: 600, // 10am to 10pm
+    endTime: 1320,
+    setStartTime: (time: number) => {
+      set((state) => ({
+        ...state,
+        startTime: time,
+      }));
     },
-    {
-      name: "Music",
-      selected: false,
+    setEndTime: (time: number) => {
+      set((state) => ({
+        ...state,
+        endTime: time,
+      }));
     },
-    {
-      name: "Outdoors",
-      selected: false,
+    togglePreference: (name: PreferenceType) => {
+      set((state) => ({
+        ...state,
+        preferences: togglePreference(state.preferences, name),
+      }));
     },
-    {
-      name: "Food",
-      selected: false,
-    },
-    {
-      name: "Art",
-      selected: false,
-    },
-    {
-      name: "Shopping",
-      selected: false,
-    },
-  ],
-  startTime: 600, // 10am to 10pm
-  endTime: 1320,
-  setStartTime: (time: number) => {
-    set((state) => ({
-      ...state,
-      startTime: time,
-    }));
-  },
-  setEndTime: (time: number) => {
-    set((state) => ({
-      ...state,
-      endTime: time,
-    }));
-  },
-  togglePreference: (name: PreferenceType) => {
-    set((state) => ({
-      ...state,
-      preferences: togglePreference(state.preferences, name),
-    }));
-  },
-}));
+  } 
+});
 
 export default useOnboardingStore;

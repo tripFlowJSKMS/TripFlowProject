@@ -8,7 +8,7 @@ import {
 
 
 import express from 'express'
-import { tripFlowAlgorithm } from './Algorithm/main';
+import { recalibrate, tripFlowAlgorithm } from './Algorithm/main';
 var cors = require('cors')
 const app = express();
 
@@ -60,7 +60,18 @@ app.post('/api/pick-locations', async (req, res) => {
   } 
 });
 
-
+// Recalibration API
+app.post('/api/recalibrate', async (req, res) => {
+  try {
+    const { issue, destinationsVisitedSoFar, currentTime } = req.body;
+    const inputData = { issue, destinationsVisitedSoFar, currentTime };
+    const itinerary: [Destination, number, number][] = await recalibrate(inputData);
+    res.json({ itinerary });
+  } catch (error) {
+    console.error('Validation error:', error);
+    res.status(400).json({ error: 'Invalid input or API error '});
+  }
+});
 
 app.listen(3000, () => {
   console.log('Backend server is running on port 3000');

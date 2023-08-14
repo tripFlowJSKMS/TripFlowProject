@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Destination } from "../BackEnd/Algorithm/Destination";
+import { Preference } from "../MobileFrontEnd/store/onboardingStore";
 
 export type DestinationType = Destination;
 
@@ -16,7 +17,7 @@ export const destinationType = z.object({
   latitude: z.number()
 });
 
-const PreferenceEnum = z.enum([
+export const preferenceEnum = z.enum([
   "Sports",
   "Music",
   "Outdoors",
@@ -29,6 +30,10 @@ const scheduleEnum = z.enum([
   "Relaxed",
   "Normal",
   "Packed",
+]);
+
+const recalibrateEnum = z.enum([
+  "EarlyOrLate",
 ]);
 
 export const registrationDetailsType = z.object({
@@ -54,9 +59,17 @@ export const tripFlowAlgorithmType = z.object({
   destinationArr: z.array(destinationType)
 });
 
-export type PreferenceType = z.infer<typeof PreferenceEnum>;
-export type scheduleType = z.infer<typeof scheduleEnum>;
+export const recalibrateItineraryType = z.object({
+  issue: recalibrateEnum,
+  destinationsVisitedSoFar: z.array(destinationType),
+  currentTime: z.number()
+});
+
+export type PreferenceType = z.infer<typeof preferenceEnum>;
+export type ScheduleType = z.infer<typeof scheduleEnum>;
+export type RecalibrateType = z.infer<typeof recalibrateEnum>;
 export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;
 export type GenerateDesirableDestinationsType = z.infer<typeof generateDesirableDestinationsType>;
 export type ItineraryDetailsType = z.infer<typeof itineraryDetailsType>;
 export type TripFlowAlgorithmType = z.infer<typeof tripFlowAlgorithmType>;
+export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;

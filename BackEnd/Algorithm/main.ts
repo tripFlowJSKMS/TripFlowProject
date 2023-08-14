@@ -15,7 +15,9 @@ import {
   ItineraryDetailsType,
   tripFlowAlgorithmType,
   TripFlowAlgorithmType,
-  DestinationType,
+  recalibrateItineraryType,
+  RecalibrateItineraryType,
+  RecalibrateType,
 } from "../../Shared/types";
 
 const RELAXED_MULTIPLIER: number = 1.25;
@@ -31,14 +33,18 @@ let endLocation: string;
 let preferences: string[];
 let numberOfDays: number = 0;
 let scheduleType: string;
+let desirableDestinations: Destination[];
 
 export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise<[Destination, number, number][]> {
   const validatedDetails = tripFlowAlgorithmType.parse(details);
-   // This seems damn sus i dont think im doing any type checking once i add "as any", but if i remove it destinationType in types.ts !== Destination class 
-  const destinationArr: Destination[] = validatedDetails.destinationArr as any; 
+  // passed in as JSON, transform it back to Destination class
+  const destinationArr: Destination[] = validatedDetails.destinationArr.map(details => {
+    const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
+    return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
+  });  
   let itinerary: [Destination, number, number][] = [];
   try {
-    planItinerary(destinationArr, startTime, endTime)
+    itinerary = planItinerary(destinationArr, startTime, endTime)
   } catch (error) {
     console.error("Error validating itinerary details:", error);
   }
@@ -55,7 +61,7 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
     console.error("Error validating generate desirable destinations details:", error);
   }
   
-  let destinationArr: Destination[] = [];
+  desirableDestinations = [];
 
   try {
     const itineraryData: any[] = await getAllItinerary();
@@ -95,13 +101,13 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
       // change this as a parameter later
       destination.setWeight(preferences);
 
-      destinationArr.push(destination);
+      desirableDestinations.push(destination);
     });
   } catch (error) {
     console.error("Error fetching itinerary data:", error);
   }
 
-  destinationArr.sort((destinationA, destinationB) => {
+  desirableDestinations.sort((destinationA, destinationB) => {
     const weightA = destinationA.getWeight();
     const weightB = destinationB.getWeight();
     return weightB - weightA; // Sort in descending order
@@ -109,12 +115,12 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
 
   const totalNumberRecommended: number = numberOfDays * GENERATE_DESTINATIONS_MULTIPLIER;
 
-  destinationArr = destinationArr.slice(0, totalNumberRecommended);
+  desirableDestinations = desirableDestinations.slice(0, totalNumberRecommended);
   
-  return destinationArr;
+  return desirableDestinations;
 }
 
-export async function itineraryDetails(details: ItineraryDetailsType) {
+export async function itineraryDetails(details: ItineraryDetailsType): Promise<Destination[]> {
   try {
     const validatedDetails = itineraryDetailsType.parse(details);
     departureLocation = validatedDetails.departureLocation;
@@ -139,4 +145,25 @@ export async function registrationDetails(details: RegistrationDetailsType) {
     console.error("Error validating registration details:", error);
   }
   
+}
+
+export async function recalibrate(details: RecalibrateItineraryType): Promise<[Destination, number, number][]> {
+  const validatedDetails = recalibrateItineraryType.parse(details);
+  const destinationsVisitedSoFar: Destination[] = validatedDetails.destinationsVisitedSoFar.map(details => {
+    const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
+    return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
+  });  
+  const issue: RecalibrateType = validatedDetails.issue;
+  if (issue == "EarlyOrLate") {
+    const currentTime: number = validatedDetails.currentTime;
+    const remainingDestinations: Destination[] = desirableDestinations.filter(location => !destinationsVisitedSoFar.includes(location));
+    let itinerary: [Destination, number, number][] = [];
+    try {
+      itinerary = planItinerary(remainingDestinations, currentTime, endTime);
+    } catch (error) {
+      console.error("Error validating itinerary details:", error);
+    }
+    return itinerary;
+  } 
+  return null;
 }
