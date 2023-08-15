@@ -9,6 +9,7 @@ import { useState } from "react";
 import ThemeButtons from "../components/themeButtons";
 import TopBar from "../components/topBar";
 import useOnboardingStore from "../lib/onboardingStore";
+import TimeInput from "../components/timeInput";
 
 export default function RegistrationPage() {
   const [username, setUsername] = useState("");
@@ -28,8 +29,8 @@ export default function RegistrationPage() {
 
           <View style={tw`w-50%`}>
             <Input parameter="Name" width={75} value={username} setValue={setUsername} />
-            <Input parameter="Prefered Trip Starting Time" width={75} value={startingTime} setValue={setStartingTime} />
-            <Input parameter="Prefered Trip Ending Time" width={75} value={endingTime} setValue={setEndingTime} />
+            <TimeInput parameter="Prefered Trip Starting Time" width={75} value={startingTime} setValue={setStartingTime}/>
+            <TimeInput parameter="Prefered Trip Ending Time" width={75} value={endingTime} setValue={setEndingTime}/>
           </View>
 
           <View style={tw`my-10 ml-20`}>

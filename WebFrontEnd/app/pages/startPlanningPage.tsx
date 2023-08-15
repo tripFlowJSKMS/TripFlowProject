@@ -7,6 +7,7 @@ import TopBar from '../components/topBar'
 import { useState } from "react";
 import Input from "../components/input";
 import { startPlanning } from "../lib/utils";
+import PaceInput from "../components/paceInput";
 
 export default function StartPlanningPage() {
   const [departure, setDeparture] = useState("");
@@ -29,7 +30,7 @@ export default function StartPlanningPage() {
             <Input parameter="Destination" width={25} value={destination} setValue={setDestination} />
           </View>
           <View style={tw`flex w-40% flex-row`}>
-            <Input parameter="Pace" width={25} value={pace} setValue={setPace} />
+            <PaceInput parameter="Pace" width={25} value={pace} setValue={setPace} />
           </View>
         </View>
 
