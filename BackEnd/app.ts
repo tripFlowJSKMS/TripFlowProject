@@ -79,9 +79,11 @@ app.post("/api/recalibrate", async (req, res) => {
   try {
     const validatedDetails: RecalibrateItineraryType =
       recalibrateItineraryType.parse(req.body);
-    const itinerary: [Destination, number, number][] = await recalibrate(
-      validatedDetails
-    );
+    const itinerary: Array<{
+      destination: Destination;
+      startingTime: number;
+      endingTime: number;
+    }> = await recalibrate(validatedDetails);
     res.json({ itinerary });
   } catch (error) {
     console.error("Validation error:", error);

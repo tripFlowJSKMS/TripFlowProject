@@ -132,8 +132,8 @@ export class Destination {
           (leaveSourceTime + travellingTime <= reachDestinationTime);
     }
 
-    itineraryFormat(startTime: number, endTime: number): [Destination, number, number] {
-      return [this, startTime, endTime];
+    itineraryFormat(startTime: number, endTime: number): {destination: Destination, startingTime: number, endingTime: number} {
+      return {destination: this, startingTime: startTime, endingTime: endTime};
     }
 
 }

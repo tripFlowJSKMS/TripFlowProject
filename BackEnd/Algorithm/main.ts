@@ -35,13 +35,13 @@ let numberOfDays: number = 0;
 let scheduleType: string;
 let desirableDestinations: Destination[];
 
-export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise<[Destination, number, number][]> {
+export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise<Array<{destination: Destination, startingTime: number, endingTime: number}>> {
   // passed in as JSON, transform it back to Destination class
   const destinationArr: Destination[] = details.destinationArr.map(details => {
     const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
     return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
   });  
-  let itinerary: [Destination, number, number][] = [];
+  let itinerary: Array<{destination: Destination, startingTime: number, endingTime: number}> = [];
   try {
     itinerary = planItinerary(destinationArr, startTime, endTime)
   } catch (error) {
@@ -130,6 +130,8 @@ export async function itineraryDetails(details: ItineraryDetailsType): Promise<D
   } catch (error) {
     console.error("Error validating itinerary details:", error);
   }
+
+  return [];
 }
 
 export async function registrationDetails(details: RegistrationDetailsType) {
@@ -144,7 +146,9 @@ export async function registrationDetails(details: RegistrationDetailsType) {
   
 }
 
-export async function recalibrate(details: RecalibrateItineraryType): Promise<[Destination, number, number][]> {
+export async function recalibrate(details: RecalibrateItineraryType): 
+  Promise<Array<{destination: Destination, startingTime: number, endingTime: number}>> 
+  {
   const destinationsVisitedSoFar: Destination[] = details.destinationsVisitedSoFar.map(details => {
     const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
     return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
@@ -153,7 +157,7 @@ export async function recalibrate(details: RecalibrateItineraryType): Promise<[D
   if (issue == "EarlyOrLate") {
     const currentTime: number = details.currentTime;
     const remainingDestinations: Destination[] = desirableDestinations.filter(location => !destinationsVisitedSoFar.includes(location));
-    let itinerary: [Destination, number, number][] = [];
+    let itinerary: Array<{destination: Destination, startingTime: number, endingTime: number}> = [];
     try {
       itinerary = planItinerary(remainingDestinations, currentTime, endTime);
     } catch (error) {
@@ -161,5 +165,6 @@ export async function recalibrate(details: RecalibrateItineraryType): Promise<[D
     }
     return itinerary;
   } 
-  return null;
+  // we will add more recalibrate cases in the future
+  return [];
 }
