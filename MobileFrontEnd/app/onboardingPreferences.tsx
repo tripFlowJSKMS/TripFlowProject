@@ -7,8 +7,42 @@ import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { numberToTime } from "@/lib/utils";
+import axios from "axios";
+import { TripFlowAlgorithmType } from "../../shared/types";
 
 const SLIDER_LENGTH = 300;
+
+const APIcall = async () => {
+  let tripflowAlgoInput: TripFlowAlgorithmType = {
+    destinationArr: [
+      {
+        id: 1,
+        name: "ABC Nature Reserve",
+        openingTime: 360,
+        closingTime: 1200,
+        tourDuration: 360,
+        characteristics: ["Adventure", "Nature"],
+        longitude: -122.419,
+        latitude: 37.7749,
+      },
+      {
+        id: 2,
+        name: "DEF Winery",
+        openingTime: 540,
+        closingTime: 1320,
+        tourDuration: 120,
+        characteristics: ["Culture", "Food"],
+        longitude: -122.424,
+        latitude: 37.7749,
+      },
+    ],
+  };
+  const res = axios.post(
+    "http://localhost:3000/api/pick-locations",
+    tripflowAlgoInput,
+  );
+  console.log(res);
+};
 
 export default function OnboardingPage() {
   const statesArray = ["Preferences", "Time", "Submission"] as const;
@@ -104,6 +138,13 @@ export default function OnboardingPage() {
         <View style={tw`absolute bottom-5 right-5`}>
           <Button onPress={() => setNextState(state)}>
             <Entypo name="chevron-right" size={24} color="black" />
+          </Button>
+        </View>
+      )}
+      {isLastState && (
+        <View style={tw`absolute bottom-5 right-5`}>
+          <Button onPress={() => APIcall()}>
+            <Entypo name="chevron-right" size={24} color="red" />
           </Button>
         </View>
       )}
