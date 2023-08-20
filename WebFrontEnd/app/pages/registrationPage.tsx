@@ -18,6 +18,12 @@ export default function RegistrationPage() {
 
   const onboardingStore = useOnboardingStore();
 
+  // Function to convert time strings (HH:MM) to minutes
+  const convertTimeToMinutes = (time) => {
+    const [hours, minutes] = time.split(":");
+    return parseInt(hours) * 60 + parseInt(minutes);
+  };
+
   return (
     <View>
       <TopBar isRegistered={false}></TopBar>
@@ -42,7 +48,8 @@ export default function RegistrationPage() {
           </View>
 
           <View>
-            <Button onPress={() => register(username, Number(startingTime), Number(endingTime), onboardingStore.preferences)}>
+            {/* <Button onPress={() => register(username, Number(startingTime), Number(endingTime), onboardingStore.preferences)}> */}
+            <Button onPress={() => register(username, convertTimeToMinutes(startingTime), convertTimeToMinutes(endingTime), onboardingStore.preferences)}>
               <Link href="/pages/startPlanningPage">
                 <Text style={tw.style("text-white")}>Create your account!</Text>
               </Link>
