@@ -7,16 +7,11 @@ import {
 import { Destination } from "./Destination";
 import { planItinerary } from "./helperFunctions";
 import { 
-  registrationDetailsType, 
   RegistrationDetailsType,
-  generateDesirableDestinationsType,
   GenerateDesirableDestinationsType,
-  itineraryDetailsType,
-  ItineraryDetailsType,
-  tripFlowAlgorithmType,
   TripFlowAlgorithmType,
-  recalibrateItineraryType,
   RecalibrateItineraryType,
+  BumpNeglectedPreferencesType,
   RecalibrateType,
 } from "../../Shared/types";
 
@@ -26,17 +21,21 @@ const PACKED_MULTIPLIER: number = 0.75;
 // Let's assume for every additional day they are touring, we generate 10 more destinations for them to choose from
 const GENERATE_DESTINATIONS_MULTIPLIER: number = 10;
 let name: string;
+let startDate: Date;
+let endDate: Date;
 let startTime: number;
 let endTime: number;
 let departureLocation: string;
-let endLocation: string;
+let destinationLocation: string;
+let paxNumber: number;
+let dietaryPreference: string;
 let preferences: string[];
-let numberOfDays: number = 0;
-let scheduleType: string;
+let pace: string;
 let desirableDestinations: Destination[];
+let selectedDestinations: Set<number> = new Set();
+let selectedCharacteristics: Map<string, number> = new Map();
 
 export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise<Array<{destination: Destination, startingTime: number, endingTime: number}>> {
-  // passed in as JSON, transform it back to Destination class
   const destinationArr: Destination[] = details.destinationArr.map(details => {
     const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
     return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
@@ -51,11 +50,17 @@ export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise
 }
 
 export async function generateDesirableDestinations(details: GenerateDesirableDestinationsType): Promise<Destination[]> {
-
   try {
-    const validatedDetails: GenerateDesirableDestinationsType = generateDesirableDestinationsType.parse(details);
-    numberOfDays = validatedDetails.numberOfDays;
-    scheduleType = validatedDetails.scheduleType;
+    startTime = details.startTime;
+    endTime = details.endTime;
+    startDate = details.startDate;
+    endDate = details.endDate;
+    departureLocation = details.departureLocation;
+    destinationLocation = details.destinationLocation;
+    paxNumber = details.paxNumber;
+    dietaryPreference = details.dietaryPreference;
+    pace = details.pace;
+    preferences = details.areaOfInterests;
   } catch (error) {
     console.error("Error validating generate desirable destinations details:", error);
   }
@@ -78,9 +83,9 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
 
       let actualTimeRequired: number = timeRequired;
 
-      if (scheduleType == "Packed") {
+      if (pace == "Packed") {
         actualTimeRequired *= PACKED_MULTIPLIER;
-      } else if (scheduleType == "Relaxed") {
+      } else if (pace == "Relaxed") {
         actualTimeRequired *= RELAXED_MULTIPLIER;
       } else {
         actualTimeRequired = timeRequired;
@@ -112,37 +117,57 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
     return weightB - weightA; // Sort in descending order
   });
 
+  // const numberOfDays: number = endDate - startDate
+  const numberOfDays: number = 1; // for MVP
   const totalNumberRecommended: number = numberOfDays * GENERATE_DESTINATIONS_MULTIPLIER;
 
-  desirableDestinations = desirableDestinations.slice(0, totalNumberRecommended);
+  const desirableDestinationsCopy: Destination[] = desirableDestinations.slice(0, totalNumberRecommended);
   
-  return desirableDestinations;
-}
-
-export async function itineraryDetails(details: ItineraryDetailsType): Promise<Destination[]> {
-  try {
-    departureLocation = details.departureLocation;
-    endLocation = details.endLocation;
-    scheduleType = details.scheduleType;
-    const numberOfDays: number = 1; // fixed as 1 for MVP, this will be a parameter passed in from frontend next time
-    const inputData = { numberOfDays, scheduleType };
-    return generateDesirableDestinations(inputData);
-  } catch (error) {
-    console.error("Error validating itinerary details:", error);
-  }
-
-  return [];
+  return desirableDestinationsCopy;
 }
 
 export async function registrationDetails(details: RegistrationDetailsType) {
   try {
     name = details.username;
-    startTime = details.startingTime;
-    endTime = details.endingTime;
-    preferences = details.preferences;
+    
+    // preferences = details.preferences;
   } catch (error) {
     console.error("Error validating registration details:", error);
   }
+  
+}
+
+export async function bumpNeglectedPreferences(details: BumpNeglectedPreferencesType): Promise<Destination[]> {
+  details.selectedDestinationArr.map(details => {
+    const { id, characteristics } = details;
+    selectedDestinations.add(id);
+    for (const characteristic of characteristics) {
+      if (preferences.includes(characteristic)) {
+        const currentValue = selectedCharacteristics.get(characteristic) ?? 0;
+        selectedCharacteristics.set(characteristic, currentValue + 1);
+      }
+    }
+  });
+
+  let chosenFrequency: number | undefined = undefined;
+  let characteristicLeastChosen: string = "";
+
+  selectedCharacteristics.forEach((value, key) => {
+    if (chosenFrequency === undefined || value < chosenFrequency) {
+      chosenFrequency = value;
+      characteristicLeastChosen = key;
+    }
+  });
+
+  const neglectedDestinations: Destination[] = [];
+
+  for (const destination of desirableDestinations) {
+    if (destination.getCharacteristics().includes(characteristicLeastChosen)) {
+      neglectedDestinations.push(destination);
+    }
+  }
+
+  return neglectedDestinations;
   
 }
 

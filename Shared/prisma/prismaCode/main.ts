@@ -54,13 +54,13 @@ async function run() {
   console.log(allItinerary);
 }
 
-// Call the run function to print out all the output
-run().catch(error => {
-  console.error("Error occurred:", error);
-}).finally(() => {
-  // Disconnect the Prisma client when done
-  prisma.$disconnect();
-});
+// // Call the run function to print out all the output
+// run().catch(error => {
+//   console.error("Error occurred:", error);
+// }).finally(() => {
+//   // Disconnect the Prisma client when done
+//   prisma.$disconnect();
+// });
 
 
 

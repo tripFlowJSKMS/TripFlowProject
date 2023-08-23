@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { Destination } from "../BackEnd/Algorithm/Destination";
-import { Preference } from "../MobileFrontEnd/store/onboardingStore";
 
 export type DestinationType = Destination;
 
@@ -26,27 +25,32 @@ export const preferenceEnum = z.enum([
   "Shopping",
 ]);
 
+export const dietaryPreference = z.enum([
+  "Normal",
+  "Halal",
+  "Vegetarian",
+  "Vegan"
+])
+
 const scheduleEnum = z.enum(["Relaxed", "Normal", "Packed"]);
 
 const recalibrateEnum = z.enum(["EarlyOrLate"]);
 
 export const registrationDetailsType = z.object({
   username: z.string(),
-  startingTime: z.number(),
-  endingTime: z.number(),
-  preferences: z.array(z.string()),
 });
 
 export const generateDesirableDestinationsType = z.object({
-  // Number will indicate how many days they will spend on vacation. Default is 1 for MVP
-  numberOfDays: z.number(),
-  scheduleType: z.string(),
-});
-
-export const itineraryDetailsType = z.object({
+  startDate: z.date(),
+  endDate: z.date(),
+  startTime: z.number(),
+  endTime: z.number(),
   departureLocation: z.string(),
-  endLocation: z.string(),
-  scheduleType: z.string(),
+  destinationLocation: z.string(),
+  paxNumber: z.number(),
+  dietaryPreference: dietaryPreference,
+  pace: scheduleEnum,
+  areaOfInterests: z.array(z.string()),
 });
 
 export const tripFlowAlgorithmType = z.object({
@@ -59,13 +63,15 @@ export const recalibrateItineraryType = z.object({
   currentTime: z.number(),
 });
 
+export const bumpNeglectedPreferencesType = z.object({
+  selectedDestinationArr: z.array(destinationType),
+})
+
 export type PreferenceType = z.infer<typeof preferenceEnum>;
 export type ScheduleType = z.infer<typeof scheduleEnum>;
 export type RecalibrateType = z.infer<typeof recalibrateEnum>;
 export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;
-export type GenerateDesirableDestinationsType = z.infer<
-  typeof generateDesirableDestinationsType
->;
-export type ItineraryDetailsType = z.infer<typeof itineraryDetailsType>;
+export type GenerateDesirableDestinationsType = z.infer<typeof generateDesirableDestinationsType>;
 export type TripFlowAlgorithmType = z.infer<typeof tripFlowAlgorithmType>;
 export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;
+export type BumpNeglectedPreferencesType = z.infer<typeof bumpNeglectedPreferencesType>;

@@ -5,12 +5,13 @@ import {
   generateDesirableDestinationsType,
   RegistrationDetailsType,
   registrationDetailsType,
-  ItineraryDetailsType,
-  itineraryDetailsType,
   TripFlowAlgorithmType,
   tripFlowAlgorithmType,
   RecalibrateItineraryType,
   recalibrateItineraryType,
+  BumpNeglectedPreferencesType,
+  bumpNeglectedPreferencesType,
+  GenerateDesirableDestinationsType,
 } from "../Shared/types";
 
 import express from "express";
@@ -21,7 +22,7 @@ const app = express();
 import {
   generateDesirableDestinations,
   registrationDetails,
-  itineraryDetails,
+  bumpNeglectedPreferences
 } from "./Algorithm/main";
 
 app.use(express.json());
@@ -30,8 +31,7 @@ app.use(cors());
 // Registration Page API
 app.post("/api/register", async (req, res) => {
   try {
-    const validatedDetails: RegistrationDetailsType =
-      registrationDetailsType.parse(req.body);
+    const validatedDetails: RegistrationDetailsType = registrationDetailsType.parse(req.body);
     registrationDetails(validatedDetails);
     res.json({ message: "Registration successful" });
   } catch (error) {
@@ -43,12 +43,8 @@ app.post("/api/register", async (req, res) => {
 // Start Planning Page API
 app.post("/api/start-planning", async (req, res) => {
   try {
-    const validatedDetails: ItineraryDetailsType = itineraryDetailsType.parse(
-      req.body
-    );
-    const destinations: Destination[] = await itineraryDetails(
-      validatedDetails
-    );
+    const validatedDetails: GenerateDesirableDestinationsType = generateDesirableDestinationsType.parse(req.body);
+    const destinations: Destination[] = await generateDesirableDestinations(validatedDetails);
     res.json({ destinations });
   } catch (error) {
     console.error("Validation error:", error);
@@ -57,11 +53,21 @@ app.post("/api/start-planning", async (req, res) => {
 });
 
 // Pick Locations Page API
-app.post("/api/pick-locations", async (req, res) => {
+app.post("/api/pick-locations-page", async(req, res) => {
   try {
-    const validatedDetails: TripFlowAlgorithmType = tripFlowAlgorithmType.parse(
-      req.body
-    );
+    const validatedDetails: BumpNeglectedPreferencesType = bumpNeglectedPreferencesType.parse(req.body);
+    const destinations: Destination[] = await bumpNeglectedPreferences(validatedDetails);
+    res.json({ destinations });
+  } catch (error) {
+    console.error("Validation error:", error);
+    res.status(400).json({ error: "Invalid input or API error "});
+  }
+});
+
+// Planning Page API
+app.post("/api/planning-page", async (req, res) => {
+  try {
+    const validatedDetails: TripFlowAlgorithmType = tripFlowAlgorithmType.parse(req.body);
     const itinerary: Array<{
       destination: Destination;
       startingTime: number;
@@ -77,8 +83,7 @@ app.post("/api/pick-locations", async (req, res) => {
 // Recalibration API
 app.post("/api/recalibrate", async (req, res) => {
   try {
-    const validatedDetails: RecalibrateItineraryType =
-      recalibrateItineraryType.parse(req.body);
+    const validatedDetails: RecalibrateItineraryType = recalibrateItineraryType.parse(req.body);
     const itinerary: Array<{
       destination: Destination;
       startingTime: number;
