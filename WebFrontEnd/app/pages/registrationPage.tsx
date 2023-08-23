@@ -10,6 +10,7 @@ import ThemeButtons from "../components/themeButtons";
 import TopBar from "../components/topBar";
 import useOnboardingStore from "../lib/onboardingStore";
 import TimeInput from "../components/timeInput";
+import Login from "../components/login";
 
 export default function RegistrationPage() {
   const [username, setUsername] = useState("");
@@ -54,6 +55,8 @@ export default function RegistrationPage() {
                 <Text style={tw.style("text-white")}>Create your account!</Text>
               </Link>
             </Button>
+
+            <Login></Login>
           </View>
 
         </View>

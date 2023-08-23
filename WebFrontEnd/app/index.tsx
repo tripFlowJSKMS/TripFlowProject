@@ -3,11 +3,18 @@ import { Text, View } from "react-native";
 import tw from "twrnc";
 import RegistrationPage from "./pages/registrationPage";
 import StartPlanningPage from "./pages/startPlanningPage";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 export default function App() {
 
   return (
-      <RegistrationPage></RegistrationPage>
+      <GoogleOAuthProvider clientId="371089798315-eeri85ic9lt17njh1dl1th1q92lfk2h7.apps.googleusercontent.com">
+        <RegistrationPage></RegistrationPage>
+      </GoogleOAuthProvider>
   );
+
+        {/* <RegistrationPage></RegistrationPage> */}
+
 }
 

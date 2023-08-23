@@ -1,2 +1,8 @@
 Username: 9jzyg2s6p29xrdp4ri4n
 Password: pscale_pw_31h8WPjIhFq01lMpLZ4BOMjbmHP9iF0lKoaDDOR35LO
+
+Test email: TripFlowJSKMS@gmail.com
+Password: R3sidentialCollegeFour
+
+Oauth client id: 371089798315-eeri85ic9lt17njh1dl1th1q92lfk2h7.apps.googleusercontent.com
+Oauth client secret: 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
