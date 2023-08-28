@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import Button from "@/components/UI/Button";
 import PreferenceItem from "@/components/onboarding/PreferenceItem";
 import useOnboardingStore from "@/store/onboardingStore";
 import { View, Text } from "react-native";
@@ -7,47 +7,18 @@ import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { numberToTime } from "@/lib/utils";
-import axios from "axios";
-import { TripFlowAlgorithmType } from "../../shared/types";
 
 const SLIDER_LENGTH = 300;
-
-const APIcall = async () => {
-  let tripflowAlgoInput: TripFlowAlgorithmType = {
-    destinationArr: [
-      {
-        id: 1,
-        name: "ABC Nature Reserve",
-        openingTime: 360,
-        closingTime: 1200,
-        tourDuration: 360,
-        characteristics: ["Adventure", "Nature"],
-        longitude: -122.419,
-        latitude: 37.7749,
-      },
-      {
-        id: 2,
-        name: "DEF Winery",
-        openingTime: 540,
-        closingTime: 1320,
-        tourDuration: 120,
-        characteristics: ["Culture", "Food"],
-        longitude: -122.424,
-        latitude: 37.7749,
-      },
-    ],
-  };
-  const res = axios.post(
-    "http://localhost:3000/api/pick-locations",
-    tripflowAlgoInput,
-  );
-  console.log(res);
-};
-
 export default function OnboardingPage() {
-  const statesArray = ["Preferences", "Time", "Submission"] as const;
+  const statesArray = [
+    "Departure",
+    "Time",
+    "Preferences",
+    "Submission",
+  ] as const;
   type State = (typeof statesArray)[number];
-  const [state, setState] = useState<State>("Preferences");
+  const [state, setState] = useState<State>("Departure");
+  const isDepartureState = state === "Departure";
   const isPreferencesState = state === "Preferences";
   const isTimeState = state === "Time";
   const isSubmissionState = state === "Submission";
@@ -76,20 +47,34 @@ export default function OnboardingPage() {
 
   const preferences = onboardingStore.preferences;
   const togglePreference = onboardingStore.togglePreference;
+  const departureLocation = onboardingStore.departureLocation;
+  const setDepartureLocation = onboardingStore.setDepartureLocation;
+  const destinationLocation = onboardingStore.destinationLocation;
+  const setDestinationLocation = onboardingStore.setDestinationLocation;
+  const pax = onboardingStore.pax;
+  const setPax = onboardingStore.setPax;
+  const dietaryPreference = onboardingStore.dietaryPreference;
+  const setDietaryPreference = onboardingStore.setDietaryPreference;
+  const pace = onboardingStore.pace;
+  const setPace = onboardingStore.setPace;
   const startTime = onboardingStore.startTime;
   const endTime = onboardingStore.endTime;
   const setStartTime = onboardingStore.setStartTime;
   const setEndTime = onboardingStore.setEndTime;
+  const startDate = onboardingStore.startDate;
+  const setStartDate = onboardingStore.setStartDate;
+  const endDate = onboardingStore.endDate;
+  const setEndDate = onboardingStore.setEndDate;
 
   return (
     <View style={tw`bg-slate-800 relative h-full w-full`}>
       <Text style={tw`mt-20 text-slate-200 text-center text-3xl font-medium`}>
-        {isPreferencesState && "Select Preferences"}
-        {isTimeState && "Select Time Period"}
+        Your ideal trip awaits
       </Text>
       <View
         style={tw`mt-10 flex flex-row flex-wrap items-start gap-10 justify-center bg-slate-800 w-full`}
       >
+        {isDepartureState && <Button></Button>}
         {isPreferencesState &&
           preferences.map((preference) => {
             return (
@@ -138,13 +123,6 @@ export default function OnboardingPage() {
         <View style={tw`absolute bottom-5 right-5`}>
           <Button onPress={() => setNextState(state)}>
             <Entypo name="chevron-right" size={24} color="black" />
-          </Button>
-        </View>
-      )}
-      {isLastState && (
-        <View style={tw`absolute bottom-5 right-5`}>
-          <Button onPress={() => APIcall()}>
-            <Entypo name="chevron-right" size={24} color="red" />
           </Button>
         </View>
       )}

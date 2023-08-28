@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import type { PreferenceType } from "shared/types";
+import type {
+  DietaryPreferenceType,
+  PreferenceType,
+  ScheduleType,
+} from "shared/types";
 
 export interface Preference {
   name: PreferenceType;
@@ -16,10 +20,24 @@ const togglePreference = (preferences: Preference[], name: PreferenceType) => {
 
 interface OnboardingStore {
   preferences: Preference[];
+  departureLocation: string;
+  destinationLocation: string;
+  pax: number;
+  dietaryPreference: DietaryPreferenceType;
+  pace: ScheduleType;
   startTime: number;
   endTime: number;
+  startDate: Date;
+  endDate: Date;
+  setDepartureLocation: (location: string) => void;
+  setDestinationLocation: (location: string) => void;
+  setPax: (pax: number) => void;
+  setDietaryPreference: (preference: DietaryPreferenceType) => void;
+  setPace: (pace: ScheduleType) => void;
   setStartTime: (time: number) => void;
   setEndTime: (time: number) => void;
+  setStartDate: (date: Date) => void;
+  setEndDate: (date: Date) => void;
   togglePreference: (name: PreferenceType) => void;
 }
 
@@ -50,8 +68,45 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
       selected: false,
     },
   ],
+  departureLocation: "",
+  destinationLocation: "",
+  pax: 1,
+  dietaryPreference: "Normal",
+  pace: "Normal",
   startTime: 600, // 10am to 10pm
   endTime: 1320,
+  startDate: new Date(),
+  endDate: new Date(),
+  setDepartureLocation: (location: string) => {
+    set((state) => ({
+      ...state,
+      departureLocation: location,
+    }));
+  },
+  setDestinationLocation: (location: string) => {
+    set((state) => ({
+      ...state,
+      destinationLocation: location,
+    }));
+  },
+  setPax: (pax: number) => {
+    set((state) => ({
+      ...state,
+      pax: pax,
+    }));
+  },
+  setDietaryPreference: (preference: DietaryPreferenceType) => {
+    set((state) => ({
+      ...state,
+      dietaryPreference: preference,
+    }));
+  },
+  setPace: (pace: ScheduleType) => {
+    set((state) => ({
+      ...state,
+      pace: pace,
+    }));
+  },
   setStartTime: (time: number) => {
     set((state) => ({
       ...state,
@@ -62,6 +117,18 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
     set((state) => ({
       ...state,
       endTime: time,
+    }));
+  },
+  setStartDate: (date: Date) => {
+    set((state) => ({
+      ...state,
+      startDate: date,
+    }));
+  },
+  setEndDate: (date: Date) => {
+    set((state) => ({
+      ...state,
+      endDate: date,
     }));
   },
   togglePreference: (name: PreferenceType) => {

@@ -10,7 +10,7 @@ interface ButtonProps
 }
 
 const buttonVariants = cva(
-  "flex items-center justify-center px-4 py-2 font-medium rounded-md shadow-sm",
+  "flex items-center justify-center px-4 py-2 font-medium rounded-md",
   {
     variants: {
       variant: {
