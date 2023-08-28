@@ -9,7 +9,7 @@ export default function MonthYearPicker() {
 
     return (
         <View style={tw`flex flex-row items-center justify-center`}>
-            {/* https://hosseinshabani.github.io/react-native-modern-datepicker/ */}
+            {/*https://hosseinshabani.github.io/react-native-modern-datepicker/*/}
             <DatePicker
                 options={{
                 backgroundColor: '#090C08',
