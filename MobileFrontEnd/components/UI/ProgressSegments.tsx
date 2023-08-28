@@ -26,5 +26,5 @@ export default function ProgressSegments({
       ></View>,
     );
   }
-  return <View style={tw`flex flex-row gap-x-4`}>{componentArray}</View>;
+  return <View style={tw`flex flex-row gap-x-2`}>{componentArray}</View>;
 }
