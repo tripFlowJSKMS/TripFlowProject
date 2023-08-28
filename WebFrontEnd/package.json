@@ -6,9 +6,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "react-native-modern-datepicker": "^1.0.0-beta.91",
+    "react-native-modal-dropdown": "^1.0.2",
     "@react-oauth/google": "^0.11.1",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
-    "@react-native-picker/picker": "^2.4.10",
+    "@react-native-picker/picker": "^2.4.8",
     "@types/react": "~18.0.27",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.1",
