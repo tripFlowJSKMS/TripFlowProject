@@ -1,16 +1,16 @@
 import { Link } from "expo-router";
 import { Text, View, Image } from "react-native";
 import tw from "twrnc";
-import Input from "../components/input";
-import Title from "../components/title";
-import Button from "../components/button";
+import Input from "../components/Input";
+import Title from "../components/Title";
+import Button from "../components/Button";
 import { register } from "../lib/utils";
 import { useState } from "react";
-import ThemeButtons from "../components/themeButtons";
-import TopBar from "../components/topBar";
+import ThemeButtons from "../components/ThemeButtons";
+import TopBar from "../components/homePageComponents/HomePageTopBar";
 import useOnboardingStore from "../lib/onboardingStore";
-import TimeInput from "../components/timeInput";
-import Login from "../components/login";
+import TimeInput from "../components/TimeInput";
+import Login from "../components/Login";
 
 export default function RegistrationPage() {
   const [username, setUsername] = useState("");
@@ -27,7 +27,7 @@ export default function RegistrationPage() {
 
   return (
     <View>
-      <TopBar isRegistered={false}></TopBar>
+      <TopBar></TopBar>
 
       <View style={tw`flex flex-row`}>
         <Image source={require('../assets/sand-castle-on-clearwater-beach-photo.jpg')} style={tw`w-50%`} />
