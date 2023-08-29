@@ -11,6 +11,7 @@ import CustomPicker from "../components/CustomPicker";
 import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
 
+// Treat it as done for now
 export default function StartPlanningPage() {
 
   const paxOptions: String[] = ["1", "2", "3-5", "6 or more"];
