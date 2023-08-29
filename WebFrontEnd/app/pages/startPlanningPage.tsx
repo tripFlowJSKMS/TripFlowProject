@@ -1,21 +1,20 @@
+import React, { useState } from "react";
 import { Link } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 import tw from "twrnc";
 import Title from "../components/Title";
-import Button from "../components/Button";
 import TopBar from '../components/TopBar'
-import { useState } from "react";
-import Input from "../components/Input";
-import { startPlanning } from "../lib/utils";
-import ModalDropdown from 'react-native-modal-dropdown';
-import PaceInput from "../components/PaceInput";
-import DatePicker from 'react-native-modern-datepicker';
 import MonthYearPicker from "../components/startPlanningComponents/MonthYearPicker";
+import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
+import DepartureDestinationPicker from "../components/startPlanningComponents/DepartureDestinationPicker";
+import CustomPicker from "../components/CustomPicker";
+import PacePicker from "../components/startPlanningComponents/PacePicker";
+import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
 
 export default function StartPlanningPage() {
-  const [departure, setDeparture] = useState("");
-  const [destination, setDestination] = useState("");
-  const [pace, setPace] = useState("");
+
+  const paxOptions: String[] = ["1", "2", "3-5", "6 or more"];
+  const dietaryPreferences: String[] = ["Normal", "Vegetarian", "Halal"];
 
   return (
     <View style={tw`flex flex-col h-full`}>
@@ -24,34 +23,34 @@ export default function StartPlanningPage() {
       <View style={tw`flex justify-center p-10`}>
         <Title parameter="Your ideal trip awaits"/>
 
-        <View style={tw`w-70%`}>          
-          <View style={tw`flex flex-row w-40% `}>
+        <View style={tw`w-[70%]`}>          
+          <View style={tw`flex flex-row w-full`}>
             <View style={tw`flex flex-col`}>
-              <View style={tw`text-center w-100`}>Travel Dates</View>
-              <View style={tw`w-full border-t border-gray-1000 my-2`} />
               <MonthYearPicker></MonthYearPicker>
-              <View style={tw`text-center w-100 mt-4`}>Preferred Trip Timings</View>
-              <View style={tw`w-full border-t border-gray-1000 my-2`} />
-              <View>FIRST VIEW</View>
-              <View>FIRST VIEW</View>
+              <TripTimingsPicker></TripTimingsPicker>
             </View>
-            <View style={tw`w-30%`}></View>
-            <View>SECOND VIEW</View>
+            <View style={tw`w-[10%]`}></View>
+            <View style={tw`flex flex-col w-[30%]`}>
+              <DepartureDestinationPicker></DepartureDestinationPicker>
+              <View style={tw`flex flex-row w-full`}>
+                <CustomPicker title="Pax" options={paxOptions} width="20%" fontSize="text-2x1"/>
+                <View style={tw`w-20%`}></View>
+                <CustomPicker title="Dietary Preference" options={dietaryPreferences} width="60%" fontSize="text-2x1"/>
+              </View>
+              <PacePicker></PacePicker>
+            </View>
             <View style={tw`border-r border-gray-1000 h-150 ml-10 mr-10`} />
-            <View>THIRD VIEW</View>
-          </View>
-          <View style={tw`flex w-40% flex-row`}>
-            <PaceInput parameter="Pace" width={25} value={pace} setValue={setPace} />
+            <AreasOfInterestPicker></AreasOfInterestPicker>
           </View>
         </View>
 
-        <View style={tw`pt-[10%]`}>
+        {/* <View style={tw`pt-[10%]`}>
           <Button onPress={() => startPlanning(departure, destination, pace)}>
             <Link href="/pages/PickLocationsPage">
               <Text style={tw.style("text-white")}>Start Planning</Text>
             </Link>
           </Button>
-        </View>
+        </View> */}
 
       </View>
 
