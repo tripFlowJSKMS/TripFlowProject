@@ -7,8 +7,14 @@ import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { numberToTime } from "@/lib/utils";
+import Input from "@/components/UI/Input";
+import { Picker } from "@react-native-picker/picker";
+import { dietaryPreferenceOptions } from "@/lib/content";
+import SelectInput from "@/components/UI/SelectInput";
+import ProgressSegments from "@/components/UI/ProgressSegments";
 
 const SLIDER_LENGTH = 300;
+
 export default function OnboardingPage() {
   const statesArray = [
     "Departure",
@@ -67,14 +73,34 @@ export default function OnboardingPage() {
   const setEndDate = onboardingStore.setEndDate;
 
   return (
-    <View style={tw`bg-slate-800 relative h-full w-full`}>
-      <Text style={tw`mt-20 text-slate-200 text-center text-3xl font-medium`}>
+    <View style={tw`bg-slate-200 relative h-full w-full`}>
+      <Text
+        style={tw`mt-28 text-slate-800 text-center text-3xl font-extrabold`}
+      >
         Your ideal trip awaits
       </Text>
       <View
-        style={tw`mt-10 flex flex-row flex-wrap items-start gap-10 justify-center bg-slate-800 w-full`}
+        style={tw`mt-20 flex flex-row flex-wrap items-start gap-10 justify-center bg-slate-200 w-full h-full px-8`}
       >
-        {isDepartureState && <Button></Button>}
+        {isDepartureState && (
+          <View style={tw`w-full gap-y-4`}>
+            <Input label="Departure" placeholder="Malaysia, Kuala Lumpur" />
+            <Input label="Destination" placeholder="Singapore" />
+            <View style={tw`w-full flex-row gap-x-4`}>
+              <View style={tw`w-12`}>
+                <Input label="Pax" placeholder="2" />
+              </View>
+              <View style={tw`flex-grow`}>
+                <SelectInput
+                  label="Dietary Preference"
+                  options={dietaryPreferenceOptions}
+                  selectedValue={dietaryPreference}
+                  setValue={setDietaryPreference}
+                />
+              </View>
+            </View>
+          </View>
+        )}
         {isPreferencesState &&
           preferences.map((preference) => {
             return (
@@ -112,20 +138,20 @@ export default function OnboardingPage() {
           </View>
         )}
       </View>
-      {!isFirstState && (
-        <View style={tw`absolute bottom-5 left-5`}>
-          <Button onPress={() => setPreviousState(state)}>
+      <View style={tw`absolute bottom-10 w-full px-10`}>
+        <View style={tw`flex flex-row justify-center mb-4 gap-x-16`}>
+          <Button
+            disabled={!!isFirstState}
+            onPress={() => setPreviousState(state)}
+          >
             <Entypo name="chevron-left" size={24} color="black" />
           </Button>
-        </View>
-      )}
-      {!isLastState && (
-        <View style={tw`absolute bottom-5 right-5`}>
-          <Button onPress={() => setNextState(state)}>
+          <Button disabled={!!isLastState} onPress={() => setNextState(state)}>
             <Entypo name="chevron-right" size={24} color="black" />
           </Button>
         </View>
-      )}
+        <ProgressSegments currentSegment={1} totalSegments={3} />
+      </View>
     </View>
   );
 }

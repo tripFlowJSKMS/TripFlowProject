@@ -26,23 +26,27 @@ export default function Page() {
             </Text>
           </ImageBackground>
         </View>
-        <View style={tw`h-[40%] w-full flex items-start px-16`}>
-          <View style={tw`mt-20`}>
+        <View style={tw`h-[40%] w-full flex items-start`}>
+          <View style={tw`mt-20 px-16`}>
             <Text style={tw`text-3xl text-left text-slate-800 font-semibold`}>
               Start your getaway
             </Text>
           </View>
-          <View style={tw`mt-8 flex`}>
+          <View style={tw`mt-8 flex w-full px-10`}>
             <Text style={tw`text-sm font-medium text-left text-slate-800`}>
               Name
             </Text>
-            <View style={tw`flex flex-row gap-x-4`}>
-              <Input style={tw`w-52 bg-slate-400`}></Input>
-              <Button variant="primary">
-                <Link href="/onboardingPreferences">
-                  <AntDesign name="enter" size={24} color="black" />
-                </Link>
-              </Button>
+            <View style={tw`flex-row mt-1 gap-x-4`}>
+              <Input
+                className="bg-slate-400 border-transparent"
+                confirmationButton={
+                  <Button className="p-0 ml-2" variant="primary">
+                    <Link href="/onboardingPreferences">
+                      <AntDesign name="enter" size={24} color="black" />
+                    </Link>
+                  </Button>
+                }
+              />
             </View>
           </View>
         </View>

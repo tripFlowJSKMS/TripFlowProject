@@ -1,10 +1,15 @@
-import { View, Pressable, Text, PressableProps } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  TouchableOpacityProps,
+} from "react-native";
 import tw from "twrnc";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 interface ButtonProps
-  extends PressableProps,
+  extends TouchableOpacityProps,
     VariantProps<typeof buttonVariants> {
   className?: string;
 }
@@ -39,11 +44,14 @@ export default function Button({
   ...props
 }: ButtonProps) {
   return (
-    <Pressable
+    <TouchableOpacity
       {...props}
-      style={tw`${cn(buttonVariants({ variant, size, className }))}`}
+      style={tw.style(
+        props.disabled && "opacity-40",
+        `${cn(buttonVariants({ variant, size, className }))}`,
+      )}
     >
       {children}
-    </Pressable>
+    </TouchableOpacity>
   );
 }

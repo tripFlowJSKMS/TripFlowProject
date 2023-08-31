@@ -20,11 +20,15 @@ export default function ProgressSegments({
   for (let i = 0; i < totalSegments; i++) {
     componentArray.push(
       <View
-        style={tw`flex-1 first:rounded-l-lg last:rounded-r-lg + ${
-          i < currentSegment ? "bg-slate-500" : "bg-slate-200"
-        }`}
+        key={i}
+        style={tw.style(
+          `h-4 flex-1`,
+          i < currentSegment ? "bg-slate-500" : "bg-slate-300",
+          i == 0 && "rounded-l-lg",
+          i == totalSegments - 1 && "rounded-r-lg",
+        )}
       ></View>,
     );
   }
-  return <View style={tw`flex flex-row gap-x-2`}>{componentArray}</View>;
+  return <View style={tw`flex flex-row gap-x-1`}>{componentArray}</View>;
 }

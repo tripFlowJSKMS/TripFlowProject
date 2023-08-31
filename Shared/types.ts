@@ -25,7 +25,7 @@ export const preferenceEnum = z.enum([
   "Shopping",
 ]);
 
-export const dietaryPreference = z.enum([
+export const dietaryPreferenceEnum = z.enum([
   "Normal",
   "Halal",
   "Vegetarian",
@@ -48,7 +48,7 @@ export const generateDesirableDestinationsType = z.object({
   departureLocation: z.string(),
   destinationLocation: z.string(),
   paxNumber: z.number(),
-  dietaryPreference: dietaryPreference,
+  dietaryPreference: dietaryPreferenceEnum,
   pace: scheduleEnum,
   areaOfInterests: z.array(z.string()),
 });
@@ -68,7 +68,7 @@ export const bumpNeglectedPreferencesType = z.object({
 });
 
 export type PreferenceType = z.infer<typeof preferenceEnum>;
-export type DietaryPreferenceType = z.infer<typeof dietaryPreference>;
+export type DietaryPreferenceType = z.infer<typeof dietaryPreferenceEnum>;
 export type ScheduleType = z.infer<typeof scheduleEnum>;
 export type RecalibrateType = z.infer<typeof recalibrateEnum>;
 export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;
