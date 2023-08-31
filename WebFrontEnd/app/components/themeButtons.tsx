@@ -2,7 +2,7 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import tw from "twrnc";
-import Button from "./button";
+import Button from "./Button";
 
 export default function ThemeButtons({ preference, onPress }) {
 

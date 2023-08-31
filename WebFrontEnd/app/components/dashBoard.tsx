@@ -2,7 +2,7 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import { ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import Title from "./title";
+import Title from "./Title";
 
 export default function DashBoard() {
   return (
