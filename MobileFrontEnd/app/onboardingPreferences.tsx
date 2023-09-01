@@ -1,7 +1,7 @@
 import Button from "@/components/UI/Button";
 import PreferenceItem from "@/components/onboarding/PreferenceItem";
 import useOnboardingStore from "@/store/onboardingStore";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import tw from "twrnc";
 import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
@@ -12,6 +12,8 @@ import { Picker } from "@react-native-picker/picker";
 import { dietaryPreferenceOptions } from "@/lib/content";
 import SelectInput from "@/components/UI/SelectInput";
 import ProgressSegments from "@/components/UI/ProgressSegments";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const SLIDER_LENGTH = 300;
 
@@ -99,6 +101,46 @@ export default function OnboardingPage() {
                 />
               </View>
             </View>
+            <View>
+              <Text style={tw`text-slate-500 opacity-95 mb-1`}>Pace</Text>
+              <View style={tw`flex-row items-center gap-x-2`}>
+                <Pressable onPress={() => setPace("Relaxed")}>
+                  <FontAwesome5
+                    color={
+                      pace == "Relaxed"
+                        ? tw.color("green-500")
+                        : tw.color("slate-800")
+                    }
+                    name={"walking"}
+                    size={40}
+                  />
+                </Pressable>
+                <View style={tw`h-1 w-20 rounded-lg bg-slate-800`} />
+                <Pressable onPress={() => setPace("Normal")}>
+                  <FontAwesome5
+                    color={
+                      pace == "Normal"
+                        ? tw.color("green-500")
+                        : tw.color("slate-800")
+                    }
+                    name={"running"}
+                    size={40}
+                  />
+                </Pressable>
+                <View style={tw`h-1 w-20 rounded-lg bg-slate-800`} />
+                <Pressable onPress={() => setPace("Packed")}>
+                  <MaterialCommunityIcons
+                    color={
+                      pace == "Packed"
+                        ? tw.color("green-500")
+                        : tw.color("slate-800")
+                    }
+                    name={"run-fast"}
+                    size={45}
+                  />
+                </Pressable>
+              </View>
+            </View>
           </View>
         )}
         {isPreferencesState &&
@@ -150,7 +192,12 @@ export default function OnboardingPage() {
             <Entypo name="chevron-right" size={24} color="black" />
           </Button>
         </View>
-        <ProgressSegments currentSegment={1} totalSegments={3} />
+        <ProgressSegments
+          currentSegment={
+            statesArray.findIndex((arrayEle) => arrayEle === state) + 1
+          }
+          totalSegments={statesArray.length}
+        />
       </View>
     </View>
   );
