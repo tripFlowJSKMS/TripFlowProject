@@ -1,9 +1,9 @@
 import { View } from "react-native";
 import tw from "twrnc";
-import Title from "../components/Title";
+import Title from "../components/title";
 import HomePageTopBar from '../components/homePageComponents/HomePageTopBar'
 import HomePageDashboard from "../components/homePageComponents/HomePageDashboard";
-import ItineraryComponent from "../components/ItineraryComponent";
+import ItineraryComponent from "../components/itineraryComponent";
 
 export default function HomePage() {
     return (

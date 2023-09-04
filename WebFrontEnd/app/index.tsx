@@ -1,11 +1,11 @@
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
 import tw from "twrnc";
-import RegistrationPage from "./pages/RegistrationPage";
-import StartPlanningPage from "./pages/StartPlanningPage";
+import RegistrationPage from "./pages/registrationPage";
+import StartPlanningPage from "./pages/startPlanningPage";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/homePage";
 
 export default function App() {
 

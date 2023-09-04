@@ -1,13 +1,13 @@
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
 import tw from "twrnc";
-import Input from "../components/Input";
-import Title from "../components/Title";
-import Button from "../components/Button";
-import TopBar from "../components/TopBar";
-import DashBoard from "../components/DashBoard";
-import LocationComponent from "../components/LocationComponent";
-import ItineraryComponent from "../components/ItineraryComponent";
+import Input from "../components/input";
+import Title from "../components/title";
+import Button from "../components/button";
+import TopBar from "../components/topBar";
+import DashBoard from "../components/dashBoard";
+import LocationComponent from "../components/locationComponent";
+import ItineraryComponent from "../components/itineraryComponent";
 
 export default function PickLocationsPage() {
   return (

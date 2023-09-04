@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
 import tw from "twrnc";
-import Title from "../components/Title";
-import TopBar from '../components/TopBar'
+import Title from "../components/title";
+import TopBar from '../components/topBar'
 import MonthYearPicker from "../components/startPlanningComponents/MonthYearPicker";
 import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
 import DepartureDestinationPicker from "../components/startPlanningComponents/DepartureDestinationPicker";

@@ -2,7 +2,7 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import { ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import Title from "../Title";
+import Title from "../title";
 
 export default function HomePageDashboard() {
     return (
