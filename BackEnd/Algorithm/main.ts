@@ -21,15 +21,15 @@ const PACKED_MULTIPLIER: number = 0.75;
 // Let's assume for every additional day they are touring, we generate 10 more destinations for them to choose from
 const GENERATE_DESTINATIONS_MULTIPLIER: number = 10;
 let name: string;
-let startDate: Date;
-let endDate: Date;
+let startDate: string;
+let endDate: string;
 let startTime: number;
 let endTime: number;
 let departureLocation: string;
 let destinationLocation: string;
 let paxNumber: number;
 let dietaryPreference: string;
-let preferences: string[];
+let areasOfInterests: string[];
 let pace: string;
 let desirableDestinations: Destination[];
 let selectedDestinations: Set<number> = new Set();
@@ -57,10 +57,26 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
     endDate = details.endDate;
     departureLocation = details.departureLocation;
     destinationLocation = details.destinationLocation;
-    paxNumber = details.paxNumber;
+    switch (details.paxNumber) {
+      case "1":
+        paxNumber = 1
+        break;
+      case "2":
+        paxNumber = 2
+        break;
+      case "3-5":
+        paxNumber = 5
+        break;
+      case "6 or more":
+        // dummy value for group
+        paxNumber = 10
+        break;
+      default:
+        break;
+    }
     dietaryPreference = details.dietaryPreference;
     pace = details.pace;
-    preferences = details.areaOfInterests;
+    areasOfInterests = details.areasOfInterests;
   } catch (error) {
     console.error("Error validating generate desirable destinations details:", error);
   }
@@ -103,7 +119,7 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
       );
 
       // change this as a parameter later
-      destination.setWeight(preferences);
+      destination.setWeight(areasOfInterests);
 
       desirableDestinations.push(destination);
     });
@@ -142,7 +158,7 @@ export async function bumpNeglectedPreferences(details: BumpNeglectedPreferences
     const { id, characteristics } = details;
     selectedDestinations.add(id);
     for (const characteristic of characteristics) {
-      if (preferences.includes(characteristic)) {
+      if (areasOfInterests.includes(characteristic)) {
         const currentValue = selectedCharacteristics.get(characteristic) ?? 0;
         selectedCharacteristics.set(characteristic, currentValue + 1);
       }
