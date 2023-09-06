@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 
-export default function AreasOfInterestPicker() {
+export default function AreasOfInterestPicker( { onAreasOfInterestChange }) {
     const areasOfInterest: string[] = ["Sports", "Music", "Outdoors", "Food", "Art", "Shopping"];
     const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
 
     const handleInterestToggle = (interest: string) => {
         if (selectedInterests.includes(interest)) {
-            setSelectedInterests(selectedInterests.filter(item => item !== interest));
+            const temp: string[] = selectedInterests.filter(item => item !== interest)
+            setSelectedInterests(temp);
+            onAreasOfInterestChange(temp)
+            
         } else {
-            setSelectedInterests([...selectedInterests, interest]);
+            const temp: string[] = [...selectedInterests, interest]
+            setSelectedInterests(temp);
+            onAreasOfInterestChange(temp);
         }
     };
 

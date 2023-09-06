@@ -9,21 +9,42 @@ const InvalidInputMessage = ({ visible }) => (
   </Text>
 );
 
-export default function TripTimingsPicker() {
-  const [startingTime, setStartingTime] = useState("");
-  const [endingTime, setEndingTime] = useState("");
+function minutesToTime(minutes: number) {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  const hoursStr = hours.toString().padStart(2, "0");
+  const minsStr = mins.toString().padStart(2, "0");
+  return `${hoursStr}:${minsStr}`;
+}
+
+function timeToMinutes(time) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+export default function TripTimingsPicker({ selectedStartTime, selectedEndTime, onStartTimeChange, onEndTimeChange }) {
+
+  const handleStartTimeChange = (value: number) => {
+    selectedStartTime = minutesToTime(value);
+    onStartTimeChange(timeToMinutes(value));
+  };
+
+  const handleEndTimeChange = (value: number) => {
+    selectedEndTime = value
+    onEndTimeChange(timeToMinutes(value));
+  };
 
   return (
     <View>
-      <Text style={tw`text-center text-5x1 font-bold w-100 mt-4`}>Preferred Trip Timings</Text>
+      <Text style={tw`text-center text-5x1 font-bold w-full mt-4`}>Preferred Trip Timings</Text>
       <View style={tw`w-full border-t border-gray-1000 my-2`} />
-      <View style={tw`flex flex-row mt-3 w-[46%] items-center`}>
-        <TimeInput width={75} value={startingTime} setValue={setStartingTime}/>
-        <View style={tw`ml-3 mr-3 mb-5`}>-</View>
-        <TimeInput width={75} value={endingTime} setValue={setEndingTime}/>
+      <View style={tw`flex flex-row mt-3 w-[48%] items-center`}>
+        <TimeInput width={75} value={minutesToTime(selectedStartTime)} setValue={handleStartTimeChange}/>
+        <Text style={tw`ml-3 mr-3 mb-5`}>-</Text>
+        <TimeInput width={75} value={minutesToTime(selectedEndTime)} setValue={handleEndTimeChange}/>
       </View>
       <View style={tw`items-center`}>
-        <InvalidInputMessage visible={startingTime >= endingTime} />
+        <InvalidInputMessage visible={ selectedStartTime >= selectedEndTime } />
       </View>
     </View>
   );

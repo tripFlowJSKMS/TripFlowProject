@@ -10,20 +10,22 @@ const filterCountries = (query) => {
     );
 };
 
-export default function DepartureDestinationPicker() {
+export default function DepartureDestinationPicker({ onDepartureLocationChange, onDestinationLocationChange }) {
     const [departureQuery, setDepartureQuery] = useState("");
-    const [departureData, setDepartureData] = useState([]);
     const [destinationQuery, setDestinationQuery] = useState("");
+    const [departureData, setDepartureData] = useState([]);
     const [destinationData, setDestinationData] = useState([]);
   
     const handleDepartureItemPress = (item) => {
-      setDepartureQuery(item);
-      setDepartureData([]);
+        setDepartureQuery(item);
+        setDepartureData([]);
+        onDepartureLocationChange(item); // Notify parent component of the selection
     };
 
     const handleDestinationItemPress = (item) => {
         setDestinationQuery(item);
         setDestinationData([]);
+        onDestinationLocationChange(item); // Notify parent component of the selection
     };
   
     return (
@@ -64,7 +66,7 @@ export default function DepartureDestinationPicker() {
                 placeholder="Search for a city"
                 placeholderTextColor="#888"
             />
-            {destinationQuery.length > 0 && departureData.length != 0 && (
+            {destinationQuery.length > 0 && destinationData.length != 0 && (
             <FlatList
                 data={destinationData}
                 renderItem={({ item }) => (
