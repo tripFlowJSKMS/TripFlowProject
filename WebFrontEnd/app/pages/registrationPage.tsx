@@ -4,11 +4,11 @@ import tw from "twrnc";
 import Input from "../components/input";
 import Title from "../components/title";
 import Button from "../components/button";
-import { register } from "../lib/utils";
+import { register } from "../../lib/utils";
 import { useState } from "react";
 import ThemeButtons from "../components/themeButtons";
 import TopBar from "../components/homePageComponents/HomePageTopBar";
-import useOnboardingStore from "../lib/onboardingStore";
+import useOnboardingStore from "../../lib/onboardingStore";
 import TimeInput from "../components/timeInput";
 import Login from "../components/login";
 

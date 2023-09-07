@@ -1,6 +1,6 @@
 import { View, Pressable, Text, PressableProps } from "react-native";
 import tw from "twrnc";
-import { cn } from "@/app/lib/utils";
+import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 interface ButtonProps extends PressableProps, VariantProps<typeof buttonVariants> {
