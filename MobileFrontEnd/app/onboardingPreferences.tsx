@@ -59,7 +59,7 @@ export default function OnboardingPage() {
         Your ideal trip awaits
       </Text>
       <View
-        style={tw`mt-20 flex flex-row flex-wrap items-start gap-10 justify-center bg-slate-200 w-full h-full px-8`}
+        style={tw`mt-10 flex flex-row flex-wrap items-start gap-10 justify-center bg-slate-200 w-full h-full px-8`}
       >
         {isDepartureState && <StartPlanningDepartureView />}
         {isTimeState && <StartPlanningDateTimeView />}

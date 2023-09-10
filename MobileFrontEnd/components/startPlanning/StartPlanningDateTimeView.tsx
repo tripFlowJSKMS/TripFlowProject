@@ -2,6 +2,7 @@ import useOnboardingStore from "@/store/onboardingStore";
 import StartPlanningTimeSlider from "@/components/startPlanning/StartPlanningTimeSlider";
 import { View } from "react-native";
 import StartPlanningDatePicker from "@/components/startPlanning/StartPlanningDatePicker";
+import tw from "twrnc";
 
 export default function StartPlanningDateTimeView() {
   const onboardingStore = useOnboardingStore();
@@ -16,8 +17,13 @@ export default function StartPlanningDateTimeView() {
   const setEndDate = onboardingStore.setEndDate;
 
   return (
-    <View>
-      <StartPlanningDatePicker />
+    <View style={tw`gap-y-10`}>
+      <StartPlanningDatePicker
+        startDate={startDate}
+        endDate={endDate}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+      />
       <StartPlanningTimeSlider
         startTime={startTime}
         endTime={endTime}

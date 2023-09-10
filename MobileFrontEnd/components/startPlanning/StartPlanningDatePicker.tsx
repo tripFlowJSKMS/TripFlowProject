@@ -2,7 +2,19 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 
-export default function StartPlanningDatePicker() {
+interface StartPlanningDatePickerProps {
+  startDate: Date;
+  endDate: Date;
+  setStartDate: (date: Date) => void;
+  setEndDate: (date: Date) => void;
+}
+
+export default function StartPlanningDatePicker({
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+}: StartPlanningDatePickerProps) {
   const currentDate = new Date();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(
@@ -114,7 +126,9 @@ export default function StartPlanningDatePicker() {
             and put the corresponding dates below in a grid format but i cant seem to get the logic out.
             If anyone can do it please revise this portion of the code */}
         <View style={styles.calendar}>
-          <View style={tw`flex flex-row items-center justify-between pb-2`}>
+          <View
+            style={tw`flex flex-row justify-between pl-[5%] pr-[5%] pb-[3%]`}
+          >
             <View
               style={tw`flex items-center w-1/7 justify-center text-center`}
             >
@@ -128,7 +142,7 @@ export default function StartPlanningDatePicker() {
             <View
               style={tw`flex items-center w-1/7 justify-center text-center`}
             >
-              <Text style={tw`font-semibold text-gray-600 text-xs`}>Tues</Text>
+              <Text style={tw`font-semibold text-gray-600 text-xs`}>Tue</Text>
             </View>
             <View
               style={tw`flex items-center w-1/7 justify-center text-center`}
@@ -138,7 +152,7 @@ export default function StartPlanningDatePicker() {
             <View
               style={tw`flex items-center w-1/7 justify-center text-center`}
             >
-              <Text style={tw`font-semibold text-gray-600 text-xs`}>Thurs</Text>
+              <Text style={tw`font-semibold text-gray-600 text-xs`}>Thu</Text>
             </View>
             <View
               style={tw`flex items-center w-1/7 justify-center text-center`}
@@ -152,7 +166,7 @@ export default function StartPlanningDatePicker() {
             </View>
           </View>
 
-          <View style={tw`flex flex-row flex-wrap justify-stretch`}>
+          <View style={{ ...styles.dateContainer, alignItems: "center" }}>
             {generateDatesForMonth(selectedYear, selectedMonth).map(
               (date, index) =>
                 date !== null ? (

@@ -1,16 +1,19 @@
 import { create } from "zustand";
 import type {
   DietaryPreferenceType,
-  PreferenceType,
+  AreasOfInterestType,
   ScheduleType,
 } from "shared/types";
 
 export interface Preference {
-  name: PreferenceType;
+  name: AreasOfInterestType;
   selected: boolean;
 }
 
-const togglePreference = (preferences: Preference[], name: PreferenceType) => {
+const togglePreference = (
+  preferences: Preference[],
+  name: AreasOfInterestType,
+) => {
   return preferences.map((preference) => ({
     ...preference,
     selected:
@@ -38,7 +41,7 @@ interface OnboardingStore {
   setEndTime: (time: number) => void;
   setStartDate: (date: Date) => void;
   setEndDate: (date: Date) => void;
-  togglePreference: (name: PreferenceType) => void;
+  togglePreference: (name: AreasOfInterestType) => void;
 }
 
 const useOnboardingStore = create<OnboardingStore>((set) => ({
@@ -131,7 +134,7 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
       endDate: date,
     }));
   },
-  togglePreference: (name: PreferenceType) => {
+  togglePreference: (name: AreasOfInterestType) => {
     set((state) => ({
       ...state,
       preferences: togglePreference(state.preferences, name),
