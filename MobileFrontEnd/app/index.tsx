@@ -1,7 +1,7 @@
 import Button from "@/components/UI/Button";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { ImageBackground, Text, View, TextInput } from "react-native";
+import { ImageBackground, Text, View } from "react-native";
 import tw from "twrnc";
 import { AntDesign } from "@expo/vector-icons";
 import Input from "@/components/UI/Input";
