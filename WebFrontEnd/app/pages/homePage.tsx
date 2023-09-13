@@ -1,14 +1,23 @@
-import { View } from "react-native";
+import { Button, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
 import Title from "../components/title";
 import HomePageTopBar from '../components/homePageComponents/HomePageTopBar'
 import HomePageDashboard from "../components/homePageComponents/HomePageDashboard";
 import ItineraryComponent from "../components/itineraryComponent";
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "@/lib/types";
 
 export default function HomePage() {
+
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    const navigateToStartPlanningPage = () => {
+      navigation.navigate('StartPlanning'); // Make sure 'StartPlanning' matches the screen name in your navigation stack
+    };
+
     return (
         <View style={tw`h-full`}>
-          <HomePageTopBar />
+          <HomePageTopBar navigation={navigateToStartPlanningPage}/>
     
           <View style={tw`flex flex-col items-center w-full h-[20%]`}>
             <HomePageDashboard></HomePageDashboard>

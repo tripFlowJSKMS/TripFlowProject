@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
-import { generateDestinations } from "../app/helpers/jsonHelpers/generateDestinations";
+import { GenerateDesirableDestinationsType } from "../../Shared/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -73,6 +73,6 @@ export async function startPlanning(
       areasOfInterests,
     },
   );
-  console.log(response);
-  generateDestinations(response);
+  // console.log(response.data.destinations);
+  return response;
 }
