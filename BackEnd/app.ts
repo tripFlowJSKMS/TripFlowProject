@@ -2,7 +2,6 @@
 import "dotenv/config";
 import { Destination } from "./Algorithm/Destination";
 import {
-  generateDesirableDestinationsType,
   RegistrationDetailsType,
   registrationDetailsType,
   TripFlowAlgorithmType,
@@ -11,8 +10,9 @@ import {
   recalibrateItineraryType,
   BumpNeglectedPreferencesType,
   bumpNeglectedPreferencesType,
-  GenerateDesirableDestinationsType,
 } from "../Shared/types";
+import { GenerateDesirableDestinationsType } from "../Shared/types/startPlanning";
+import { generateDesirableDestinationsSchema } from "../Shared/types/startPlanning";
 
 import express from "express";
 import { recalibrate, tripFlowAlgorithm } from "./Algorithm/main";
@@ -22,7 +22,7 @@ const app = express();
 import {
   generateDesirableDestinations,
   registrationDetails,
-  bumpNeglectedPreferences
+  bumpNeglectedPreferences,
 } from "./Algorithm/main";
 
 app.use(express.json());
@@ -31,7 +31,8 @@ app.use(cors());
 // Registration Page API
 app.post("/api/register", async (req, res) => {
   try {
-    const validatedDetails: RegistrationDetailsType = registrationDetailsType.parse(req.body);
+    const validatedDetails: RegistrationDetailsType =
+      registrationDetailsType.parse(req.body);
     registrationDetails(validatedDetails);
     res.json({ message: "Registration successful" });
   } catch (error) {
@@ -43,8 +44,11 @@ app.post("/api/register", async (req, res) => {
 // Start Planning Page API
 app.post("/api/start-planning", async (req, res) => {
   try {
-    const validatedDetails: GenerateDesirableDestinationsType = generateDesirableDestinationsType.parse(req.body);
-    const destinations: Destination[] = await generateDesirableDestinations(validatedDetails);
+    const validatedDetails: GenerateDesirableDestinationsType =
+      generateDesirableDestinationsSchema.parse(req.body);
+    const destinations: Destination[] = await generateDesirableDestinations(
+      validatedDetails
+    );
     res.json({ destinations });
   } catch (error) {
     console.error("Validation error:", error);
@@ -53,21 +57,26 @@ app.post("/api/start-planning", async (req, res) => {
 });
 
 // Pick Locations Page API
-app.post("/api/pick-locations-page", async(req, res) => {
+app.post("/api/pick-locations-page", async (req, res) => {
   try {
-    const validatedDetails: BumpNeglectedPreferencesType = bumpNeglectedPreferencesType.parse(req.body);
-    const destinations: Destination[] = await bumpNeglectedPreferences(validatedDetails);
+    const validatedDetails: BumpNeglectedPreferencesType =
+      bumpNeglectedPreferencesType.parse(req.body);
+    const destinations: Destination[] = await bumpNeglectedPreferences(
+      validatedDetails
+    );
     res.json({ destinations });
   } catch (error) {
     console.error("Validation error:", error);
-    res.status(400).json({ error: "Invalid input or API error "});
+    res.status(400).json({ error: "Invalid input or API error " });
   }
 });
 
 // Planning Page API
 app.post("/api/planning-page", async (req, res) => {
   try {
-    const validatedDetails: TripFlowAlgorithmType = tripFlowAlgorithmType.parse(req.body);
+    const validatedDetails: TripFlowAlgorithmType = tripFlowAlgorithmType.parse(
+      req.body
+    );
     const itinerary: Array<{
       destination: Destination;
       startingTime: number;
@@ -83,7 +92,8 @@ app.post("/api/planning-page", async (req, res) => {
 // Recalibration API
 app.post("/api/recalibrate", async (req, res) => {
   try {
-    const validatedDetails: RecalibrateItineraryType = recalibrateItineraryType.parse(req.body);
+    const validatedDetails: RecalibrateItineraryType =
+      recalibrateItineraryType.parse(req.body);
     const itinerary: Array<{
       destination: Destination;
       startingTime: number;

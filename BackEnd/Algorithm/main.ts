@@ -6,14 +6,14 @@ import {
 } from "../../Shared/prisma/prismaCode/main";
 import { Destination } from "./Destination";
 import { planItinerary } from "./helperFunctions";
-import { 
+import {
   RegistrationDetailsType,
-  GenerateDesirableDestinationsType,
   TripFlowAlgorithmType,
   RecalibrateItineraryType,
   BumpNeglectedPreferencesType,
   RecalibrateType,
 } from "../../Shared/types";
+import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlanning";
 
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
@@ -35,21 +35,51 @@ let desirableDestinations: Destination[];
 let selectedDestinations: Set<number> = new Set();
 let selectedCharacteristics: Map<string, number> = new Map();
 
-export async function tripFlowAlgorithm(details: TripFlowAlgorithmType): Promise<Array<{destination: Destination, startingTime: number, endingTime: number}>> {
-  const destinationArr: Destination[] = details.destinationArr.map(details => {
-    const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
-    return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
-  });  
-  let itinerary: Array<{destination: Destination, startingTime: number, endingTime: number}> = [];
+export async function tripFlowAlgorithm(
+  details: TripFlowAlgorithmType
+): Promise<
+  Array<{ destination: Destination; startingTime: number; endingTime: number }>
+> {
+  const destinationArr: Destination[] = details.destinationArr.map(
+    (details) => {
+      const {
+        id,
+        name,
+        openingTime,
+        closingTime,
+        tourDuration,
+        characteristics,
+        longitude,
+        latitude,
+      } = details;
+      return new Destination(
+        id,
+        name,
+        openingTime,
+        closingTime,
+        tourDuration,
+        characteristics,
+        longitude,
+        latitude
+      );
+    }
+  );
+  let itinerary: Array<{
+    destination: Destination;
+    startingTime: number;
+    endingTime: number;
+  }> = [];
   try {
-    itinerary = planItinerary(destinationArr, startTime, endTime)
+    itinerary = planItinerary(destinationArr, startTime, endTime);
   } catch (error) {
     console.error("Error validating itinerary details:", error);
   }
   return itinerary;
 }
 
-export async function generateDesirableDestinations(details: GenerateDesirableDestinationsType): Promise<Destination[]> {
+export async function generateDesirableDestinations(
+  details: GenerateDesirableDestinationsType
+): Promise<Destination[]> {
   try {
     startTime = details.startTime;
     endTime = details.endTime;
@@ -59,17 +89,17 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
     destinationLocation = details.destinationLocation;
     switch (details.paxNumber) {
       case "1":
-        paxNumber = 1
+        paxNumber = 1;
         break;
       case "2":
-        paxNumber = 2
+        paxNumber = 2;
         break;
       case "3-5":
-        paxNumber = 5
+        paxNumber = 5;
         break;
       case "6 or more":
         // dummy value for group
-        paxNumber = 10
+        paxNumber = 10;
         break;
       default:
         break;
@@ -78,9 +108,12 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
     pace = details.pace;
     areasOfInterests = details.areasOfInterests;
   } catch (error) {
-    console.error("Error validating generate desirable destinations details:", error);
+    console.error(
+      "Error validating generate desirable destinations details:",
+      error
+    );
   }
-  
+
   desirableDestinations = [];
 
   try {
@@ -135,26 +168,31 @@ export async function generateDesirableDestinations(details: GenerateDesirableDe
 
   // const numberOfDays: number = endDate - startDate
   const numberOfDays: number = 1; // for MVP
-  const totalNumberRecommended: number = numberOfDays * GENERATE_DESTINATIONS_MULTIPLIER;
+  const totalNumberRecommended: number =
+    numberOfDays * GENERATE_DESTINATIONS_MULTIPLIER;
 
-  const desirableDestinationsCopy: Destination[] = desirableDestinations.slice(0, totalNumberRecommended);
-  
+  const desirableDestinationsCopy: Destination[] = desirableDestinations.slice(
+    0,
+    totalNumberRecommended
+  );
+
   return desirableDestinationsCopy;
 }
 
 export async function registrationDetails(details: RegistrationDetailsType) {
   try {
     name = details.username;
-    
+
     // preferences = details.preferences;
   } catch (error) {
     console.error("Error validating registration details:", error);
   }
-  
 }
 
-export async function bumpNeglectedPreferences(details: BumpNeglectedPreferencesType): Promise<Destination[]> {
-  details.selectedDestinationArr.map(details => {
+export async function bumpNeglectedPreferences(
+  details: BumpNeglectedPreferencesType
+): Promise<Destination[]> {
+  details.selectedDestinationArr.map((details) => {
     const { id, characteristics } = details;
     selectedDestinations.add(id);
     for (const characteristic of characteristics) {
@@ -184,28 +222,54 @@ export async function bumpNeglectedPreferences(details: BumpNeglectedPreferences
   }
 
   return neglectedDestinations;
-  
 }
 
-export async function recalibrate(details: RecalibrateItineraryType): 
-  Promise<Array<{destination: Destination, startingTime: number, endingTime: number}>> 
-  {
-  const destinationsVisitedSoFar: Destination[] = details.destinationsVisitedSoFar.map(details => {
-    const { id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude } = details;
-    return new Destination(id, name, openingTime, closingTime, tourDuration, characteristics, longitude, latitude);
-  });  
+export async function recalibrate(
+  details: RecalibrateItineraryType
+): Promise<
+  Array<{ destination: Destination; startingTime: number; endingTime: number }>
+> {
+  const destinationsVisitedSoFar: Destination[] =
+    details.destinationsVisitedSoFar.map((details) => {
+      const {
+        id,
+        name,
+        openingTime,
+        closingTime,
+        tourDuration,
+        characteristics,
+        longitude,
+        latitude,
+      } = details;
+      return new Destination(
+        id,
+        name,
+        openingTime,
+        closingTime,
+        tourDuration,
+        characteristics,
+        longitude,
+        latitude
+      );
+    });
   const issue: RecalibrateType = details.issue;
   if (issue == "EarlyOrLate") {
     const currentTime: number = details.currentTime;
-    const remainingDestinations: Destination[] = desirableDestinations.filter(location => !destinationsVisitedSoFar.includes(location));
-    let itinerary: Array<{destination: Destination, startingTime: number, endingTime: number}> = [];
+    const remainingDestinations: Destination[] = desirableDestinations.filter(
+      (location) => !destinationsVisitedSoFar.includes(location)
+    );
+    let itinerary: Array<{
+      destination: Destination;
+      startingTime: number;
+      endingTime: number;
+    }> = [];
     try {
       itinerary = planItinerary(remainingDestinations, currentTime, endTime);
     } catch (error) {
       console.error("Error validating itinerary details:", error);
     }
     return itinerary;
-  } 
+  }
   // we will add more recalibrate cases in the future
   return [];
 }

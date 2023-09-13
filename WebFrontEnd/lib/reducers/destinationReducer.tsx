@@ -1,10 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { GenerateDesirableDestinationsType } from '../../../Shared/types';
+import { createSlice } from "@reduxjs/toolkit";
+import { StartPlanningOutputType } from "../../../Shared/types/startPlanning";
 
 const destinationSlice = createSlice({
-  name: 'destination',
+  name: "destination",
   initialState: {
-    destinations: [] as GenerateDesirableDestinationsType[], // Initial state
+    // jy edit this
+    destinations: [] as StartPlanningOutputType[], // Initial state
   },
   reducers: {
     setDestinations: (state, action) => {

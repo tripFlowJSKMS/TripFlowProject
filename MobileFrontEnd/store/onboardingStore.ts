@@ -3,7 +3,7 @@ import type {
   DietaryPreferenceType,
   AreasOfInterestType,
   ScheduleType,
-} from "shared/types";
+} from "../../Shared/types";
 
 export interface Preference {
   name: AreasOfInterestType;

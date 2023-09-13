@@ -14,31 +14,30 @@ export const destinationType = z.object({
   latitude: z.number(),
 });
 
-export const areasOfInterestEnum = z.enum(["Sports", "Music","Outdoors", "Food", "Art", "Shopping"]);
+export const areasOfInterestEnum = z.enum([
+  "Sports",
+  "Music",
+  "Outdoors",
+  "Food",
+  "Art",
+  "Shopping",
+]);
 
-export const dietaryPreferenceEnum = z.enum(["Normal", "Halal", "Vegetarian", "Vegan"]);
+export const dietaryPreferenceEnum = z.enum([
+  "Normal",
+  "Halal",
+  "Vegetarian",
+  "Vegan",
+]);
 
 export const paxNumberEnum = z.enum(["1", "2", "3-5", "6 or more"]);
 
-const scheduleEnum = z.enum(["Relaxed", "Normal", "Packed"]);
+export const scheduleEnum = z.enum(["Relaxed", "Normal", "Packed"]);
 
 const recalibrateEnum = z.enum(["EarlyOrLate"]);
 
 export const registrationDetailsType = z.object({
   username: z.string(),
-});
-
-export const generateDesirableDestinationsType = z.object({
-  startDate: z.string(),
-  endDate: z.string(),
-  startTime: z.number(),
-  endTime: z.number(),
-  departureLocation: z.string(),
-  destinationLocation: z.string(),
-  paxNumber: paxNumberEnum,
-  dietaryPreference: dietaryPreferenceEnum,
-  pace: scheduleEnum,
-  areasOfInterests: z.array(areasOfInterestEnum),
 });
 
 export const tripFlowAlgorithmType = z.object({
@@ -56,10 +55,13 @@ export const bumpNeglectedPreferencesType = z.object({
 });
 
 export type AreasOfInterestType = z.infer<typeof areasOfInterestEnum>;
-export type BumpNeglectedPreferencesType = z.infer<typeof bumpNeglectedPreferencesType>;
+export type BumpNeglectedPreferencesType = z.infer<
+  typeof bumpNeglectedPreferencesType
+>;
+
+export type PaxNumberType = z.infer<typeof paxNumberEnum>;
 export type DestinationType = Destination;
 export type DietaryPreferenceType = z.infer<typeof dietaryPreferenceEnum>;
-export type GenerateDesirableDestinationsType = z.infer<typeof generateDesirableDestinationsType>;
 export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;
 export type RecalibrateType = z.infer<typeof recalibrateEnum>;
 export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;

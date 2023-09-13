@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import tw from "twrnc";
 import Title from "../components/title";
-import TopBar from '../components/topBar'
+import TopBar from "../components/topBar";
 import DatePicker from "../components/startPlanningComponents/DatePicker";
 import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
 import DepartureDestinationPicker from "../components/startPlanningComponents/DepartureDestinationPicker";
@@ -11,47 +11,62 @@ import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
 import Button from "../components/button";
 import { startPlanning } from "../../lib/utils";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { setDestinations } from "@/lib/reducers/destinationReducer";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/lib/types";
+import {
+  AreasOfInterestType,
+  DietaryPreferenceType,
+  PaxNumberType,
+  ScheduleType,
+} from "../../../Shared/types";
 
 function formatDate(year, month, date) {
-  const formattedMonth = String(month).padStart(2, '0');
-  const formattedDate = String(date).padStart(2, '0');
+  const formattedMonth = String(month).padStart(2, "0");
+  const formattedDate = String(date).padStart(2, "0");
   const formattedDateStr = `${year}-${formattedMonth}-${formattedDate}`;
   return formattedDateStr;
 }
 
 export default function StartPlanningPage() {
-
-  const paxOptions: String[] = ["1", "2", "3-5", "6 or more"];
-  const dietaryPreferences: String[] = ["Normal", "Vegetarian", "Halal"];
+  const paxOptions: PaxNumberType[] = ["1", "2", "3-5", "6 or more"];
+  const dietaryPreferences: DietaryPreferenceType[] = [
+    "Normal",
+    "Vegetarian",
+    "Halal",
+    "Vegan",
+  ];
 
   const currentDate = new Date();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
+  const [selectedMonth, setSelectedMonth] = useState(
+    currentDate.getMonth() + 1,
+  );
   const [selectedDate, setSelectedDate] = useState(currentDate.getDay());
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [departureLocation, setDepartureLocation] = useState("");
   const [destinationLocation, setDestinationLocation] = useState("");
-  const [paxNumber, setPaxNumber] = useState("1");
-  const [dietaryPreference, setDietaryPreference] = useState("Normal");
-  const [pace, setPace] = useState("Normal");
-  const [areaOfInterests, setAreaOfInterests] = useState([]);
+  const [paxNumber, setPaxNumber] = useState<PaxNumberType>("1");
+  const [dietaryPreference, setDietaryPreference] =
+    useState<DietaryPreferenceType>("Normal");
+  const [pace, setPace] = useState<ScheduleType>("Normal");
+  const [areaOfInterests, setAreaOfInterests] = useState<
+    Array<AreasOfInterestType>
+  >([]);
   const dispatch = useDispatch();
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const navigateToPickLocationsPage = () => {
-    navigation.navigate('PickLocations');
+    navigation.navigate("PickLocations");
   };
-  
+
   const handleStartPlanning = async () => {
-    const response = await startPlanning(
-      formatDate(selectedYear, selectedMonth, selectedDate),
-      formatDate(selectedYear, selectedMonth, selectedDate),
+    const destinations = await startPlanning({
+      startDate: formatDate(selectedYear, selectedMonth, selectedDate),
+      endDate: formatDate(selectedYear, selectedMonth, selectedDate),
       startTime,
       endTime,
       departureLocation,
@@ -59,25 +74,24 @@ export default function StartPlanningPage() {
       paxNumber,
       dietaryPreference,
       pace,
-      areaOfInterests
-    );
+      areasOfInterests: areaOfInterests,
+    });
     // Dispatch the action to store the data in Redux
-    dispatch(setDestinations(response["data"]["destinations"]));
+    dispatch(setDestinations(destinations));
     navigateToPickLocationsPage();
   };
 
   return (
     <View style={tw`flex flex-col h-full`}>
-      
-      <TopBar /> 
+      <TopBar />
       <ScrollView contentContainerStyle={tw`flex justify-center p-10`}>
         <View style={tw`flex justify-center p-10`}>
-          <Title parameter="Your ideal trip awaits"/>
+          <Title parameter="Your ideal trip awaits" />
 
-          <View style={tw`w-[70%]`}>          
+          <View style={tw`w-[70%]`}>
             <View style={tw`flex flex-row w-full`}>
               <View style={tw`flex flex-col w-[40%]`}>
-                <DatePicker 
+                <DatePicker
                   onDateChange={(year, month, date) => {
                     setSelectedYear(year);
                     setSelectedMonth(month);
@@ -85,46 +99,53 @@ export default function StartPlanningPage() {
                   }}
                 />
                 <TripTimingsPicker
-                  selectedStartTime = {startTime}
-                  selectedEndTime = {endTime}
-                  onStartTimeChange = {setStartTime}
-                  onEndTimeChange = {setEndTime}
+                  selectedStartTime={startTime}
+                  selectedEndTime={endTime}
+                  onStartTimeChange={setStartTime}
+                  onEndTimeChange={setEndTime}
                 />
               </View>
               <View style={tw`w-[10%]`}></View>
               <View style={tw`flex flex-col w-[30%]`}>
                 <DepartureDestinationPicker
-                  onDepartureLocationChange = {setDepartureLocation}
-                  onDestinationLocationChange = {setDestinationLocation}
+                  onDepartureLocationChange={setDepartureLocation}
+                  onDestinationLocationChange={setDestinationLocation}
                 />
                 <View style={tw`flex flex-row w-full`}>
-                  <CustomPicker 
-                    title="Pax" 
-                    options={paxOptions} 
-                    width="20%" 
-                    fontSize="text-2x1" 
-                    selectedValue= { paxNumber }
-                    onValueChange= { (value: string) => setPaxNumber(value) }
+                  <CustomPicker
+                    title="Pax"
+                    options={paxOptions}
+                    width="20%"
+                    fontSize="text-2x1"
+                    selectedValue={paxNumber}
+                    onValueChange={(value) =>
+                      setPaxNumber(value as PaxNumberType)
+                    }
                   />
                   <View style={tw`w-20%`}></View>
-                  <CustomPicker 
-                    title="Dietary Preference" 
-                    options={dietaryPreferences} 
-                    width="60%" 
+                  <CustomPicker
+                    title="Dietary Preference"
+                    options={dietaryPreferences}
+                    width="60%"
                     fontSize="text-2x1"
-                    selectedValue = {dietaryPreference}
-                    onValueChange={ (value: string) => setDietaryPreference(value) }
+                    selectedValue={dietaryPreference}
+                    onValueChange={(value: string) =>
+                      setDietaryPreference(value as DietaryPreferenceType)
+                    }
                   />
                 </View>
                 <PacePicker
-                  onPaceChange = {(value: string) => setPace(value) }
+                  onPaceChange={(value: string) =>
+                    setPace(value as ScheduleType)
+                  }
                 />
               </View>
-              <View style={tw`border-r border-gray-1000 h-150 ml-10 mr-10`} />
+              <View style={tw`border-r border-gray-100 h-150 ml-10 mr-10`} />
               <AreasOfInterestPicker
-                onAreasOfInterestChange={(value:string[]) => setAreaOfInterests(value) }
+                onAreasOfInterestChange={(value: string[]) =>
+                  setAreaOfInterests(value as AreasOfInterestType[])
+                }
               />
-              
             </View>
           </View>
         </View>

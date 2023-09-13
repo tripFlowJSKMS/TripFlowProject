@@ -65,7 +65,7 @@ export default function DatePicker({ onDateChange }) {
       <Text style={tw`text-center text-5x1 font-bold w-full mt-4`}>
         Travel Dates
       </Text>
-      <View style={tw`w-full border-t border-gray-1000 my-2`} />
+      <View style={tw`w-full border-t border-gray-100 my-2`} />
       <View style={tw`flex flex-col items-center justify-center`}>
         <View style={styles.row}>
           <TouchableOpacity
