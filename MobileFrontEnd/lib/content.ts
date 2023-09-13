@@ -1,6 +1,6 @@
 import {
   DietaryPreferenceType,
-  PreferenceType,
+  AreasOfInterestType,
   ScheduleType,
 } from "../../shared/types";
 

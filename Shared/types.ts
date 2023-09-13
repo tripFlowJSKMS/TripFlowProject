@@ -1,8 +1,6 @@
 import { z } from "zod";
 import { Destination } from "../BackEnd/Algorithm/Destination";
 
-export type DestinationType = Destination;
-
 // If there is an error related to this, please look at BackEnd/Algorithm/main.ts tripflowAlgorithm function
 // Am i using zod correctly since Zod's destinationType isnt the same as Destination class
 export const destinationType = z.object({
@@ -58,15 +56,12 @@ export const bumpNeglectedPreferencesType = z.object({
 });
 
 export type AreasOfInterestType = z.infer<typeof areasOfInterestEnum>;
+export type BumpNeglectedPreferencesType = z.infer<typeof bumpNeglectedPreferencesType>;
+export type DestinationType = Destination;
 export type DietaryPreferenceType = z.infer<typeof dietaryPreferenceEnum>;
-export type ScheduleType = z.infer<typeof scheduleEnum>;
+export type GenerateDesirableDestinationsType = z.infer<typeof generateDesirableDestinationsType>;
+export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;
 export type RecalibrateType = z.infer<typeof recalibrateEnum>;
 export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;
-export type GenerateDesirableDestinationsType = z.infer<
-  typeof generateDesirableDestinationsType
->;
+export type ScheduleType = z.infer<typeof scheduleEnum>;
 export type TripFlowAlgorithmType = z.infer<typeof tripFlowAlgorithmType>;
-export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;
-export type BumpNeglectedPreferencesType = z.infer<
-  typeof bumpNeglectedPreferencesType
->;

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import tw from "twrnc";
 import Title from "../components/title";
@@ -12,6 +11,11 @@ import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
 import Button from "../components/button";
 import { startPlanning } from "../../lib/utils";
+import { useDispatch } from 'react-redux';
+import { setDestinations } from "@/lib/reducers/destinationReducer";
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "@/lib/types";
 
 function formatDate(year, month, date) {
   const formattedMonth = String(month).padStart(2, '0');
@@ -37,7 +41,31 @@ export default function StartPlanningPage() {
   const [dietaryPreference, setDietaryPreference] = useState("Normal");
   const [pace, setPace] = useState("Normal");
   const [areaOfInterests, setAreaOfInterests] = useState([]);
+  const dispatch = useDispatch();
+
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigateToPickLocationsPage = () => {
+    navigation.navigate('PickLocations');
+  };
   
+  const handleStartPlanning = async () => {
+    const response = await startPlanning(
+      formatDate(selectedYear, selectedMonth, selectedDate),
+      formatDate(selectedYear, selectedMonth, selectedDate),
+      startTime,
+      endTime,
+      departureLocation,
+      destinationLocation,
+      paxNumber,
+      dietaryPreference,
+      pace,
+      areaOfInterests
+    );
+    // Dispatch the action to store the data in Redux
+    dispatch(setDestinations(response["data"]["destinations"]));
+    navigateToPickLocationsPage();
+  };
+
   return (
     <View style={tw`flex flex-col h-full`}>
       
@@ -103,24 +131,10 @@ export default function StartPlanningPage() {
       </ScrollView>
       {/* For MVP. Need to change enddate parameter for future production */}
       <View style={tw`absolute bottom-0 right-0 mb-[10%] mr-[5%]`}>
-        <Button onPress={() => startPlanning(
-          formatDate(selectedYear, selectedMonth, selectedDate), 
-          formatDate(selectedYear, selectedMonth, selectedDate), 
-          startTime, 
-          endTime, 
-          departureLocation, 
-          destinationLocation, 
-          paxNumber, 
-          dietaryPreference, 
-          pace, 
-          areaOfInterests)}>
-          <Link href="/pages/pickLocationsPage">
-            <Text style={tw.style("text-white")}>Start Planning</Text>
-          </Link>
+        <Button onPress={() => handleStartPlanning()}>
+          <Text style={tw.style("text-white")}>Start Planning</Text>
         </Button>
       </View>
     </View>
   );
-
-  
 }

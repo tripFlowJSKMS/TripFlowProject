@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
-import { generateDestinations } from "../app/helpers/jsonHelpers/generateDestinations";
+import { GenerateDesirableDestinationsType } from "../../Shared/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -46,5 +46,6 @@ export async function startPlanning(
     pace: string, 
     areasOfInterests: string[]) {
     const response = await axios.post("http://localhost:3000/api/start-planning", {startDate, endDate, startTime, endTime, departureLocation, destinationLocation, paxNumber, dietaryPreference, pace, areasOfInterests});
-    generateDestinations(response);
+    // console.log(response.data.destinations);
+    return response;
 }
