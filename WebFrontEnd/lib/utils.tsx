@@ -29,22 +29,50 @@ export function numberToTime(num: number) {
   return `${hours}:${minutes.toString().padStart(2, "0")} ${suffix}`;
 }
 
-export async function register(username, startingTime, endingTime, preferences) {
-  preferences = preferences.filter(preference => preference.selected).map(preferences => preferences.name);
-  const response = await axios.post("http://localhost:3000/api/register", {username, startingTime, endingTime, preferences});
+export async function register(
+  username,
+  startingTime,
+  endingTime,
+  preferences,
+) {
+  preferences = preferences
+    .filter((preference) => preference.selected)
+    .map((preferences) => preferences.name);
+  const response = await axios.post("http://localhost:3000/api/register", {
+    username,
+    startingTime,
+    endingTime,
+    preferences,
+  });
 }
 
 export async function startPlanning(
-    startDate: string, 
-    endDate: string, 
-    startTime: number, 
-    endTime: number, 
-    departureLocation: string, 
-    destinationLocation: string, 
-    paxNumber: string, 
-    dietaryPreference: string, 
-    pace: string, 
-    areasOfInterests: string[]) {
-    const response = await axios.post("http://localhost:3000/api/start-planning", {startDate, endDate, startTime, endTime, departureLocation, destinationLocation, paxNumber, dietaryPreference, pace, areasOfInterests});
-    generateDestinations(response);
+  startDate: string,
+  endDate: string,
+  startTime: number,
+  endTime: number,
+  departureLocation: string,
+  destinationLocation: string,
+  paxNumber: string,
+  dietaryPreference: string,
+  pace: string,
+  areasOfInterests: string[],
+) {
+  const response = await axios.post(
+    "http://localhost:3000/api/start-planning",
+    {
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      departureLocation,
+      destinationLocation,
+      paxNumber,
+      dietaryPreference,
+      pace,
+      areasOfInterests,
+    },
+  );
+  console.log(response);
+  generateDestinations(response);
 }
