@@ -112,15 +112,13 @@ export default function StartPlanningPage() {
                   onDestinationLocationChange={setDestinationLocation}
                 />
                 <View style={tw`flex flex-row w-full`}>
-                  <CustomPicker
+                  <CustomPicker<PaxNumberType>
                     title="Pax"
                     options={paxOptions}
                     width="20%"
                     fontSize="text-2x1"
                     selectedValue={paxNumber}
-                    onValueChange={(value) =>
-                      setPaxNumber(value as PaxNumberType)
-                    }
+                    onValueChange={(value) => setPaxNumber(value)}
                   />
                   <View style={tw`w-20%`}></View>
                   <CustomPicker
@@ -129,16 +127,10 @@ export default function StartPlanningPage() {
                     width="60%"
                     fontSize="text-2x1"
                     selectedValue={dietaryPreference}
-                    onValueChange={(value: string) =>
-                      setDietaryPreference(value as DietaryPreferenceType)
-                    }
+                    onValueChange={(value) => setDietaryPreference(value)}
                   />
                 </View>
-                <PacePicker
-                  onPaceChange={(value: string) =>
-                    setPace(value as ScheduleType)
-                  }
-                />
+                <PacePicker onPaceChange={(value) => setPace(value)} />
               </View>
               <View style={tw`border-r border-gray-100 h-150 ml-10 mr-10`} />
               <AreasOfInterestPicker

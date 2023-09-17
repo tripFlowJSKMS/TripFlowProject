@@ -3,23 +3,23 @@ import { Text, View } from "react-native";
 import tw from "twrnc";
 import { Picker } from "@react-native-picker/picker";
 
-interface CustomPickerProps {
+interface CustomPickerProps<T> {
   title: string;
-  options: string[];
+  options: T[];
   width: string;
   fontSize: string;
-  selectedValue: string;
-  onValueChange: (itemValue: string) => void;
+  selectedValue: T;
+  onValueChange: (itemValue: T) => void;
 }
 
-export default function CustomPicker({
+export default function CustomPicker<T extends string>({
   title,
   options,
   width,
   fontSize,
   selectedValue,
   onValueChange,
-}: CustomPickerProps) {
+}: CustomPickerProps<T>) {
   useEffect(() => {
     setValue(selectedValue);
   }, [selectedValue]);
