@@ -6,7 +6,7 @@ import HomePageDashboard from "../components/homePageComponents/HomePageDashboar
 import ItineraryComponent from "../components/itineraryComponent";
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@/lib/types";
+import { RootStackParamList } from "@/lib/navigation";
 
 export default function HomePage() {
 

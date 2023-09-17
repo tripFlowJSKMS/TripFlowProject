@@ -1,7 +1,16 @@
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
 
-export default function LocationComponent({ name, characteristics }) {
+
+interface LocationComponentProps {
+  name: string;
+  characteristics: string[];
+}
+
+  
+export default function LocationComponent({ 
+  name, characteristics 
+}: LocationComponentProps) {
   return (
       <TouchableOpacity style={tw`flex rounded shadow-lg h-55 w-65 mr-5`}>
         <ImageBackground imageStyle={{height:'70%'}} source={require("../assets/sand-castle-on-clearwater-beach-photo.jpg")} style={tw`w-full h-full rounded overflow-hidden`}>

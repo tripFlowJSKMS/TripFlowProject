@@ -10,12 +10,12 @@ import CustomPicker from "../components/customPicker";
 import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
 import Button from "../components/button";
-import { startPlanning } from "../../lib/utils";
+import { startPlanning } from "@/api/startPlanning";
 import { useDispatch } from "react-redux";
 import { setDestinations } from "@/lib/reducers/destinationReducer";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@/lib/types";
+import { RootStackParamList } from "@/lib/navigation";
 import {
   AreasOfInterestType,
   DietaryPreferenceType,

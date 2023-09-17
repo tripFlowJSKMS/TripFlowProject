@@ -4,6 +4,7 @@ import { Text, TextInput, View } from "react-native";
 import tw from "twrnc";
 import {Picker} from '@react-native-picker/picker';
 
+
 export default function TimeInput({ width, value, setValue }) {
     // Create an array of time options in a 30-minute interval
     const timeOptions = [];

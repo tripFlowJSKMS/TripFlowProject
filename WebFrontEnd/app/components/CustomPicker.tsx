@@ -20,6 +20,7 @@ export default function CustomPicker({
   selectedValue,
   onValueChange,
 }: CustomPickerProps) {
+
   useEffect(() => {
     setValue(selectedValue);
   }, [selectedValue]);

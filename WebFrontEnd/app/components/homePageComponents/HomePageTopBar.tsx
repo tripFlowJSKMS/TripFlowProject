@@ -1,8 +1,11 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import { Link } from "expo-router";
 
-export default function HomePageTopBar({ navigation }) {
+interface HomePageTopBarProps {
+  navigation: EventListener
+}
+
+export default function HomePageTopBar({ navigation }: HomePageTopBarProps) {
   return (
     <View style={tw`flex-row items-center justify-between p-6 bg-transparent`}>
       <Text style={tw`text-lg font-semibold m-2`}>TripFlow</Text>
