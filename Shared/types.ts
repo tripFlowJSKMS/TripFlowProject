@@ -7,6 +7,9 @@ export const areasOfInterestEnum = z.enum([
   "Food",
   "Art",
   "Shopping",
+  "Adventure",
+  "Nature",
+  "Culture"
 ]);
 
 export const dietaryPreferenceEnum = z.enum([

@@ -11,6 +11,9 @@ export const areasOfInterestEnum = z.enum([
   "Food",
   "Art",
   "Shopping",
+  "Adventure",
+  "Nature",
+  "Culture"
 ]);
 
 export const startPlanningOutputSchema = z.array(
