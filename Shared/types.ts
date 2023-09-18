@@ -1,18 +1,4 @@
 import { z } from "zod";
-import { Destination } from "../BackEnd/Algorithm/Destination";
-
-// If there is an error related to this, please look at BackEnd/Algorithm/main.ts tripflowAlgorithm function
-// Am i using zod correctly since Zod's destinationType isnt the same as Destination class
-export const destinationType = z.object({
-  id: z.number(),
-  name: z.string(),
-  openingTime: z.number(),
-  closingTime: z.number(),
-  tourDuration: z.number(),
-  characteristics: z.array(z.string()),
-  longitude: z.number(),
-  latitude: z.number(),
-});
 
 export const areasOfInterestEnum = z.enum([
   "Sports",
@@ -29,6 +15,20 @@ export const dietaryPreferenceEnum = z.enum([
   "Vegetarian",
   "Vegan",
 ]);
+
+export const destinationType = z.object({
+  id: z.number(),
+  name: z.string(),
+  openingTime: z.number(),
+  closingTime: z.number(),
+  tourDuration: z.number(),
+  characteristics: z.array(areasOfInterestEnum),
+  longitude: z.number(),
+  latitude: z.number(),
+  TIME_SLOT: z.number(),
+  DIST_TIME_RATIO: z.number(),
+});
+
 
 export const paxNumberEnum = z.enum(["1", "2", "3-5", "6 or more"]);
 
@@ -55,12 +55,9 @@ export const bumpNeglectedPreferencesType = z.object({
 });
 
 export type AreasOfInterestType = z.infer<typeof areasOfInterestEnum>;
-export type BumpNeglectedPreferencesType = z.infer<
-  typeof bumpNeglectedPreferencesType
->;
-
+export type BumpNeglectedPreferencesType = z.infer<typeof bumpNeglectedPreferencesType>;
 export type PaxNumberType = z.infer<typeof paxNumberEnum>;
-export type DestinationType = Destination;
+export type DestinationType = z.infer<typeof destinationType>;
 export type DietaryPreferenceType = z.infer<typeof dietaryPreferenceEnum>;
 export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;
 export type RecalibrateType = z.infer<typeof recalibrateEnum>;

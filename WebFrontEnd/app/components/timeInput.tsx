@@ -1,11 +1,13 @@
-import { Link } from "expo-router";
-import { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { View } from "react-native";
 import tw from "twrnc";
 import {Picker} from '@react-native-picker/picker';
 
+interface TimeInputProps {
+  value: string;
+  setValue: (value: string) => void;
+}
 
-export default function TimeInput({ width, value, setValue }) {
+export default function TimeInput({ value, setValue }: TimeInputProps) {
     // Create an array of time options in a 30-minute interval
     const timeOptions = [];
     for (let hour = 0; hour < 24; hour++) {

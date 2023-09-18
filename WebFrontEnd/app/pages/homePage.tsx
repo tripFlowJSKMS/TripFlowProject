@@ -1,4 +1,4 @@
-import { Button, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 import tw from "twrnc";
 import Title from "../components/title";
 import HomePageTopBar from '../components/homePageComponents/HomePageTopBar'

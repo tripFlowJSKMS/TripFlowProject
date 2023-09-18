@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
 
 interface HomePageTopBarProps {
-  navigation: EventListener
+  navigation: () => void;
 }
 
 export default function HomePageTopBar({ navigation }: HomePageTopBarProps) {

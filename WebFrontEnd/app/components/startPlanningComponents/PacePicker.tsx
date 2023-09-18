@@ -3,11 +3,15 @@ import { Text, View, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPersonRunning, faPersonSnowboarding, faPersonWalking, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { ScheduleType } from "../../../../Shared/types";
 
-export default function PacePicker( { onPaceChange } ) {
+interface PacePickerProps {
+    onPaceChange: (value: ScheduleType) => void;
+}
+export default function PacePicker( { onPaceChange }: PacePickerProps ) {
     const [selectedValue, setSelectedValue] = useState("Normal");
 
-    const handleIconClick = (value) => {
+    const handleIconClick = (value: ScheduleType) => {
         setSelectedValue(value);
         onPaceChange(value);
     };

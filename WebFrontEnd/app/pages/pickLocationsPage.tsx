@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import tw from "twrnc";
 import Title from "../components/title";
 import TopBar from "../components/topBar";
@@ -6,10 +6,29 @@ import DashBoard from "../components/dashBoard";
 import LocationComponent from "../components/locationComponent";
 import ItineraryComponent from "../components/itineraryComponent";
 import { useSelector } from "react-redux";
+import { RootState } from "@/lib/reducers/reducers";
+import { StartPlanningOutputType } from "../../../Shared/types/startPlanning";
+import { useState } from "react";
+import { DestinationType } from "../../../Shared/types";
+
 
 export default function PickLocationsPage() {
-  const destinationsData = useSelector((state: any) => state.destination.destinations);
-  return (
+  const destinationsData: StartPlanningOutputType = useSelector((state: RootState) => state.destination.destinations);
+  const [selectedLocations, setSelectedLocations] = useState<DestinationType[]>([]);
+
+  const handleLocationClick = (location: DestinationType) => {
+    setSelectedLocations((prevLocations: DestinationType[]) => {
+      const isAlreadySelected = prevLocations.some(item => item.id === location.id);
+      if (isAlreadySelected) {
+        return prevLocations.filter((item) => item.id !== location.id);
+      } else {
+        return [...prevLocations, location];
+      }
+    });
+  }
+  
+
+  return (  
     <View>
       <TopBar />
 
@@ -24,8 +43,11 @@ export default function PickLocationsPage() {
             <View style={tw`flex flex-row flex-wrap`}>
             {destinationsData.map((destination) => (
               <LocationComponent
+                key={destination.id}
                 name = {destination.name}
                 characteristics = {destination.characteristics}
+                onClick={() => handleLocationClick(destination)}
+                isSelected={selectedLocations.some(selected => selected.id === destination.id)}
               />
             ))}
             </View>

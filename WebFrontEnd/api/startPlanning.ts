@@ -1,7 +1,7 @@
 import axios from "axios";
 import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlanning";
-
-const destinationArray: [] = [];
+import { StartPlanningOutputType } from "../../Shared/types/startPlanning";
+import { startPlanningOutputSchema } from "@/lib/types/startPlanningTypes";
 
 export async function startPlanning({
   startDate,
@@ -31,5 +31,6 @@ export async function startPlanning({
     },
   );
 
-  const destinations = response.data.destinations;
+  const destinations: StartPlanningOutputType = startPlanningOutputSchema.parse(response.data.destinations);
+  return destinations;
 }

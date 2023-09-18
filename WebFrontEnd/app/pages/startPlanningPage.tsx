@@ -23,7 +23,7 @@ import {
   ScheduleType,
 } from "../../../Shared/types";
 
-function formatDate(year, month, date) {
+function formatDate(year: number, month: number, date: number): string {
   const formattedMonth = String(month).padStart(2, "0");
   const formattedDate = String(date).padStart(2, "0");
   const formattedDateStr = `${year}-${formattedMonth}-${formattedDate}`;
@@ -32,30 +32,20 @@ function formatDate(year, month, date) {
 
 export default function StartPlanningPage() {
   const paxOptions: PaxNumberType[] = ["1", "2", "3-5", "6 or more"];
-  const dietaryPreferences: DietaryPreferenceType[] = [
-    "Normal",
-    "Vegetarian",
-    "Halal",
-    "Vegan",
-  ];
+  const dietaryPreferences: DietaryPreferenceType[] = ["Normal", "Vegetarian", "Halal", "Vegan"];
 
   const currentDate = new Date();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(
-    currentDate.getMonth() + 1,
-  );
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
   const [selectedDate, setSelectedDate] = useState(currentDate.getDay());
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [departureLocation, setDepartureLocation] = useState("");
   const [destinationLocation, setDestinationLocation] = useState("");
   const [paxNumber, setPaxNumber] = useState<PaxNumberType>("1");
-  const [dietaryPreference, setDietaryPreference] =
-    useState<DietaryPreferenceType>("Normal");
+  const [dietaryPreference, setDietaryPreference] = useState<DietaryPreferenceType>("Normal");
   const [pace, setPace] = useState<ScheduleType>("Normal");
-  const [areaOfInterests, setAreaOfInterests] = useState<
-    Array<AreasOfInterestType>
-  >([]);
+  const [areaOfInterests, setAreaOfInterests] = useState<Array<AreasOfInterestType>>([]);
   const dispatch = useDispatch();
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -129,21 +119,21 @@ export default function StartPlanningPage() {
                     width="60%"
                     fontSize="text-2x1"
                     selectedValue={dietaryPreference}
-                    onValueChange={(value: string) =>
+                    onValueChange={(value) =>
                       setDietaryPreference(value as DietaryPreferenceType)
                     }
                   />
                 </View>
                 <PacePicker
-                  onPaceChange={(value: string) =>
-                    setPace(value as ScheduleType)
+                  onPaceChange={(value: ScheduleType) =>
+                    setPace(value)
                   }
                 />
               </View>
               <View style={tw`border-r border-gray-100 h-150 ml-10 mr-10`} />
               <AreasOfInterestPicker
-                onAreasOfInterestChange={(value: string[]) =>
-                  setAreaOfInterests(value as AreasOfInterestType[])
+                onAreasOfInterestChange={(value: AreasOfInterestType[]) =>
+                  setAreaOfInterests(value)
                 }
               />
             </View>

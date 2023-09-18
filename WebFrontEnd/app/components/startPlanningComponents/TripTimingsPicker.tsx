@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { View, Text } from "react-native"; // Don't forget to import Text
+import React from "react";
+import { View, Text } from "react-native"; 
 import TimeInput from "../timeInput";
 import tw from "twrnc";
 
-const InvalidInputMessage = ({ visible }) => (
+interface InvalidInputMessageProps {
+  visible: boolean;
+}
+
+const InvalidInputMessage: React.FC<InvalidInputMessageProps> = ({ visible }) => (
   <Text
     style={{
       textAlign: "center",
@@ -15,6 +19,7 @@ const InvalidInputMessage = ({ visible }) => (
   </Text>
 );
 
+
 function minutesToTime(minutes: number) {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
@@ -23,9 +28,16 @@ function minutesToTime(minutes: number) {
   return `${hoursStr}:${minsStr}`;
 }
 
-function timeToMinutes(time) {
+function timeToMinutes(time: string) {
   const [hours, minutes] = time.split(":").map(Number);
   return hours * 60 + minutes;
+}
+
+interface TripTimingsPickerProps {
+  selectedStartTime: number;
+  selectedEndTime: number;
+  onStartTimeChange: (value: number) => void;
+  onEndTimeChange: (value: number) => void;
 }
 
 export default function TripTimingsPicker({
@@ -33,15 +45,16 @@ export default function TripTimingsPicker({
   selectedEndTime,
   onStartTimeChange,
   onEndTimeChange,
-}) {
-  const handleStartTimeChange = (value: number) => {
-    selectedStartTime = minutesToTime(value);
-    onStartTimeChange(timeToMinutes(value));
+}: TripTimingsPickerProps ) {
+
+  const handleStartTimeChange = (value: string) => {
+    const minutes: number = timeToMinutes(value); 
+    onStartTimeChange(minutes);
   };
 
-  const handleEndTimeChange = (value: number) => {
-    selectedEndTime = value;
-    onEndTimeChange(timeToMinutes(value));
+  const handleEndTimeChange = (value: string) => {
+    const minutes: number = timeToMinutes(value); 
+    onEndTimeChange(minutes);
   };
 
   return (
@@ -52,13 +65,11 @@ export default function TripTimingsPicker({
       <View style={tw`w-full border-t border-gray-100 my-2`} />
       <View style={tw`flex flex-row mt-3 w-[48%] items-center`}>
         <TimeInput
-          width={75}
           value={minutesToTime(selectedStartTime)}
           setValue={handleStartTimeChange}
         />
         <Text style={tw`ml-3 mr-3 mb-5`}>-</Text>
         <TimeInput
-          width={75}
           value={minutesToTime(selectedEndTime)}
           setValue={handleEndTimeChange}
         />

@@ -4,25 +4,12 @@ import {
   dietaryPreferenceEnum,
   scheduleEnum,
   areasOfInterestEnum,
+  destinationType,
 } from "../types";
 
-export const startPlanningOutputSchema = z.array(
-  z.object({
-    id: z.number(),
-    name: z.string(),
-    weight: z.number(),
-    openingTime: z.number(),
-    closingTime: z.number(),
-    tourDuration: z.number(),
-    characteristics: z.array(z.string()),
-    longitude: z.number(),
-    latitude: z.number(),
-    TIME_SLOT: z.number(),
-    DIST_TIME_RATIO: z.number(),
-  })
-);
+export const startPlanningOutputSchema = z.array(destinationType);
 
-export type StartPlanningOutputType = z.infer<typeof startPlanningOutputSchema>;
+export type StartPlanningOutputType = z.TypeOf<typeof startPlanningOutputSchema>;
 
 export const generateDesirableDestinationsSchema = z.object({
   startDate: z.string(),
@@ -37,6 +24,4 @@ export const generateDesirableDestinationsSchema = z.object({
   areasOfInterests: z.array(areasOfInterestEnum),
 });
 
-export type GenerateDesirableDestinationsType = z.infer<
-  typeof generateDesirableDestinationsSchema
->;
+export type GenerateDesirableDestinationsType = z.TypeOf<typeof generateDesirableDestinationsSchema>;
