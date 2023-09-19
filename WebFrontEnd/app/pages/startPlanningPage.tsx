@@ -12,7 +12,7 @@ import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOf
 import Button from "../components/button";
 import { startPlanning } from "@/api/startPlanning";
 import { useDispatch } from "react-redux";
-import { setDestinations } from "@/lib/reducers/destinationReducer";
+import { setStartPlanningOutputDestinations } from "@/lib/reducers/startPlanningOutputDestinationReducer";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/lib/navigation";
@@ -67,7 +67,7 @@ export default function StartPlanningPage() {
       areasOfInterests: areaOfInterests,
     });
     // Dispatch the action to store the data in Redux
-    dispatch(setDestinations(destinations));
+    dispatch(setStartPlanningOutputDestinations(destinations));
     navigateToPickLocationsPage();
   };
 

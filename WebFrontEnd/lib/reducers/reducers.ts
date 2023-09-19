@@ -1,12 +1,15 @@
 import { combineReducers } from 'redux';
-import destinationReducer, { DestinationState } from './destinationReducer'; // Import your individual reducers
+import startPlanningOutputDestinationReducer, { StartPlanningOutputDestinationState } from './startPlanningOutputDestinationReducer';
+import pickLocationsOutputDestinationReducer, { PickLocationsOutputDestinationState } from './pickLocationsOutputDestinationReducer';
 
 const rootReducer = combineReducers({
-  destination: destinationReducer, // Add more reducers as needed
+  startPlanningOutputDestination: startPlanningOutputDestinationReducer, // Add more reducers as needed
+  pickLocationsOutputDestination: pickLocationsOutputDestinationReducer
 });
 
 export type RootState = {
-  destination: DestinationState;
+  startPlanningOutputDestination: StartPlanningOutputDestinationState;
+  pickLocationsOutputDestination: PickLocationsOutputDestinationState;
 }
 
 export default rootReducer;
