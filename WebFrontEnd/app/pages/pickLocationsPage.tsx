@@ -10,9 +10,17 @@ import { RootState } from "@/lib/reducers/reducers";
 import { StartPlanningOutputType } from "../../../Shared/types/startPlanning";
 import { useState } from "react";
 import { DestinationType } from "../../../Shared/types";
-
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "@/lib/navigation";
 
 export default function PickLocationsPage() {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  // Call this function weijie
+  const navigateToEditLocationsPage = () => {
+    navigation.navigate("EditLocations");
+  };
+
   const destinationsData: StartPlanningOutputType = useSelector((state: RootState) => state.destination.destinations);
   const [selectedLocations, setSelectedLocations] = useState<DestinationType[]>([]);
 
