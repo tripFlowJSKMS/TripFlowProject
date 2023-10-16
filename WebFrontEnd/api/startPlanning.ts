@@ -16,7 +16,7 @@ export async function startPlanning({
   areasOfInterests,
 }: GenerateDesirableDestinationsType) {
   const response = await axios.post(
-    "http://localhost:3000/api/start-planning",
+    "http://localhost:3000/api/start-planning-page",
     {
       startDate,
       endDate,

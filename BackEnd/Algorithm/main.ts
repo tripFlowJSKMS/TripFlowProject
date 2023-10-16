@@ -10,8 +10,9 @@ import {
   RegistrationDetailsType,
   TripFlowAlgorithmType,
   RecalibrateItineraryType,
-  BumpNeglectedPreferencesType,
+  editLocationsInputType,
   RecalibrateType,
+  EditLocationsInputType,
 } from "../../Shared/types";
 import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlanning";
 
@@ -190,7 +191,7 @@ export async function registrationDetails(details: RegistrationDetailsType) {
 }
 
 export async function bumpNeglectedPreferences(
-  details: BumpNeglectedPreferencesType
+  details: EditLocationsInputType
 ): Promise<Destination[]> {
   details.selectedDestinationArr.map((details) => {
     const { id, characteristics } = details;

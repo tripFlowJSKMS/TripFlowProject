@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import tw from "twrnc";
 import Title from "../components/title";
 import TopBar from "../components/topBar";
@@ -14,6 +14,9 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/lib/navigation";
 import { setPickLocationsOutputDestinations } from "@/lib/reducers/pickLocationsOutputDestinationReducer";
+import { setEditLocationsInputDestinations } from "@/lib/reducers/editLocationsInputDestinationReducer";
+import { pickLocations } from "@/api/pickLocations";
+import Button from "../components/button";
 
 export default function PickLocationsPage() {
 
@@ -37,12 +40,18 @@ export default function PickLocationsPage() {
     });
   }
 
-  // Call this function weijie
   const handlePickLocations = async () => {
-    // const destinations = await pickLocations(selectedDestinations);
+    const destinations = await pickLocations(selectedDestinations);
     // Dispatch the action to store the data in Redux
-    // dispatch(setPickLocationsOutputDestinations(destinations));
-    // navigateToEditLocationsPage();
+
+    
+    
+    // What the user selected this page
+    dispatch(setPickLocationsOutputDestinations(selectedDestinations));
+
+    // What we are going to bump as neglected in the edit locations page 
+    dispatch(setEditLocationsInputDestinations(destinations));
+    navigateToEditLocationsPage();
   };
 
   
@@ -73,7 +82,14 @@ export default function PickLocationsPage() {
             ))}
             </View>
 
+
+            <View style={tw`flex flex-row-reverse mb-[10%] mr-[5%]`}>
+              <Button onPress={() => handlePickLocations()}>
+                <Text style={tw.style("text-white")}>Confirm Selections</Text>
+              </Button>
+            </View>
             <View style={tw`p-3`}></View>
+
             
             <Title size="2" parameter="Itineraries to check out!"/>
             <View style={tw`flex flex-row flex-wrap`}>

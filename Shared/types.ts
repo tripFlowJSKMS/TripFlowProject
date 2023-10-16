@@ -53,12 +53,7 @@ export const recalibrateItineraryType = z.object({
   currentTime: z.number(),
 });
 
-export const bumpNeglectedPreferencesType = z.object({
-  selectedDestinationArr: z.array(destinationType),
-});
-
 export type AreasOfInterestType = z.infer<typeof areasOfInterestEnum>;
-export type BumpNeglectedPreferencesType = z.infer<typeof bumpNeglectedPreferencesType>;
 export type PaxNumberType = z.infer<typeof paxNumberEnum>;
 export type DestinationType = z.infer<typeof destinationType>;
 export type DietaryPreferenceType = z.infer<typeof dietaryPreferenceEnum>;
