@@ -5,7 +5,8 @@ export type RootStackParamList = {
   Home: undefined;
   StartPlanning: undefined;
   PickLocations: undefined;
-  EditLocations: undefined
+  EditLocations: undefined;
+  Itinerary: undefined;
 };
 
 export type MessageNavProps<T extends keyof RootStackParamList> = {

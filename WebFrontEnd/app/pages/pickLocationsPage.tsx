@@ -29,22 +29,19 @@ export default function PickLocationsPage() {
     navigation.navigate("EditLocations");
   };
 
-  const handleLocationClick = (location: DestinationType) => {
-    setSelectedDestinations((prevLocations: DestinationType[]) => {
-      const isAlreadySelected = prevLocations.some(item => item.id === location.id);
+  const handleDestinationClick = (destination: DestinationType) => {
+    setSelectedDestinations((prevDestinations: DestinationType[]) => {
+      const isAlreadySelected = prevDestinations.some(item => item.id === destination.id);
       if (isAlreadySelected) {
-        return prevLocations.filter((item) => item.id !== location.id);
+        return prevDestinations.filter((item) => item.id !== destination.id);
       } else {
-        return [...prevLocations, location];
+        return [...prevDestinations, destination];
       }
     });
   }
 
-  const handlePickLocations = async () => {
-    const destinationsInput = {
-      selectedDestinations
-    };
-    const destinations = await pickLocations(destinationsInput);
+  const handlePickDestinations = async () => {
+    const destinations = await pickLocations(selectedDestinations);
     // Dispatch the action to store the data in Redux
     // What the user selected this page
     dispatch(setPickLocationsOutputDestinations(selectedDestinations));
@@ -57,13 +54,10 @@ export default function PickLocationsPage() {
   return (  
     <View>
       <TopBar />
-
         <View style={tw`flex flex-row h-full`}>
-
           <View style={tw`flex w-[30%] p-10`}>
             <DashBoard></DashBoard>
           </View>
-          
           <View style={tw`flex h-[100%] w-[70%] justify-center`}>
             <Title size="2" parameter="Recommended Locations"/>
             <View style={tw`flex flex-row flex-wrap`}>
@@ -72,21 +66,17 @@ export default function PickLocationsPage() {
                   key={destination.id}
                   name = {destination.name}
                   characteristics = {destination.characteristics}
-                  onClick={() => handleLocationClick(destination)}
+                  onClick={() => handleDestinationClick(destination)}
                   isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
                 />
               ))}
             </View>
-
-
             <View style={tw`flex flex-row-reverse mb-[10%] mr-[5%]`}>
-              <Button onPress={() => handlePickLocations()}>
+              <Button onPress={() => handlePickDestinations()}>
                 <Text style={tw.style("text-white")}>Confirm Selections</Text>
               </Button>
             </View>
-            <View style={tw`p-3`}></View>
-
-            
+            <View style={tw`p-3`}></View> 
             <Title size="2" parameter="Itineraries to check out!"/>
             <View style={tw`flex flex-row flex-wrap`}>
               <ItineraryComponent />

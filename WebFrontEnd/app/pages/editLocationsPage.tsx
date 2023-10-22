@@ -1,22 +1,85 @@
 import React, { useState } from 'react'
 import { View, Text } from 'react-native'
 import tw from "twrnc";
-import { PickLocationsOutputType } from "../../../Shared/types/pickLocations";
+import { EditLocationsInputType } from "../../../Shared/types/pickLocations";
+import { PickLocationsOutputType } from '../../../Shared/types/pickLocations';
 import { RootState } from '@/lib/reducers/reducers';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DestinationType } from '../../../Shared/types';
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "@/lib/navigation";
+import { editLocations } from '@/api/editLocations';
+import { setEditLocationsOutputDestinations } from '@/lib/reducers/editLocationsOutputDestinationReducer';
+import { setItineraryInputDestinations } from '@/lib/reducers/itineraryInputDestinationReducer';
+import TopBar from '../components/topBar';
+import DashBoard from '../components/dashBoard';
+import Title from '../components/title';
+import Button from '../components/button';
+import LocationComponent from '../components/locationComponent';
 
 
 export default function EditLocationsPage() {
 
-  // const destinationsData: PickLocationsOutputType = useSelector((state: RootState) => state.PickLocationsOutputType.destinations);
-  const [selectedLocations, setSelectedLocations] = useState<DestinationType[]>([]);
+  const destinationsData: EditLocationsInputType = useSelector((state: RootState) => state.editLocationsInputDestination.destinations);
+  const prevSelectedData: PickLocationsOutputType = useSelector((state: RootState) => state.pickLocationsOutputDestination.destinations ); 
+  const [selectedDestinations, setSelectedDestinations] = useState<DestinationType[]>([]);
+  const dispatch = useDispatch();
+
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigateToItineraryPage = () => {
+    navigation.navigate("Itinerary");
+  };
+
+  const handleDestinationClick = (destination: DestinationType) => {
+    setSelectedDestinations((prevDestinations: DestinationType[]) => {
+      const isAlreadySelected = prevDestinations.some(item => item.id === destination.id);
+      if (isAlreadySelected) {
+        return prevDestinations.filter((item) => item.id !== destination.id);
+      } else {
+        return [...prevDestinations, destination];
+      }
+    });
+  }
+
+  const handlePickDestinations = async () => {
+    const destinations = await editLocations(selectedDestinations);
+    // Dispatch the action to store the data in Redux
+    dispatch(setEditLocationsOutputDestinations(destinations));
+    const allDestinations: DestinationType[] = [...prevSelectedData, ...selectedDestinations];
+    dispatch(setItineraryInputDestinations(allDestinations));
+    navigateToItineraryPage();
+  };
 
 
-  return (
-    <View style={tw`flex flex-col h-full`}>
-      <Text>lmao</Text>
-        {/* <View>test</View> */}
+  return (  
+    <View>
+      <TopBar />
+        <View style={tw`flex flex-row h-full`}>
+          <View style={tw`flex w-[30%] p-10`}>
+            <DashBoard></DashBoard>
+          </View>
+          <View style={tw`flex h-[100%] w-[70%] justify-center`}>
+            <Title size="2" parameter="Try these locations too!"/>
+            <View style={tw`flex flex-row flex-wrap`}>
+              {destinationsData.map((destination) => (
+                <LocationComponent
+                  key={destination.id}
+                  name = {destination.name}
+                  characteristics = {destination.characteristics}
+                  onClick={() => handleDestinationClick(destination)}
+                  isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
+                />
+              ))}
+            </View>
+            <View style={tw`flex flex-row-reverse mb-[10%] mr-[5%]`}>
+              <Button onPress={() => handlePickDestinations()}>
+                <Text style={tw.style("text-white")}>Confirm Selections</Text>
+              </Button>
+            </View>
+          </View>
+        </View>
+
     </View>
   );
 }
