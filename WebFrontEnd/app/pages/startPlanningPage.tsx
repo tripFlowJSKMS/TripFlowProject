@@ -22,13 +22,7 @@ import {
   PaxNumberType,
   ScheduleType,
 } from "../../../Shared/types";
-
-function formatDate(year: number, month: number, date: number): string {
-  const formattedMonth = String(month).padStart(2, "0");
-  const formattedDate = String(date).padStart(2, "0");
-  const formattedDateStr = `${year}-${formattedMonth}-${formattedDate}`;
-  return formattedDateStr;
-}
+import formatDate from "../helpers/formatDate";
 
 export default function StartPlanningPage() {
   const paxOptions: PaxNumberType[] = ["1", "2", "3-5", "6 or more"];
@@ -77,7 +71,6 @@ export default function StartPlanningPage() {
       <ScrollView contentContainerStyle={tw`flex justify-center p-10`}>
         <View style={tw`flex justify-center p-10`}>
           <Title parameter="Your ideal trip awaits" />
-
           <View style={tw`w-[70%]`}>
             <View style={tw`flex flex-row w-full`}>
               <View style={tw`flex flex-col w-[40%]`}>

@@ -41,22 +41,18 @@ export default function PickLocationsPage() {
   }
 
   const handlePickLocations = async () => {
-    const destinations = await pickLocations(selectedDestinations);
+    const destinationsInput = {
+      selectedDestinations
+    };
+    const destinations = await pickLocations(destinationsInput);
     // Dispatch the action to store the data in Redux
-
-    
-    
     // What the user selected this page
     dispatch(setPickLocationsOutputDestinations(selectedDestinations));
-
     // What we are going to bump as neglected in the edit locations page 
     dispatch(setEditLocationsInputDestinations(destinations));
     navigateToEditLocationsPage();
   };
 
-  
-  
-  
 
   return (  
     <View>
@@ -71,15 +67,15 @@ export default function PickLocationsPage() {
           <View style={tw`flex h-[100%] w-[70%] justify-center`}>
             <Title size="2" parameter="Recommended Locations"/>
             <View style={tw`flex flex-row flex-wrap`}>
-            {destinationsData.map((destination) => (
-              <LocationComponent
-                key={destination.id}
-                name = {destination.name}
-                characteristics = {destination.characteristics}
-                onClick={() => handleLocationClick(destination)}
-                isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
-              />
-            ))}
+              {destinationsData.map((destination) => (
+                <LocationComponent
+                  key={destination.id}
+                  name = {destination.name}
+                  characteristics = {destination.characteristics}
+                  onClick={() => handleLocationClick(destination)}
+                  isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
+                />
+              ))}
             </View>
 
 

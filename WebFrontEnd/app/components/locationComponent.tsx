@@ -23,7 +23,7 @@ export default function LocationComponent({
             <Text style={tw`text-white pl-2 pb-1 absolute bottom-0 text-lg font-medium`}>{name}</Text>
           </View>
           {characteristics.map((characteristic) => (
-            <Text style={tw`ml-2 mt-2`}>{characteristic}</Text>
+            <Text key={characteristic + name} style={tw`ml-2 mt-2`}>{characteristic}</Text>
           ))}
         </ImageBackground>
       </TouchableOpacity>

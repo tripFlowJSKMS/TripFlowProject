@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { destinationType } from "./commonTypes";
 
 /**
  * BIG types import directly from shared
@@ -16,18 +17,4 @@ export const areasOfInterestEnum = z.enum([
   "Culture"
 ]);
 
-export const startPlanningOutputSchema = z.array(
-    z.object({
-      id: z.number(),
-      name: z.string(),
-      weight: z.number(),
-      openingTime: z.number(),
-      closingTime: z.number(),
-      tourDuration: z.number(),
-      characteristics: z.array(areasOfInterestEnum),
-      longitude: z.number(),
-      latitude: z.number(),
-      TIME_SLOT: z.number(),
-      DIST_TIME_RATIO: z.number(),
-    })
-  );
+export const startPlanningOutputSchema = z.array(destinationType);
