@@ -8,11 +8,11 @@ import {
   tripFlowAlgorithmType,
   RecalibrateItineraryType,
   recalibrateItineraryType,
-  BumpNeglectedPreferencesType,
-  bumpNeglectedPreferencesType,
 } from "../Shared/types";
 import { GenerateDesirableDestinationsType } from "../Shared/types/startPlanning";
 import { generateDesirableDestinationsSchema } from "../Shared/types/startPlanning";
+import { EditLocationsInputType } from "../Shared/types/pickLocations";
+import { editLocationsInputSchema } from "../Shared/types/pickLocations";
 
 import express from "express";
 import { recalibrate, tripFlowAlgorithm } from "./Algorithm/main";
@@ -24,6 +24,7 @@ import {
   registrationDetails,
   bumpNeglectedPreferences,
 } from "./Algorithm/main";
+
 
 app.use(express.json());
 app.use(cors());
@@ -42,7 +43,7 @@ app.post("/api/register", async (req, res) => {
 });
 
 // Start Planning Page API
-app.post("/api/start-planning", async (req, res) => {
+app.post("/api/start-planning-page", async (req, res) => {
   try {
     const validatedDetails: GenerateDesirableDestinationsType =
       generateDesirableDestinationsSchema.parse(req.body);
@@ -59,8 +60,8 @@ app.post("/api/start-planning", async (req, res) => {
 // Pick Locations Page API
 app.post("/api/pick-locations-page", async (req, res) => {
   try {
-    const validatedDetails: BumpNeglectedPreferencesType =
-      bumpNeglectedPreferencesType.parse(req.body);
+    const validatedDetails: EditLocationsInputType =
+      editLocationsInputSchema.parse(req.body);
     const destinations: Destination[] = await bumpNeglectedPreferences(
       validatedDetails
     );

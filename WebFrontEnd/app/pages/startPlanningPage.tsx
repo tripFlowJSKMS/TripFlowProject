@@ -6,29 +6,23 @@ import TopBar from "../components/topBar";
 import DatePicker from "../components/startPlanningComponents/DatePicker";
 import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
 import DepartureDestinationPicker from "../components/startPlanningComponents/DepartureDestinationPicker";
-import CustomPicker from "../components/customPicker";
+import CustomPicker from "../components/CustomPicker";
 import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
 import Button from "../components/button";
-import { startPlanning } from "../../lib/utils";
+import { startPlanning } from "@/api/startPlanning";
 import { useDispatch } from "react-redux";
-import { setDestinations } from "@/lib/reducers/destinationReducer";
+import { setStartPlanningOutputDestinations } from "@/lib/reducers/startPlanningOutputDestinationReducer";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@/lib/types";
+import { RootStackParamList } from "@/lib/navigation";
 import {
   AreasOfInterestType,
   DietaryPreferenceType,
   PaxNumberType,
   ScheduleType,
 } from "../../../Shared/types";
-
-function formatDate(year, month, date) {
-  const formattedMonth = String(month).padStart(2, "0");
-  const formattedDate = String(date).padStart(2, "0");
-  const formattedDateStr = `${year}-${formattedMonth}-${formattedDate}`;
-  return formattedDateStr;
-}
+import formatDate from "../helpers/formatDate";
 
 export default function StartPlanningPage() {
   const paxOptions: PaxNumberType[] = ["1", "2", "3-5", "6 or more"];
@@ -77,7 +71,7 @@ export default function StartPlanningPage() {
       areasOfInterests: areaOfInterests,
     });
     // Dispatch the action to store the data in Redux
-    dispatch(setDestinations(destinations));
+    dispatch(setStartPlanningOutputDestinations(destinations));
     navigateToPickLocationsPage();
   };
 
@@ -87,7 +81,6 @@ export default function StartPlanningPage() {
       <ScrollView contentContainerStyle={tw`flex justify-center p-10`}>
         <View style={tw`flex justify-center p-10`}>
           <Title parameter="Your ideal trip awaits" />
-
           <View style={tw`w-[70%]`}>
             <View style={tw`flex flex-row w-full`}>
               <View style={tw`flex flex-col w-[40%]`}>
@@ -127,15 +120,19 @@ export default function StartPlanningPage() {
                     width="60%"
                     fontSize="text-2x1"
                     selectedValue={dietaryPreference}
-                    onValueChange={(value) => setDietaryPreference(value)}
+                    onValueChange={(value) =>
+                      setDietaryPreference(value as DietaryPreferenceType)
+                    }
                   />
                 </View>
-                <PacePicker onPaceChange={(value) => setPace(value)} />
+                <PacePicker
+                  onPaceChange={(value: ScheduleType) => setPace(value)}
+                />
               </View>
               <View style={tw`border-r border-gray-100 h-150 ml-10 mr-10`} />
               <AreasOfInterestPicker
-                onAreasOfInterestChange={(value: string[]) =>
-                  setAreaOfInterests(value as AreasOfInterestType[])
+                onAreasOfInterestChange={(value: AreasOfInterestType[]) =>
+                  setAreaOfInterests(value)
                 }
               />
             </View>

@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
+import { AreasOfInterestType } from "../../../../Shared/types";
 
-export default function AreasOfInterestPicker( { onAreasOfInterestChange }) {
-    const areasOfInterest: string[] = ["Sports", "Music", "Outdoors", "Food", "Art", "Shopping"];
-    const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+interface AreasOfInterestPickerProps {
+    onAreasOfInterestChange: (value: AreasOfInterestType[]) => void;
+}
+export default function AreasOfInterestPicker( { onAreasOfInterestChange }: AreasOfInterestPickerProps) {
+    const areasOfInterest: AreasOfInterestType[] = ["Sports", "Music", "Outdoors", "Food", "Art", "Shopping"];
+    const [selectedInterests, setSelectedInterests] = useState<AreasOfInterestType[]>([]);
 
-    const handleInterestToggle = (interest: string) => {
+    const handleInterestToggle = (interest: AreasOfInterestType) => {
         if (selectedInterests.includes(interest)) {
-            const temp: string[] = selectedInterests.filter(item => item !== interest)
+            const temp: AreasOfInterestType[] = selectedInterests.filter(item => item !== interest)
             setSelectedInterests(temp);
             onAreasOfInterestChange(temp)
             
         } else {
-            const temp: string[] = [...selectedInterests, interest]
+            const temp: AreasOfInterestType[] = [...selectedInterests, interest]
             setSelectedInterests(temp);
             onAreasOfInterestChange(temp);
         }

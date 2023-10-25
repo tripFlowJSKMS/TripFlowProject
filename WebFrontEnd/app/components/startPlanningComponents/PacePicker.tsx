@@ -13,11 +13,10 @@ import { ScheduleType } from "../../../../Shared/types";
 interface PacePickerProps {
   onPaceChange: (value: ScheduleType) => void;
 }
-
 export default function PacePicker({ onPaceChange }: PacePickerProps) {
   const [selectedValue, setSelectedValue] = useState("Normal");
 
-  const handleIconClick = (value) => {
+  const handleIconClick = (value: ScheduleType) => {
     setSelectedValue(value);
     onPaceChange(value);
   };

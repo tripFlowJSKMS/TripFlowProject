@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 
-export default function DatePicker({ onDateChange }) {
+interface DatePickerProps {
+  onDateChange: (year: number, month: number, date: number) => void;
+}
+
+export default function DatePicker({ onDateChange }: DatePickerProps) {
   const currentDate = new Date();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(
-    currentDate.getMonth() + 1,
-  );
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
   const [selectedDate, setSelectedDate] = useState(currentDate.getDay());
 
   const years = Array.from({ length: 10 }, (_, i) => selectedYear - 5 + i);
 
-  const monthNames = [
+  const monthNames: string[] = [
     "January",
     "February",
     "March",
@@ -28,11 +30,11 @@ export default function DatePicker({ onDateChange }) {
   ];
 
   // Calculate the day of the week (0 = Sunday, 1 = Monday, etc.)
-  const getDayOfWeek = (year, month, day) => {
+  const getDayOfWeek = (year: number, month: number, day: number) => {
     return new Date(year, month - 1, day).getDay();
   };
 
-  const generateDatesForMonth = (year, month) => {
+  const generateDatesForMonth = (year: number, month: number) => {
     const daysInMonth = new Date(year, month, 0).getDate();
     const firstDayOfWeek = getDayOfWeek(year, month, 1); // 0 = Sunday, 1 = Monday, etc.
     const dates = Array.from({ length: daysInMonth }, (_, i) => i + 1);
@@ -45,17 +47,17 @@ export default function DatePicker({ onDateChange }) {
     return dates;
   };
 
-  const handleYearChange = (year) => {
+  const handleYearChange = (year: number) => {
     setSelectedYear(year);
     onDateChange(year, selectedMonth, selectedDate);
   };
 
-  const handleMonthChange = (month) => {
+  const handleMonthChange = (month: number) => {
     setSelectedMonth(month);
     onDateChange(selectedYear, month, selectedDate);
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (date: number) => {
     setSelectedDate(date);
     onDateChange(selectedYear, selectedMonth, date);
   };

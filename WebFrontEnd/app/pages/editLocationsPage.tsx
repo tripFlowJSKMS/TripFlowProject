@@ -1,32 +1,34 @@
-import { Text, View } from "react-native";
+import React, { useState } from 'react'
+import { View, Text } from 'react-native'
 import tw from "twrnc";
-import Title from "../components/title";
-import TopBar from "../components/topBar";
-import DashBoard from "../components/dashBoard";
-import LocationComponent from "../components/locationComponent";
-import ItineraryComponent from "../components/itineraryComponent";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/reducers/reducers";
-import { StartPlanningOutputType } from "../../../Shared/types/startPlanning";
-import { useState } from "react";
-import { DestinationType } from "../../../Shared/types";
+import { EditLocationsInputType } from "../../../Shared/types/pickLocations";
+import { PickLocationsOutputType } from '../../../Shared/types/pickLocations';
+import { RootState } from '@/lib/reducers/reducers';
+import { useDispatch, useSelector } from 'react-redux';
+import { DestinationType } from '../../../Shared/types';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/lib/navigation";
-import { setPickLocationsOutputDestinations } from "@/lib/reducers/pickLocationsOutputDestinationReducer";
-import { setEditLocationsInputDestinations } from "@/lib/reducers/editLocationsInputDestinationReducer";
-import { pickLocations } from "@/api/pickLocations";
-import Button from "../components/button";
+import { editLocations } from '@/api/editLocations';
+import { setEditLocationsOutputDestinations } from '@/lib/reducers/editLocationsOutputDestinationReducer';
+import { setItineraryInputDestinations } from '@/lib/reducers/itineraryInputDestinationReducer';
+import TopBar from '../components/topBar';
+import DashBoard from '../components/dashBoard';
+import Title from '../components/title';
+import Button from '../components/button';
+import LocationComponent from '../components/locationComponent';
 
-export default function PickLocationsPage() {
 
-  const destinationsData: StartPlanningOutputType = useSelector((state: RootState) => state.startPlanningOutputDestination.destinations);
+export default function EditLocationsPage() {
+
+  const destinationsData: EditLocationsInputType = useSelector((state: RootState) => state.editLocationsInputDestination.destinations);
+  const prevSelectedData: PickLocationsOutputType = useSelector((state: RootState) => state.pickLocationsOutputDestination.destinations ); 
   const [selectedDestinations, setSelectedDestinations] = useState<DestinationType[]>([]);
   const dispatch = useDispatch();
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const navigateToEditLocationsPage = () => {
-    navigation.navigate("EditLocations");
+  const navigateToItineraryPage = () => {
+    navigation.navigate("Itinerary");
   };
 
   const handleDestinationClick = (destination: DestinationType) => {
@@ -41,13 +43,12 @@ export default function PickLocationsPage() {
   }
 
   const handlePickDestinations = async () => {
-    const destinations = await pickLocations(selectedDestinations);
+    const destinations = await editLocations(selectedDestinations);
     // Dispatch the action to store the data in Redux
-    // What the user selected this page
-    dispatch(setPickLocationsOutputDestinations(selectedDestinations));
-    // What we are going to bump as neglected in the edit locations page 
-    dispatch(setEditLocationsInputDestinations(destinations));
-    navigateToEditLocationsPage();
+    dispatch(setEditLocationsOutputDestinations(destinations));
+    const allDestinations: DestinationType[] = [...prevSelectedData, ...selectedDestinations];
+    dispatch(setItineraryInputDestinations(allDestinations));
+    navigateToItineraryPage();
   };
 
 
@@ -59,7 +60,7 @@ export default function PickLocationsPage() {
             <DashBoard></DashBoard>
           </View>
           <View style={tw`flex h-[100%] w-[70%] justify-center`}>
-            <Title size="2" parameter="Recommended Locations"/>
+            <Title size="2" parameter="Try these locations too!"/>
             <View style={tw`flex flex-row flex-wrap`}>
               {destinationsData.map((destination) => (
                 <LocationComponent
@@ -75,13 +76,6 @@ export default function PickLocationsPage() {
               <Button onPress={() => handlePickDestinations()}>
                 <Text style={tw.style("text-white")}>Confirm Selections</Text>
               </Button>
-            </View>
-            <View style={tw`p-3`}></View> 
-            <Title size="2" parameter="Itineraries to check out!"/>
-            <View style={tw`flex flex-row flex-wrap`}>
-              <ItineraryComponent />
-              <ItineraryComponent />
-              <ItineraryComponent />
             </View>
           </View>
         </View>

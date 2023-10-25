@@ -10,16 +10,16 @@ import {
   RegistrationDetailsType,
   TripFlowAlgorithmType,
   RecalibrateItineraryType,
-  BumpNeglectedPreferencesType,
   RecalibrateType,
 } from "../../Shared/types";
 import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlanning";
+import { EditLocationsInputType } from "../../Shared/types/pickLocations";
 
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
 
 // Let's assume for every additional day they are touring, we generate 10 more destinations for them to choose from
-const GENERATE_DESTINATIONS_MULTIPLIER: number = 10;
+const GENERATE_DESTINATIONS_MULTIPLIER: number = 3;
 let name: string;
 let startDate: string;
 let endDate: string;
@@ -190,9 +190,9 @@ export async function registrationDetails(details: RegistrationDetailsType) {
 }
 
 export async function bumpNeglectedPreferences(
-  details: BumpNeglectedPreferencesType
+  details: EditLocationsInputType
 ): Promise<Destination[]> {
-  details.selectedDestinationArr.map((details) => {
+  details.map((details) => {
     const { id, characteristics } = details;
     selectedDestinations.add(id);
     for (const characteristic of characteristics) {

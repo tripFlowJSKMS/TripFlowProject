@@ -2,27 +2,32 @@ import { View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import tw from "twrnc";
 
-const cities = [ "Singapore", "Singaaa", "Singggb", "Cambodia", "Laos", "Malaysia", "Thailand" ];
+const cities: string[] = [ "Singapore", "Singaaa", "Singggb", "Cambodia", "Laos", "Malaysia", "Thailand" ];
 
-const filterCountries = (query) => {
+function filterCountries(query: string): string[] {
     return cities.filter(country =>
-      country.toLowerCase().startsWith(query.toLowerCase())
-    );
-};
+        country.toLowerCase().startsWith(query.toLowerCase())
+      );
+}
 
-export default function DepartureDestinationPicker({ onDepartureLocationChange, onDestinationLocationChange }) {
+interface DepartureDestinationPickerProps {
+    onDepartureLocationChange: (value: string) => void;
+    onDestinationLocationChange: (value: string) => void;
+}
+
+export default function DepartureDestinationPicker({ onDepartureLocationChange, onDestinationLocationChange }: DepartureDestinationPickerProps) {
     const [departureQuery, setDepartureQuery] = useState("");
     const [destinationQuery, setDestinationQuery] = useState("");
     const [departureData, setDepartureData] = useState([]);
     const [destinationData, setDestinationData] = useState([]);
   
-    const handleDepartureItemPress = (item) => {
+    const handleDepartureItemPress = (item: string) => {
         setDepartureQuery(item);
         setDepartureData([]);
         onDepartureLocationChange(item); // Notify parent component of the selection
     };
 
-    const handleDestinationItemPress = (item) => {
+    const handleDestinationItemPress = (item: string) => {
         setDestinationQuery(item);
         setDestinationData([]);
         onDestinationLocationChange(item); // Notify parent component of the selection
