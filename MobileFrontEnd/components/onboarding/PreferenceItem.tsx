@@ -2,7 +2,6 @@ import { Preference } from "@/store/onboardingStore";
 import { Text, Pressable } from "react-native";
 import tw from "twrnc";
 import { AntDesign } from "@expo/vector-icons";
-import { fromTheme } from "tailwind-merge";
 
 interface PreferenceItemProps {
   preference: Preference;
