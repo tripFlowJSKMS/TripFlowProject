@@ -1,8 +1,4 @@
-import {
-  DietaryPreferenceType,
-  AreasOfInterestType,
-  ScheduleType,
-} from "../../shared/types";
+import { DietaryPreferenceType, ScheduleType } from "../../Shared/types";
 
 export const dietaryPreferenceOptions: Array<{
   name: string;

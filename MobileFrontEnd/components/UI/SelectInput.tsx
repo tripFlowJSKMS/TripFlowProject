@@ -1,7 +1,6 @@
 import { View, Text } from "react-native";
 import tw from "twrnc";
 import { Picker } from "@react-native-picker/picker";
-import { cn } from "@/lib/utils";
 
 interface SelectInputProps {
   label?: string;

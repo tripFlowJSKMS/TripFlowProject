@@ -1,7 +1,8 @@
 import axios from "axios";
 import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlanning";
-
-const destinationArray: [] = [];
+import { isValidBody } from "@/lib/utils";
+import { DestinationType } from "../../Shared/types";
+import { startPlanningOutputSchema } from "@/types/startPlanningTypes";
 
 export async function startPlanning({
   startDate,
@@ -31,5 +32,10 @@ export async function startPlanning({
     },
   );
 
-  const destinations = response.data.destinations;
+  if (!isValidBody(response.data, startPlanningOutputSchema)) {
+    return Response.json({ message: "Invalid response" });
+  }
+  const destinations: DestinationType[] = response.data.destinations;
+
+  return response.data.destinations;
 }
