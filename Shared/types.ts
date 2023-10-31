@@ -54,6 +54,7 @@ export const recalibrateItineraryType = z.object({
 });
 
 export type AreasOfInterestType = z.infer<typeof areasOfInterestEnum>;
+export type TripFlowAlgorithmType = z.infer<typeof tripFlowAlgorithmType>;
 export type PaxNumberType = z.infer<typeof paxNumberEnum>;
 export type DestinationType = z.infer<typeof destinationType>;
 export type DietaryPreferenceType = z.infer<typeof dietaryPreferenceEnum>;
@@ -61,4 +62,3 @@ export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;
 export type RecalibrateType = z.infer<typeof recalibrateEnum>;
 export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;
 export type ScheduleType = z.infer<typeof scheduleEnum>;
-export type TripFlowAlgorithmType = z.infer<typeof tripFlowAlgorithmType>;
