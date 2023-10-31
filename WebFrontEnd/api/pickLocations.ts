@@ -2,6 +2,7 @@ import axios from "axios";
 import { EditLocationsInputType } from "../../Shared/types/pickLocations";
 import { editLocationsInputSchema } from "@/lib/types/pickLocationsTypes";
 import { isValidBody } from "@/lib/utils";
+import { DestinationType } from "../../Shared/types";
 
 
 export async function pickLocations(selectedDestinations: EditLocationsInputType ) {
@@ -15,6 +16,6 @@ export async function pickLocations(selectedDestinations: EditLocationsInputType
   if (!isValidBody(response.data.destinations, editLocationsInputSchema)) {
     return Response.json({ message: "Invalid response"});
   }
-
-  return response.data.destinations;
+  const destinations: DestinationType[] = response.data.destinations;
+  return destinations;
 }

@@ -46,7 +46,7 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/start-planning-page", async (req, res) => {
   try {
     const validatedDetails: GenerateDesirableDestinationsType =
-      generateDesirableDestinationsSchema.parse(req.body);
+      generateDesirableDestinationsSchema.parse(req.body); 
     const destinations: Destination[] = await generateDesirableDestinations(
       validatedDetails
     );
@@ -60,11 +60,8 @@ app.post("/api/start-planning-page", async (req, res) => {
 // Pick Locations Page API
 app.post("/api/pick-locations-page", async (req, res) => {
   try {
-    const validatedDetails: EditLocationsInputType =
-      editLocationsInputSchema.parse(req.body);
-    const destinations: Destination[] = await bumpNeglectedPreferences(
-      validatedDetails
-    );
+    const validatedDetails: EditLocationsInputType = editLocationsInputSchema.parse(req.body.selectedDestinations);
+    const destinations: Destination[] = await bumpNeglectedPreferences(validatedDetails);
     res.json({ destinations });
   } catch (error) {
     console.error("Validation error:", error);

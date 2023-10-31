@@ -32,8 +32,8 @@ let dietaryPreference: string;
 let areasOfInterests: string[];
 let pace: string;
 let desirableDestinations: Destination[];
-let selectedDestinations: Set<number> = new Set();
-let selectedCharacteristics: Map<string, number> = new Map();
+let selectedDestinations: Set<number>;
+let selectedCharacteristics: Map<string, number>;
 
 export async function tripFlowAlgorithm(
   details: TripFlowAlgorithmType
@@ -192,6 +192,11 @@ export async function registrationDetails(details: RegistrationDetailsType) {
 export async function bumpNeglectedPreferences(
   details: EditLocationsInputType
 ): Promise<Destination[]> {
+
+  // Always reinitialise this here so that when user presses back/refresh the destinations/characteristics do not get double counted
+  selectedCharacteristics = new Map();
+  selectedDestinations = new Set();
+  // details contain all the locations initially selected by the user at the PickLocationsPage
   details.map((details) => {
     const { id, characteristics } = details;
     selectedDestinations.add(id);
@@ -214,10 +219,13 @@ export async function bumpNeglectedPreferences(
   });
 
   const neglectedDestinations: Destination[] = [];
-
+  
   for (const destination of desirableDestinations) {
+    if (selectedDestinations.has(destination.getId())) {
+        continue;
+    }    
     if (destination.getCharacteristics().includes(characteristicLeastChosen)) {
-      neglectedDestinations.push(destination);
+        neglectedDestinations.push(destination);
     }
   }
 
