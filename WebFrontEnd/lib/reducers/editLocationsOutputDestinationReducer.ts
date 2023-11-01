@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { EditLocationsOutputType } from "../../../Shared/types/editLocations";
+import { DestinationType } from "../../../Shared/types";
 
 export type EditLocationsOutputDestinationState = {
-  destinations: EditLocationsOutputType;
+  destinations: DestinationType[];
 };
 
 const initialState: EditLocationsOutputDestinationState = {
@@ -13,7 +13,7 @@ const editLocationsOutputDestinationSlice = createSlice({
   name: "destination",
   initialState,
   reducers: {
-    setEditLocationsOutputDestinations: (state: EditLocationsOutputDestinationState, action: PayloadAction<EditLocationsOutputType>) => {
+    setEditLocationsOutputDestinations: (state: EditLocationsOutputDestinationState, action: PayloadAction<DestinationType[]>) => {
       state.destinations = action.payload;
     },
   },

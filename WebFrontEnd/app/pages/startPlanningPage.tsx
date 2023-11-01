@@ -18,6 +18,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/lib/navigation";
 import {
   AreasOfInterestType,
+  DestinationType,
   DietaryPreferenceType,
   PaxNumberType,
   ScheduleType,
@@ -58,21 +59,25 @@ export default function StartPlanningPage() {
   };
 
   const handleStartPlanning = async () => {
-    const destinations = await startPlanning({
-      startDate: formatDate(selectedYear, selectedMonth, selectedDate),
-      endDate: formatDate(selectedYear, selectedMonth, selectedDate),
-      startTime,
-      endTime,
-      departureLocation,
-      destinationLocation,
-      paxNumber,
-      dietaryPreference,
-      pace,
-      areasOfInterests: areaOfInterests,
-    });
-    // Dispatch the action to store the data in Redux
-    dispatch(setStartPlanningOutputDestinations(destinations));
-    navigateToPickLocationsPage();
+    try {
+      const destinations = await startPlanning({
+        startDate: formatDate(selectedYear, selectedMonth, selectedDate),
+        endDate: formatDate(selectedYear, selectedMonth, selectedDate),
+        startTime,
+        endTime,
+        departureLocation,
+        destinationLocation,
+        paxNumber,
+        dietaryPreference,
+        pace,
+        areasOfInterests: areaOfInterests,
+      });
+      // Dispatch the action to store the data in Redux
+      dispatch(setStartPlanningOutputDestinations(destinations));
+      navigateToPickLocationsPage();
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (

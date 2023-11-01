@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TripFlowAlgorithmType } from "../../../Shared/types/editLocations";
+import { DestinationType } from "../../../Shared/types";
 
 export type ItineraryInputDestinationState = {
-  destinations: TripFlowAlgorithmType;
+  itinerary: Array<{ destination: DestinationType; startingTime: number; endingTime: number }>;
 };
 
 const initialState: ItineraryInputDestinationState = {
-  destinations: [],
+  itinerary: [],
 };
 
 const itineraryInputDestinationSlice = createSlice({
-  name: "destination",
+  name: "itinerary",
   initialState,
   reducers: {
-    setItineraryInputDestinations: (state: ItineraryInputDestinationState, action: PayloadAction<TripFlowAlgorithmType>) => {
-      state.destinations = action.payload;
+    setItineraryInputDestinations: (state: ItineraryInputDestinationState, action: PayloadAction<Array<{ destination: DestinationType; startingTime: number; endingTime: number }>>) => {
+      state.itinerary = action.payload;
     },
   },
 });

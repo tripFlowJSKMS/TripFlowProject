@@ -4,10 +4,10 @@ import {
   dietaryPreferenceEnum,
   scheduleEnum,
   areasOfInterestEnum,
-  destinationType,
+  destinationSchema,
 } from "../types";
 
-export const startPlanningOutputSchema = z.array(destinationType);
+export const startPlanningOutputSchema = z.array(destinationSchema);
 
 export type StartPlanningOutputType = z.TypeOf<typeof startPlanningOutputSchema>;
 

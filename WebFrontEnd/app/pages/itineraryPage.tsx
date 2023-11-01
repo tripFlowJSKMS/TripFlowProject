@@ -1,9 +1,9 @@
 import React from 'react'
 
-function itineraryPage() {
+function ItineraryPage() {
   return (
     <div>itineraryPage</div>
   )
 }
 
-export default itineraryPage
+export default ItineraryPage

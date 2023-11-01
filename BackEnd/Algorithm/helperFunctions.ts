@@ -85,7 +85,6 @@ weight sum at the end of the path.
 function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
   itinerarySoFar: Destination[], weightSoFar: number): void {
     const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
-
     if (outgoingEdges.length == 0) {
       allPaths.push([pathSoFar, weightSoFar]);
     } else {
