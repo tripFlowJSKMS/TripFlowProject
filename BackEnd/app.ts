@@ -4,14 +4,12 @@ import { Destination } from "./Algorithm/Destination";
 import {
   RegistrationDetailsType,
   registrationDetailsType,
-  TripFlowAlgorithmType,
-  tripFlowAlgorithmType,
   RecalibrateItineraryType,
   recalibrateItineraryType,
 } from "../Shared/types";
 import { GenerateDesirableDestinationsType } from "../Shared/types/startPlanning";
 import { generateDesirableDestinationsSchema } from "../Shared/types/startPlanning";
-import { EditLocationsInputType } from "../Shared/types/pickLocations";
+import { EditLocationsInputType, tripFlowAlgorithmType } from "../Shared/types/pickLocations";
 import { editLocationsInputSchema } from "../Shared/types/pickLocations";
 
 import express from "express";
@@ -24,6 +22,7 @@ import {
   registrationDetails,
   bumpNeglectedPreferences,
 } from "./Algorithm/main";
+import { TripFlowAlgorithmType } from "../Shared/types/editLocations";
 
 
 app.use(express.json());
@@ -73,13 +72,14 @@ app.post("/api/pick-locations-page", async (req, res) => {
 app.post("/api/planning-page", async (req, res) => {
   try {
     const validatedDetails: TripFlowAlgorithmType = tripFlowAlgorithmType.parse(
-      req.body
+      req.body.selectedDestinations
     );
     const itinerary: Array<{
       destination: Destination;
       startingTime: number;
       endingTime: number;
     }> = await tripFlowAlgorithm(validatedDetails);
+    console.log(itinerary);
     res.json({ itinerary });
   } catch (error) {
     console.error("Validation error:", error);

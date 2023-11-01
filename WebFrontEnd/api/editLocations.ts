@@ -1,10 +1,9 @@
 import axios from "axios";
-import { TripFlowAlgorithmType } from "../../Shared/types/editLocations";
-import { tripFlowAlgorithmSchema } from "@/lib/types/editLocationsTypes";
+import { generatedItinerarySchema } from "../lib/types/editLocationsTypes";
 import { isValidBody } from "@/lib/utils";
 import { DestinationType } from "../../Shared/types";
 
-export async function editLocations(selectedDestinations: TripFlowAlgorithmType ) {
+export async function editLocations(selectedDestinations: DestinationType[] ) {
     const response = await axios.post(
         "http://localhost:3000/api/planning-page",
         {
@@ -12,9 +11,9 @@ export async function editLocations(selectedDestinations: TripFlowAlgorithmType 
         },
     );
 
-    if (!isValidBody(response.data.destinations, tripFlowAlgorithmSchema)) {
-        return Response.json({ message: "Invalid response"});
+    if (!isValidBody(response.data.destinations, generatedItinerarySchema)) {
+        throw new Error("Invalid response");
     }
-    const destinations: DestinationType[] = response.data.destinations;
+    const destinations: Array<{ destination: DestinationType; startingTime: number; endingTime: number }> = response.data.destinations;
     return destinations;
 }

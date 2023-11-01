@@ -14,7 +14,7 @@ export async function pickLocations(selectedDestinations: EditLocationsInputType
   );
 
   if (!isValidBody(response.data.destinations, editLocationsInputSchema)) {
-    return Response.json({ message: "Invalid response"});
+    throw new Error("Invalid response");
   }
   const destinations: DestinationType[] = response.data.destinations;
   return destinations;

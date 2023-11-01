@@ -41,15 +41,18 @@ export default function PickLocationsPage() {
   }
 
   const handlePickDestinations = async () => {
-    const destinations = await pickLocations(selectedDestinations);
-    // Dispatch the action to store the data in Redux
-    // What the user selected this page
-    dispatch(setPickLocationsOutputDestinations(selectedDestinations));
-    // What we are going to bump as neglected in the edit locations page 
-    dispatch(setEditLocationsInputDestinations(destinations));
-    navigateToEditLocationsPage();
+    try {
+      const destinations = await pickLocations(selectedDestinations);
+      // Dispatch the action to store the data in Redux
+      // What the user selected this page
+      dispatch(setPickLocationsOutputDestinations(selectedDestinations));
+      // What we are going to bump as neglected in the edit locations page 
+      dispatch(setEditLocationsInputDestinations(destinations));
+      navigateToEditLocationsPage();
+    } catch (error) {
+      console.error(error.message);
+    }
   };
-
 
   return (  
     <View>

@@ -19,7 +19,7 @@ export const dietaryPreferenceEnum = z.enum([
   "Vegan",
 ]);
 
-export const destinationType = z.object({
+export const destinationSchema = z.object({
   id: z.number(),
   name: z.string(),
   openingTime: z.number(),
@@ -43,20 +43,15 @@ export const registrationDetailsType = z.object({
   username: z.string(),
 });
 
-export const tripFlowAlgorithmType = z.object({
-  destinationArr: z.array(destinationType),
-});
-
 export const recalibrateItineraryType = z.object({
   issue: recalibrateEnum,
-  destinationsVisitedSoFar: z.array(destinationType),
+  destinationsVisitedSoFar: z.array(destinationSchema),
   currentTime: z.number(),
 });
 
 export type AreasOfInterestType = z.infer<typeof areasOfInterestEnum>;
-export type TripFlowAlgorithmType = z.infer<typeof tripFlowAlgorithmType>;
 export type PaxNumberType = z.infer<typeof paxNumberEnum>;
-export type DestinationType = z.infer<typeof destinationType>;
+export type DestinationType = z.infer<typeof destinationSchema>;
 export type DietaryPreferenceType = z.infer<typeof dietaryPreferenceEnum>;
 export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;
 export type RecalibrateType = z.infer<typeof recalibrateEnum>;

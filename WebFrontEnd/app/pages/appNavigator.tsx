@@ -4,6 +4,7 @@ import HomePage from './homePage';
 import StartPlanningPage from './startPlanningPage';
 import PickLocationsPage from './pickLocationsPage';
 import EditLocationsPage from './editLocationsPage';
+import ItineraryPage from './itineraryPage';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const AppNavigator = () => {
         <Stack.Screen name="StartPlanning" component={StartPlanningPage} />
         <Stack.Screen name="PickLocations" component={PickLocationsPage} />
         <Stack.Screen name="EditLocations" component={EditLocationsPage} />
+        <Stack.Screen name="Itinerary" component={ItineraryPage} />
       </Stack.Navigator>
   );
 };

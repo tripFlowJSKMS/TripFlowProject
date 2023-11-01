@@ -8,12 +8,13 @@ import { Destination } from "./Destination";
 import { planItinerary } from "./helperFunctions";
 import {
   RegistrationDetailsType,
-  TripFlowAlgorithmType,
   RecalibrateItineraryType,
   RecalibrateType,
+  DestinationType,
 } from "../../Shared/types";
 import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlanning";
 import { EditLocationsInputType } from "../../Shared/types/pickLocations";
+import { TripFlowAlgorithmType } from "../../Shared/types/editLocations";
 
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
@@ -40,7 +41,7 @@ export async function tripFlowAlgorithm(
 ): Promise<
   Array<{ destination: Destination; startingTime: number; endingTime: number }>
 > {
-  const destinationArr: Destination[] = details.destinationArr.map(
+  const destinationArr: Destination[] = details.map(
     (details) => {
       const {
         id,
