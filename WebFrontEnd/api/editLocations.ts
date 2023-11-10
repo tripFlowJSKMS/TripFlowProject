@@ -10,10 +10,10 @@ export async function editLocations(selectedDestinations: DestinationType[] ) {
             selectedDestinations
         },
     );
-
-    if (!isValidBody(response.data.destinations, generatedItinerarySchema)) {
+    // Note that the name itinerary is sensitive and based on the name of the array defined in the backend API
+    if (!isValidBody(response.data.itinerary, generatedItinerarySchema)) {
         throw new Error("Invalid response");
     }
-    const destinations: Array<{ destination: DestinationType; startingTime: number; endingTime: number }> = response.data.destinations;
-    return destinations;
+    const itinerary: Array<{ destination: DestinationType; startingTime: number; endingTime: number }> = response.data.itinerary;
+    return itinerary;
 }

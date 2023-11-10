@@ -79,6 +79,7 @@ app.post("/api/planning-page", async (req, res) => {
       startingTime: number;
       endingTime: number;
     }> = await tripFlowAlgorithm(validatedDetails);
+    console.log("LOG: Itinerary generated in app.ts Planning Page API");
     console.log(itinerary);
     res.json({ itinerary });
   } catch (error) {

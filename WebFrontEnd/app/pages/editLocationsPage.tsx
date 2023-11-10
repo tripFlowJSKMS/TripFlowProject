@@ -5,7 +5,7 @@ import { EditLocationsInputType } from "../../../Shared/types/pickLocations";
 import { PickLocationsOutputType } from '../../../Shared/types/pickLocations';
 import { RootState } from '@/lib/reducers/reducers';
 import { useDispatch, useSelector } from 'react-redux';
-import { DestinationType, TripFlowAlgorithmType } from '../../../Shared/types';
+import { DestinationType } from '../../../Shared/types';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/lib/navigation";
@@ -17,8 +17,6 @@ import DashBoard from '../components/dashBoard';
 import Title from '../components/title';
 import Button from '../components/button';
 import LocationComponent from '../components/locationComponent';
-import { GeneratedItineraryType } from '../../../Shared/types/editLocations';
-
 
 export default function EditLocationsPage() {
 
@@ -44,13 +42,15 @@ export default function EditLocationsPage() {
   }
 
   const handlePickDestinations = async () => {
-    console.log(selectedDestinations);
     dispatch(setEditLocationsOutputDestinations(selectedDestinations));
     const allDestinations: DestinationType[] = [...prevSelectedData, ...selectedDestinations];
     try {
-      const finalSchedule = await editLocations(allDestinations);
-      // this is not dispatched to redux properly. But the final schedule is correct already yay
-      dispatch(setItineraryInputDestinations(finalSchedule));
+      console.log("INSPECTOR LOG: User's final selection of destinations");
+      console.log(allDestinations);
+      const finalItinerary = await editLocations(allDestinations);
+      console.log("INSPECTOR LOG: Generated Itinerary for user to be displated");
+      console.log(finalItinerary);
+      dispatch(setItineraryInputDestinations(finalItinerary));
       navigateToItineraryPage();
     } catch (error) {
       console.error(error.message);
