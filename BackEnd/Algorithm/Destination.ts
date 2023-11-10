@@ -119,14 +119,12 @@ export class Destination {
       let travellingTime: number = Infinity;
       if (this.name == "Supernode") {
         // This is assumed for our MVP. We will set this as the hotel location next time
-            travellingTime = 0;
+        travellingTime = 0;
       } else {
-          travellingTime = this.getTravelTime(destination);
+        travellingTime = this.getTravelTime(destination);
       }
       // this statement bugs out the algo because we no longer respect the 30 minute intervals
       // const totalTime = leaveSourceTime + travellingTime + tourDuration;
-
-
 
       return (reachDestinationTime + destination.tourDuration <= dayEndTime) &&
           (leaveSourceTime + travellingTime <= reachDestinationTime);

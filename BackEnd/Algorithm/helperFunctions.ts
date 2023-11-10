@@ -43,6 +43,7 @@ function partition(arr: [DestinationNode[], number][], left: number, right: numb
     }
   }
 
+  console.log("DEV: Did you input realistic timings?");
   console.log("something went wrong, shouldn't have come out");
   return [[], -1];
 };
@@ -84,27 +85,26 @@ weight sum at the end of the path.
 
 function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
   itinerarySoFar: Destination[], weightSoFar: number): void {
-    const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
-    if (outgoingEdges.length == 0) {
-      allPaths.push([pathSoFar, weightSoFar]);
-    } else {
-      for (const edge of outgoingEdges) {
-        const destinationNode: DestinationNode = edge.getDestinationNode();
-        const destination: Destination = destinationNode.getDestination();
-        //I want to check if destination is a member of itinerarySoFar
-        if (itinerarySoFar.includes(destination)) {
-          allPaths.push([pathSoFar, weightSoFar]);
-        } else {
-          const updatedPath: DestinationNode[] = [...pathSoFar];
-          updatedPath.push(destinationNode);
-          const updatedItinerary: Destination[] = [...itinerarySoFar];
-          updatedItinerary.push(destination);
-          const updatedWeight: number = weightSoFar + destinationNode.getDestination().getWeight();
-          traversal(destinationNode, updatedPath, updatedItinerary, updatedWeight);
-        }
-
+  const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
+  if (outgoingEdges.length == 0) {
+    allPaths.push([pathSoFar, weightSoFar]);
+  } else {
+    for (const edge of outgoingEdges) {
+      const destinationNode: DestinationNode = edge.getDestinationNode();
+      const destination: Destination = destinationNode.getDestination();
+      // Accept ABA even if ABCA is possible since we will get the largest weight path in the end 
+      if (itinerarySoFar.includes(destination)) {
+        allPaths.push([pathSoFar, weightSoFar]);
+      } else {
+        const updatedPath: DestinationNode[] = [...pathSoFar];
+        updatedPath.push(destinationNode);
+        const updatedItinerary: Destination[] = [...itinerarySoFar];
+        updatedItinerary.push(destination);
+        const updatedWeight: number = weightSoFar + destinationNode.getDestination().getWeight();
+        traversal(destinationNode, updatedPath, updatedItinerary, updatedWeight);
       }
     }
+  } 
   }
 
 function isFeasibleEdge(sourceNode: DestinationNode, destinationNode: DestinationNode, dayEndTime: number): boolean {
@@ -137,14 +137,12 @@ function createSuperNode(endTime: number): DestinationNode {
   const dummyDestination: Destination = new Destination(0, "Supernode", earliestStartTime, earliestStartTime, 0, [], 0, 0);
   const supernode: DestinationNode = new DestinationNode(dummyDestination, earliestStartTime, earliestStartTime);
 
-
   // Add edges from the supernode to the earliest node of each destination
   for (const startNode of earliestNodes) {
       if (isFeasibleEdge(supernode, startNode, endTime)) {
           supernode.addOutgoingEdge(startNode);
       }
   }
-  
   return supernode; 
 }
 
