@@ -4,8 +4,10 @@ import pickLocationsOutputDestinationReducer, { PickLocationsOutputDestinationSt
 import editLocationsInputDestinationReducer, { EditLocationsInputDestinationState } from './editLocationsInputDestinationReducer';
 import itineraryInputDestinationReducer, { ItineraryInputDestinationState } from './itineraryInputDestinationReducer';
 import editLocationsOutputDestinationReducer, { EditLocationsOutputDestinationState } from './editLocationsOutputDestinationReducer';
+import travellingPreferencesReducer, { TravellingPreferencesState } from './travellingPreferencesReducer';
 
 const rootReducer = combineReducers({
+  travellingPreferences: travellingPreferencesReducer,
   startPlanningOutputDestination: startPlanningOutputDestinationReducer, // Add more reducers as needed
   pickLocationsOutputDestination: pickLocationsOutputDestinationReducer,
   editLocationsInputDestination: editLocationsInputDestinationReducer,
@@ -14,6 +16,7 @@ const rootReducer = combineReducers({
 });
 
 export type RootState = {
+  travellingPreferences: TravellingPreferencesState;
   startPlanningOutputDestination: StartPlanningOutputDestinationState;
   pickLocationsOutputDestination: PickLocationsOutputDestinationState;
   editLocationsInputDestination: EditLocationsInputDestinationState;
