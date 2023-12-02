@@ -51,6 +51,7 @@ export default function EditLocationsPage() {
       console.log("INSPECTOR LOG: Generated Itinerary for user to be displated");
       console.log(finalItinerary);
       dispatch(setItineraryInputDestinations(finalItinerary));
+      console.log("INSPECTOR LOG: Navigating to Itinerary Page");
       navigateToItineraryPage();
     } catch (error) {
       console.error(error.message);

@@ -24,6 +24,7 @@ import {
   ScheduleType,
 } from "../../../Shared/types";
 import formatDate from "../helpers/formatDate";
+import { setTravellingPreferences } from "@/lib/reducers/travellingPreferencesReducer";
 
 export default function StartPlanningPage() {
   const paxOptions: PaxNumberType[] = ["1", "2", "3-5", "6 or more"];
@@ -48,7 +49,7 @@ export default function StartPlanningPage() {
   const [dietaryPreference, setDietaryPreference] =
     useState<DietaryPreferenceType>("Normal");
   const [pace, setPace] = useState<ScheduleType>("Normal");
-  const [areaOfInterests, setAreaOfInterests] = useState<
+  const [areasOfInterests, setAreasOfInterests] = useState<
     Array<AreasOfInterestType>
   >([]);
   const dispatch = useDispatch();
@@ -60,9 +61,14 @@ export default function StartPlanningPage() {
 
   const handleStartPlanning = async () => {
     try {
+      const startDate: string = formatDate(selectedYear, selectedMonth, selectedDate);
+      const endDate: string = formatDate(selectedYear, selectedMonth, selectedDate);
+
+      dispatch(setTravellingPreferences({startDate, endDate, startTime, endTime, departureLocation, destinationLocation, paxNumber, dietaryPreference, pace, areasOfInterests}));
+      
       const destinations = await startPlanning({
-        startDate: formatDate(selectedYear, selectedMonth, selectedDate),
-        endDate: formatDate(selectedYear, selectedMonth, selectedDate),
+        startDate,
+        endDate,
         startTime,
         endTime,
         departureLocation,
@@ -70,7 +76,7 @@ export default function StartPlanningPage() {
         paxNumber,
         dietaryPreference,
         pace,
-        areasOfInterests: areaOfInterests,
+        areasOfInterests,
       });
       // Dispatch the action to store the data in Redux
       dispatch(setStartPlanningOutputDestinations(destinations));
@@ -137,7 +143,7 @@ export default function StartPlanningPage() {
               <View style={tw`border-r border-gray-100 h-150 ml-10 mr-10`} />
               <AreasOfInterestPicker
                 onAreasOfInterestChange={(value: AreasOfInterestType[]) =>
-                  setAreaOfInterests(value)
+                  setAreasOfInterests(value)
                 }
               />
             </View>
