@@ -120,7 +120,7 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
             If anyone can do it please revise this portion of the code */}
         <View style={styles.calendar}>
           <View
-            style={tw`flex flex-row justify-between pl-[5%] pr-[5%] pb-[3%]`}
+            style={tw`flex flex-row justify-between pb-[3%]`}
           >
             <View
               style={tw`flex items-center w-1/7 justify-center text-center`}
