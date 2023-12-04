@@ -14,14 +14,14 @@ import { setEditLocationsOutputDestinations } from '@/lib/reducers/editLocations
 import { setItineraryInputDestinations } from '@/lib/reducers/itineraryInputDestinationReducer';
 import TopBar from '../components/topBar';
 import DashBoard from '../components/dashBoard';
-import Title from '../components/title';
+import Title from '../components/Title';
 import Button from '../components/button';
 import LocationComponent from '../components/locationComponent';
 
 export default function EditLocationsPage() {
 
   const destinationsData: EditLocationsInputType = useSelector((state: RootState) => state.editLocationsInputDestination.destinations);
-  const prevSelectedData: PickLocationsOutputType = useSelector((state: RootState) => state.pickLocationsOutputDestination.destinations ); 
+  const prevSelectedData: PickLocationsOutputType = useSelector((state: RootState) => state.pickLocationsOutputDestination.destinations );
   const [selectedDestinations, setSelectedDestinations] = useState<DestinationType[]>([]);
   const dispatch = useDispatch();
 
@@ -59,7 +59,7 @@ export default function EditLocationsPage() {
   };
 
 
-  return (  
+  return (
     <View>
       <TopBar />
         <View style={tw`flex flex-row h-full`}>

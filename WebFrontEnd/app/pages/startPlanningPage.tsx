@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import tw from "twrnc";
-import Title from "../components/title";
+import Title from "../components/Title";
 import TopBar from "../components/topBar";
 import DatePicker from "../components/startPlanningComponents/DatePicker";
 import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
@@ -65,7 +65,7 @@ export default function StartPlanningPage() {
       const endDate: string = formatDate(selectedYear, selectedMonth, selectedDate);
 
       dispatch(setTravellingPreferences({startDate, endDate, startTime, endTime, departureLocation, destinationLocation, paxNumber, dietaryPreference, pace, areasOfInterests}));
-      
+
       const destinations = await startPlanning({
         startDate,
         endDate,

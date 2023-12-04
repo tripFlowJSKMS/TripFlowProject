@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import tw from "twrnc";
-import Title from "../components/title";
+import Title from "../components/Title";
 import TopBar from "../components/topBar";
 import DashBoard from "../components/dashBoard";
 import LocationComponent from "../components/locationComponent";
@@ -46,7 +46,7 @@ export default function PickLocationsPage() {
       // Dispatch the action to store the data in Redux
       // What the user selected this page
       dispatch(setPickLocationsOutputDestinations(selectedDestinations));
-      // What we are going to bump as neglected in the edit locations page 
+      // What we are going to bump as neglected in the edit locations page
       dispatch(setEditLocationsInputDestinations(destinations));
       navigateToEditLocationsPage();
     } catch (error) {
@@ -54,7 +54,7 @@ export default function PickLocationsPage() {
     }
   };
 
-  return (  
+  return (
     <View>
       <TopBar />
         <View style={tw`flex flex-row h-full`}>
@@ -79,7 +79,7 @@ export default function PickLocationsPage() {
                 <Text style={tw.style("text-white")}>Confirm Selections</Text>
               </Button>
             </View>
-            <View style={tw`p-3`}></View> 
+            <View style={tw`p-3`}></View>
             <Title size="2" parameter="Itineraries to check out!"/>
             <View style={tw`flex flex-row flex-wrap`}>
               <ItineraryComponent />
