@@ -110,7 +110,7 @@ export default function StartPlanningPage() {
                 />
               </View>
               <View style={tw`w-[10%]`}></View>
-              <View style={tw`flex flex-col w-[30%]`}>
+              <View style={tw`flex flex-col w-[30%] z-0`}>
                 <DepartureDestinationPicker
                   onDepartureLocationChange={setDepartureLocation}
                   onDestinationLocationChange={setDestinationLocation}
@@ -140,7 +140,7 @@ export default function StartPlanningPage() {
                   onPaceChange={(value: ScheduleType) => setPace(value)}
                 />
               </View>
-              <View style={tw`border-r border-gray-100 h-150 ml-10 mr-10`} />
+              <View style={tw`border-r border-gray-100 h-150 ml-[8%] mr-[8%]`} />
               <AreasOfInterestPicker
                 onAreasOfInterestChange={(value: AreasOfInterestType[]) =>
                   setAreasOfInterests(value)
