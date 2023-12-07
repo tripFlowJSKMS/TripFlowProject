@@ -87,75 +87,69 @@ export default function StartPlanningPage() {
   };
 
   return (
-    <View style={tw`flex flex-col h-full`}>
+    <View style={tw`items-center`}>
       <TopBar />
-      <ScrollView contentContainerStyle={tw`flex justify-center p-10`}>
-        <View style={tw`flex justify-center p-10`}>
-          <Title parameter="Your ideal trip awaits" />
-          <View style={tw`w-[70%]`}>
-            <View style={tw`flex flex-row w-full`}>
-              <View style={tw`flex flex-col w-[40%]`}>
-                <DatePicker
-                  onDateChange={(year, month, date) => {
-                    setSelectedYear(year);
-                    setSelectedMonth(month);
-                    setSelectedDate(date);
-                  }}
-                />
-                <TripTimingsPicker
-                  selectedStartTime={startTime}
-                  selectedEndTime={endTime}
-                  onStartTimeChange={setStartTime}
-                  onEndTimeChange={setEndTime}
-                />
-              </View>
-              <View style={tw`w-[10%]`}></View>
-              <View style={tw`flex flex-col w-[30%] z-0`}>
-                <DepartureDestinationPicker
-                  onDepartureLocationChange={setDepartureLocation}
-                  onDestinationLocationChange={setDestinationLocation}
-                />
-                <View style={tw`flex flex-row w-full`}>
-                  <CustomPicker<PaxNumberType>
-                    title="Pax"
-                    options={paxOptions}
-                    width="20%"
-                    fontSize="text-2x1"
-                    selectedValue={paxNumber}
-                    onValueChange={(value) => setPaxNumber(value)}
-                  />
-                  <View style={tw`w-20%`}></View>
-                  <CustomPicker
-                    title="Dietary Preference"
-                    options={dietaryPreferences}
-                    width="60%"
-                    fontSize="text-2x1"
-                    selectedValue={dietaryPreference}
-                    onValueChange={(value) =>
-                      setDietaryPreference(value as DietaryPreferenceType)
-                    }
-                  />
-                </View>
-                <PacePicker
-                  onPaceChange={(value: ScheduleType) => setPace(value)}
-                />
-              </View>
-              <View style={tw`border-r border-gray-100 h-150 ml-[8%] mr-[8%]`} />
-              <AreasOfInterestPicker
-                onAreasOfInterestChange={(value: AreasOfInterestType[]) =>
-                  setAreasOfInterests(value)
-                }
-              />
-            </View>
-          </View>
+      <View style={tw`flex flex-row justify-between w-9/12 m-15`}>
+        <View style={tw`w-4/12`}>
+          <Text style={tw`font-bold text-4xl`}>Your ideal trip awaits</Text>
+          <DatePicker
+            onDateChange={(year, month, date) => {
+              setSelectedYear(year);
+              setSelectedMonth(month);
+              setSelectedDate(date);
+            }}
+          />
+          <TripTimingsPicker
+            selectedStartTime={startTime}
+            selectedEndTime={endTime}
+            onStartTimeChange={setStartTime}
+            onEndTimeChange={setEndTime}
+          />
         </View>
-      </ScrollView>
-      {/* For MVP. Need to change enddate parameter for future production */}
-      <View style={tw`absolute bottom-0 right-0 mb-[10%] mr-[5%]`}>
-        <Button onPress={() => handleStartPlanning()}>
-          <Text style={tw.style("text-white")}>Start Planning</Text>
-        </Button>
+
+        <View style={tw`w-3/12`}>
+          <DepartureDestinationPicker
+            onDepartureLocationChange={setDepartureLocation}
+            onDestinationLocationChange={setDestinationLocation}
+          />
+          <View style={tw`flex flex-row justify-between`}>
+            <CustomPicker<PaxNumberType>
+              title="Pax"
+              options={paxOptions}
+              width="20%"
+              fontSize="text-2x1"
+              selectedValue={paxNumber}
+              onValueChange={(value) => setPaxNumber(value)}
+            />
+            <CustomPicker
+              title="Dietary Preference"
+              options={dietaryPreferences}
+              width="60%"
+              fontSize="text-2x1"
+              selectedValue={dietaryPreference}
+              onValueChange={(value) =>
+                setDietaryPreference(value as DietaryPreferenceType)
+              }
+            />
+          </View>
+          <PacePicker
+            onPaceChange={(value: ScheduleType) => setPace(value)}
+          />
+        </View>
+
+        <View style={tw`flex justify-between h-5/6 w-2/12`}>
+          <AreasOfInterestPicker
+            onAreasOfInterestChange={(value: AreasOfInterestType[]) =>
+              setAreasOfInterests(value)
+            }
+          />
+          <Button onPress={() => handleStartPlanning()}>
+            <Text style={tw`text-white`}>Start Planning</Text>
+          </Button>
+        </View>
+
       </View>
+      {/* For MVP. Need to change enddate parameter for future production */}
     </View>
   );
 }
