@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { TouchableOpacity, Text, View } from "react-native";
 import tw from "twrnc";
-import Title from "../components/Title";
 import TopBar from "../components/topBar";
 import DatePicker from "../components/startPlanningComponents/DatePicker";
 import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
@@ -9,7 +8,6 @@ import DepartureDestinationPicker from "../components/startPlanningComponents/De
 import CustomPicker from "../components/CustomPicker";
 import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
-import Button from "../components/button";
 import { startPlanning } from "@/api/startPlanning";
 import { useDispatch } from "react-redux";
 import { setStartPlanningOutputDestinations } from "@/lib/reducers/startPlanningOutputDestinationReducer";
@@ -18,7 +16,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/lib/navigation";
 import {
   AreasOfInterestType,
-  DestinationType,
   DietaryPreferenceType,
   PaxNumberType,
   ScheduleType,
@@ -37,21 +34,16 @@ export default function StartPlanningPage() {
 
   const currentDate = new Date();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(
-    currentDate.getMonth() + 1,
-  );
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1,);
   const [selectedDate, setSelectedDate] = useState(currentDate.getDay());
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [departureLocation, setDepartureLocation] = useState("");
   const [destinationLocation, setDestinationLocation] = useState("");
   const [paxNumber, setPaxNumber] = useState<PaxNumberType>("1");
-  const [dietaryPreference, setDietaryPreference] =
-    useState<DietaryPreferenceType>("Normal");
+  const [dietaryPreference, setDietaryPreference] = useState<DietaryPreferenceType>("Normal");
   const [pace, setPace] = useState<ScheduleType>("Normal");
-  const [areasOfInterests, setAreasOfInterests] = useState<
-    Array<AreasOfInterestType>
-  >([]);
+  const [areasOfInterests, setAreasOfInterests] = useState<Array<AreasOfInterestType>>([]);
   const dispatch = useDispatch();
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -116,36 +108,28 @@ export default function StartPlanningPage() {
             <CustomPicker<PaxNumberType>
               title="Pax"
               options={paxOptions}
-              width="20%"
-              fontSize="text-2x1"
+              width="3"
               selectedValue={paxNumber}
               onValueChange={(value) => setPaxNumber(value)}
             />
             <CustomPicker
               title="Dietary Preference"
               options={dietaryPreferences}
-              width="60%"
-              fontSize="text-2x1"
+              width="7"
               selectedValue={dietaryPreference}
               onValueChange={(value) =>
                 setDietaryPreference(value as DietaryPreferenceType)
               }
             />
           </View>
-          <PacePicker
-            onPaceChange={(value: ScheduleType) => setPace(value)}
-          />
+          <PacePicker onPaceChange={(value: ScheduleType) => setPace(value)} />
         </View>
 
-        <View style={tw`flex justify-between h-5/6 w-2/12`}>
-          <AreasOfInterestPicker
-            onAreasOfInterestChange={(value: AreasOfInterestType[]) =>
-              setAreasOfInterests(value)
-            }
-          />
-          <Button onPress={() => handleStartPlanning()}>
-            <Text style={tw`text-white`}>Start Planning</Text>
-          </Button>
+        <View style={tw`flex w-2/12 items-center justify-evenly`}>
+          <AreasOfInterestPicker onAreasOfInterestChange={(value: AreasOfInterestType[]) => setAreasOfInterests(value)} />
+          <TouchableOpacity style={tw`bg-black rounded-2xl w-full p-2`} onPress={() => handleStartPlanning()}>
+            <Text style={tw`text-white text-center`}>Start Planning</Text>
+          </TouchableOpacity>
         </View>
 
       </View>

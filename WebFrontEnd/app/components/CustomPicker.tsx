@@ -7,7 +7,6 @@ interface CustomPickerProps<T> {
   title: string;
   options: T[];
   width: string;
-  fontSize: string;
   selectedValue: T;
   onValueChange: (itemValue: T) => void;
 }
@@ -16,7 +15,6 @@ export default function CustomPicker<T extends string>({
   title,
   options,
   width,
-  fontSize,
   selectedValue,
   onValueChange,
 }: CustomPickerProps<T>) {
@@ -27,8 +25,8 @@ export default function CustomPicker<T extends string>({
   const [value, setValue] = useState(selectedValue);
 
   return (
-    <View style={tw`mt-5 w-[${width}]`}>
-      <Text style={tw`${fontSize} font-bold mb-1`}>{title}</Text>
+    <View style={tw`w-${width}/12`}>
+      <Text style={tw`text-sm font-semibold my-2`}>{title}</Text>
       <Picker
         selectedValue={value}
         onValueChange={(itemValue) => {

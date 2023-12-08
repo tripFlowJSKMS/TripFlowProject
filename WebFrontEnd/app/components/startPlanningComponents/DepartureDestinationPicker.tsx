@@ -38,11 +38,11 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Text style={tw`text-5x1 font-bold w-full mt-4 mb-4`}>Departure</Text>
+    <View style={tw`z-10`}>
+      <View>
+        <Text style={tw`text-xl font-bold w-full my-3`}>Departure</Text>
         <TextInput
-          style={tw`h-10 border rounded-md p-2`}
+          style={tw`border rounded-md p-3`}
           value={departureQuery}
           onChangeText={(text) => {
             setDepartureQuery(text);
@@ -55,10 +55,10 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
         />
       </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={tw`text-5x1 font-bold w-full mt-4 mb-4`}>Destination</Text>
+      <View>
+        <Text style={tw`text-xl font-bold w-full my-3`}>Destination</Text>
         <TextInput
-          style={tw`h-10 border rounded-md p-2`}
+          style={tw`border rounded-md p-3`}
           value={destinationQuery}
           onChangeText={(text) => {
             setDestinationQuery(text);
@@ -101,13 +101,6 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
 }
 
 const styles = StyleSheet.create({
-    container: {
-        position: 'relative',
-        zIndex: 3,
-    },
-    inputContainer: {
-        zIndex: 1, // Ensure the input container is above the FlatLists
-    },
     list: {
         position: 'absolute',
         left: 0,

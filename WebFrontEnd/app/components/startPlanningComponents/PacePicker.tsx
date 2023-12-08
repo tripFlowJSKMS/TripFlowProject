@@ -23,35 +23,17 @@ export default function PacePicker({ onPaceChange }: PacePickerProps) {
 
   return (
     <View>
-      <Text style={tw`text-5x1 font-bold w-full mt-4 mb-4`}>Pace</Text>
-      <View style={tw`flex flex-row w-full items-center`}>
-        <TouchableOpacity
-          onPress={() => handleIconClick("Relaxed")}
-          style={[
-            tw`mr-4 w-[15%]`,
-            selectedValue === "Relaxed" && tw`bg-gray-200`,
-          ]}
-        >
+      <Text style={tw`text-xl font-bold my-5`}>Pace</Text>
+      <View style={tw`flex flex-row w-full items-center justify-between`}>
+        <TouchableOpacity onPress={() => handleIconClick("Relaxed")} style={selectedValue === "Relaxed" && tw`text-2xl`}>
           <FontAwesomeIcon icon={faPersonWalking} />
         </TouchableOpacity>
-        <FontAwesomeIcon icon={faArrowRight} style={tw`mx-4 w-[15%]`} />
-        <TouchableOpacity
-          onPress={() => handleIconClick("Normal")}
-          style={[
-            tw`mx-4 w-[15%]`,
-            selectedValue === "Normal" && tw`bg-gray-200 h-5`,
-          ]}
-        >
+        <FontAwesomeIcon icon={faArrowRight} />
+        <TouchableOpacity onPress={() => handleIconClick("Normal")} style={selectedValue === "Normal" && tw`text-2xl`}>
           <FontAwesomeIcon icon={faPersonRunning} />
         </TouchableOpacity>
-        <FontAwesomeIcon icon={faArrowRight} style={tw`mx-4 w-[15%]`} />
-        <TouchableOpacity
-          onPress={() => handleIconClick("Packed")}
-          style={[
-            tw`mx-4 w-[15%]`,
-            selectedValue === "Packed" && tw`bg-gray-200`,
-          ]}
-        >
+        <FontAwesomeIcon icon={faArrowRight} />
+        <TouchableOpacity onPress={() => handleIconClick("Packed")} style={selectedValue === "Packed" && tw`text-2xl`}>
           <FontAwesomeIcon icon={faPersonSnowboarding} />
         </TouchableOpacity>
       </View>

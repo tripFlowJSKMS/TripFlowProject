@@ -17,9 +17,7 @@ export default function HomePage() {
     return (
         <View style={tw`flex items-center`}>
           <HomePageTopBar navigation={navigateToStartPlanningPage}/>
-
           <HomePageDashboard></HomePageDashboard>
-
           <View style={tw`w-9/12`}>
             <Text style={tw`w-50% text-xl font-bold w-full mt-4 mb-4`}>Check out these itineraries</Text>
             <View style={tw`flex flex-row flex-wrap`}>
@@ -27,7 +25,6 @@ export default function HomePage() {
               <ItineraryComponent />
               <ItineraryComponent />
             </View>
-
           </View>
 
         </View>

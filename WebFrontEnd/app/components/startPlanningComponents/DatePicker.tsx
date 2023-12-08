@@ -65,49 +65,25 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
   return (
     <View>
       <Text style={tw`text-center text-xl font-bold w-full my-3`}>Travel Dates</Text>
-      <View style={tw`flex flex-col items-center justify-center`}>
+      <View>
         <View style={styles.row}>
-          <TouchableOpacity
-            style={tw`p-2 border border-gray-400 rounded-full`}
-            onPress={() => handleYearChange(selectedYear - 1)}
-          >
+          <TouchableOpacity style={styles.arrowButton} onPress={() => handleYearChange(selectedYear - 1)}>
             <Text>{"<"}</Text>
           </TouchableOpacity>
-          <View style={styles.yearMonthContainer}>
             <Text style={styles.headerText}>{selectedYear}</Text>
-          </View>
-          <TouchableOpacity
-            style={tw`p-2 border border-gray-400 rounded-full`}
-            onPress={() => handleYearChange(selectedYear + 1)}
-          >
+          <TouchableOpacity style={styles.arrowButton} onPress={() => handleYearChange(selectedYear + 1)}>
             <Text>{">"}</Text>
           </TouchableOpacity>
         </View>
-
         <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.arrowButton}
-            onPress={() =>
-              handleMonthChange(
-                selectedMonth - 1 === 0 ? 12 : selectedMonth - 1,
-              )
-            }
-          >
+          <TouchableOpacity style={styles.arrowButton}
+            onPress={() => handleMonthChange(selectedMonth - 1 === 0 ? 12 : selectedMonth - 1,)}>
             <Text>{"<"}</Text>
           </TouchableOpacity>
-          <View style={styles.yearMonthContainer}>
             <Text style={styles.headerText}>
               {monthNames[selectedMonth - 1]}
             </Text>
-          </View>
-          <TouchableOpacity
-            style={styles.arrowButton}
-            onPress={() =>
-              handleMonthChange(
-                selectedMonth + 1 === 13 ? 1 : selectedMonth + 1,
-              )
-            }
-          >
+          <TouchableOpacity style={styles.arrowButton} onPress={() => handleMonthChange(selectedMonth + 1 === 13 ? 1 : selectedMonth + 1, )}>
             <Text>{">"}</Text>
           </TouchableOpacity>
         </View>
@@ -191,7 +167,7 @@ const styles = {
   emptyDateItem: tw`w-1/7`,
   selectedItem: tw`bg-blue-500`,
   dateText: tw`text-center text-base text-black`,
-  row: tw`flex flex-row items-center justify-center`,
+  row: tw`flex flex-row items-center justify-between`,
   arrowButton: tw`p-2 border border-gray-400 rounded-full`,
   yearMonthContainer: tw`w-[50]`,
   headerText: tw`text-lg font-bold mx-4 text-center`,
