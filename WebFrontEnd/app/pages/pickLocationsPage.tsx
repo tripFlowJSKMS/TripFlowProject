@@ -1,6 +1,5 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import Title from "../components/Title";
 import TopBar from "../components/topBar";
 import DashBoard from "../components/dashBoard";
 import LocationComponent from "../components/locationComponent";
@@ -16,7 +15,6 @@ import { RootStackParamList } from "@/lib/navigation";
 import { setPickLocationsOutputDestinations } from "@/lib/reducers/pickLocationsOutputDestinationReducer";
 import { setEditLocationsInputDestinations } from "@/lib/reducers/editLocationsInputDestinationReducer";
 import { pickLocations } from "@/api/pickLocations";
-import Button from "../components/button";
 
 export default function PickLocationsPage() {
 
@@ -57,12 +55,10 @@ export default function PickLocationsPage() {
   return (
     <View>
       <TopBar />
-        <View style={tw`flex flex-row h-full`}>
-          <View style={tw`flex w-[30%] p-10`}>
-            <DashBoard></DashBoard>
-          </View>
-          <View style={tw`flex h-[100%] w-[70%] justify-center`}>
-            <Title size="2" parameter="Recommended Locations"/>
+        <View style={tw`flex flex-row justify-around`}>
+          <DashBoard></DashBoard>
+          <View style={tw`my-5`}>
+            <Text style={tw`text-2xl font-bold mb-3`}>Recommended Locations</Text>
             <View style={tw`flex flex-row flex-wrap`}>
               {destinationsData.map((destination) => (
                 <LocationComponent
@@ -74,18 +70,17 @@ export default function PickLocationsPage() {
                 />
               ))}
             </View>
-            <View style={tw`flex flex-row-reverse mb-[10%] mr-[5%]`}>
-              <Button onPress={() => handlePickDestinations()}>
-                <Text style={tw.style("text-white")}>Confirm Selections</Text>
-              </Button>
-            </View>
-            <View style={tw`p-3`}></View>
-            <Title size="2" parameter="Itineraries to check out!"/>
+            <Text style={tw`text-2xl font-bold my-5`}>Itineraries to check out!</Text>
             <View style={tw`flex flex-row flex-wrap`}>
               <ItineraryComponent />
               <ItineraryComponent />
               <ItineraryComponent />
             </View>
+          </View>
+          <View style={tw`w-2/12 justify-center h-3/6 items-center`}>
+            <TouchableOpacity style={tw`bg-black rounded-3xl`} onPress={() => handlePickDestinations()}>
+              <Text style={tw`text-white text-center p-2 px-5`}>Confirm Selections</Text>
+            </TouchableOpacity>
           </View>
         </View>
 

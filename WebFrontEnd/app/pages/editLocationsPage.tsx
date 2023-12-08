@@ -14,9 +14,8 @@ import { setEditLocationsOutputDestinations } from '@/lib/reducers/editLocations
 import { setItineraryInputDestinations } from '@/lib/reducers/itineraryInputDestinationReducer';
 import TopBar from '../components/topBar';
 import DashBoard from '../components/dashBoard';
-import Title from '../components/Title';
-import Button from '../components/button';
 import LocationComponent from '../components/locationComponent';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function EditLocationsPage() {
 
@@ -62,30 +61,28 @@ export default function EditLocationsPage() {
   return (
     <View>
       <TopBar />
-        <View style={tw`flex flex-row h-full`}>
-          <View style={tw`flex w-[30%] p-10`}>
-            <DashBoard></DashBoard>
-          </View>
-          <View style={tw`flex h-[100%] w-[70%] justify-center`}>
-            <Title size="2" parameter="Try these locations too!"/>
-            <View style={tw`flex flex-row flex-wrap`}>
-              {destinationsData.map((destination) => (
-                <LocationComponent
-                  key={destination.id}
-                  name = {destination.name}
-                  characteristics = {destination.characteristics}
-                  onClick={() => handleDestinationClick(destination)}
-                  isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
-                />
-              ))}
-            </View>
-            <View style={tw`flex flex-row-reverse mb-[10%] mr-[5%]`}>
-              <Button onPress={() => handlePickDestinations()}>
-                <Text style={tw.style("text-white")}>Confirm Selections</Text>
-              </Button>
-            </View>
+      <View style={tw`flex flex-row justify-around`}>
+        <DashBoard></DashBoard>
+        <View>
+          <Text style={tw`text-2xl font-bold my-5`}>Try these locations too!</Text>
+          <View style={tw`flex flex-row flex-wrap`}>
+            {destinationsData.map((destination) => (
+              <LocationComponent
+                key={destination.id}
+                name = {destination.name}
+                characteristics = {destination.characteristics}
+                onClick={() => handleDestinationClick(destination)}
+                isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
+              />
+            ))}
           </View>
         </View>
+        <View style={tw`w-2/12 justify-center h-3/6 items-center`}>
+          <TouchableOpacity style={tw`bg-black rounded-3xl`} onPress={() => handlePickDestinations()}>
+            <Text style={tw`text-white p-2 px-5`}>Confirm Selections</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
     </View>
   );
