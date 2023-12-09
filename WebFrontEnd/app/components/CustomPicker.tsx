@@ -33,7 +33,7 @@ export default function CustomPicker<T extends string>({
           setValue(itemValue);
           onValueChange(itemValue);
         }}
-        style={tw`w-full border rounded-lg`}
+        style={tw`w-full p-1 border rounded-lg`}
       >
         {options.map((option, index) => (
           <Picker.Item key={index} label={option} value={option} />

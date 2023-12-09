@@ -3,23 +3,6 @@ import { View, Text } from "react-native";
 import TimeInput from "../timeInput";
 import tw from "twrnc";
 
-interface InvalidInputMessageProps {
-  visible: boolean;
-}
-
-const InvalidInputMessage: React.FC<InvalidInputMessageProps> = ({ visible }) => (
-  <Text
-    style={{
-      textAlign: "center",
-      color: "red",
-      display: visible ? "flex" : "none",
-    }}
-  >
-    Starting time must be earlier than ending time
-  </Text>
-);
-
-
 function minutesToTime(minutes: number) {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
@@ -65,7 +48,7 @@ export default function TripTimingsPicker({
         <Text>-</Text>
         <TimeInput value={minutesToTime(selectedEndTime)} setValue={handleEndTimeChange}/>
       </View>
-      <InvalidInputMessage visible={selectedStartTime >= selectedEndTime} />
+      <Text style={tw.style('text-red-500', selectedStartTime < selectedEndTime && 'hidden')}>Starting time must be earlier than ending time</Text>
     </View>
   );
 }

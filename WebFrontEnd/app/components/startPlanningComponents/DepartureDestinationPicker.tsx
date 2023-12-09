@@ -39,37 +39,33 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
 
   return (
     <View style={tw`z-10`}>
-      <View>
-        <Text style={tw`text-xl font-bold w-full my-3`}>Departure</Text>
-        <TextInput
-          style={tw`border rounded-md p-3`}
-          value={departureQuery}
-          onChangeText={(text) => {
-            setDepartureQuery(text);
-            setDepartureData(filterCountries(text));
-            setIsDepartureListVisible(true);
-            setIsDestinationListVisible(false);
-          }}
-          placeholder="Search for a city"
-          placeholderTextColor="#888"
-        />
-      </View>
+      <Text style={tw`text-xl font-bold w-full my-3`}>Departure</Text>
+      <TextInput
+        style={tw`border rounded-md p-3`}
+        value={departureQuery}
+        onChangeText={(text) => {
+          setDepartureQuery(text);
+          setDepartureData(filterCountries(text));
+          setIsDepartureListVisible(true);
+          setIsDestinationListVisible(false);
+        }}
+        placeholder="Search for a city"
+        placeholderTextColor="#888"
+      />
 
-      <View>
-        <Text style={tw`text-xl font-bold w-full my-3`}>Destination</Text>
-        <TextInput
-          style={tw`border rounded-md p-3`}
-          value={destinationQuery}
-          onChangeText={(text) => {
-            setDestinationQuery(text);
-            setDestinationData(filterCountries(text));
-            setIsDepartureListVisible(false);
-            setIsDestinationListVisible(true);
-          }}
-          placeholder="Search for a city"
-          placeholderTextColor="#888"
-        />
-      </View>
+      <Text style={tw`text-xl font-bold w-full my-3`}>Destination</Text>
+      <TextInput
+        style={tw`border rounded-md p-3`}
+        value={destinationQuery}
+        onChangeText={(text) => {
+          setDestinationQuery(text);
+          setDestinationData(filterCountries(text));
+          setIsDepartureListVisible(false);
+          setIsDestinationListVisible(true);
+        }}
+        placeholder="Search for a city"
+        placeholderTextColor="#888"
+      />
 
       {(isDepartureListVisible && departureQuery.length > 0 && departureData.length != 0) && (
         <FlatList

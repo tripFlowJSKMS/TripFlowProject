@@ -25,21 +25,16 @@ import { setTravellingPreferences } from "@/lib/reducers/travellingPreferencesRe
 
 export default function StartPlanningPage() {
   const paxOptions: PaxNumberType[] = ["1", "2", "3-5", "6 or more"];
-  const dietaryPreferences: DietaryPreferenceType[] = [
-    "Normal",
-    "Vegetarian",
-    "Halal",
-    "Vegan",
-  ];
+  const dietaryPreferences: DietaryPreferenceType[] = ["Normal", "Vegetarian", "Halal", "Vegan"];
 
   const currentDate = new Date();
-  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1,);
-  const [selectedDate, setSelectedDate] = useState(currentDate.getDay());
-  const [startTime, setStartTime] = useState(0);
-  const [endTime, setEndTime] = useState(0);
-  const [departureLocation, setDepartureLocation] = useState("");
-  const [destinationLocation, setDestinationLocation] = useState("");
+  const [selectedYear, setSelectedYear] = useState<number>(currentDate.getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState<number>(currentDate.getMonth() + 1);
+  const [selectedDate, setSelectedDate] = useState<number>(currentDate.getDate());
+  const [startTime, setStartTime] = useState<number>(0);
+  const [endTime, setEndTime] = useState<number>(0);
+  const [departureLocation, setDepartureLocation] = useState<string>("");
+  const [destinationLocation, setDestinationLocation] = useState<string>("");
   const [paxNumber, setPaxNumber] = useState<PaxNumberType>("1");
   const [dietaryPreference, setDietaryPreference] = useState<DietaryPreferenceType>("Normal");
   const [pace, setPace] = useState<ScheduleType>("Normal");
@@ -47,9 +42,6 @@ export default function StartPlanningPage() {
   const dispatch = useDispatch();
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const navigateToPickLocationsPage = () => {
-    navigation.navigate("PickLocations");
-  };
 
   const handleStartPlanning = async () => {
     try {
@@ -72,7 +64,7 @@ export default function StartPlanningPage() {
       });
       // Dispatch the action to store the data in Redux
       dispatch(setStartPlanningOutputDestinations(destinations));
-      navigateToPickLocationsPage();
+      navigation.navigate("PickLocations");
     } catch (error) {
       console.error(error.message);
     }
@@ -84,13 +76,8 @@ export default function StartPlanningPage() {
       <View style={tw`flex flex-row justify-between w-9/12 m-15`}>
         <View style={tw`w-4/12`}>
           <Text style={tw`font-bold text-4xl`}>Your ideal trip awaits</Text>
-          <DatePicker
-            onDateChange={(year, month, date) => {
-              setSelectedYear(year);
-              setSelectedMonth(month);
-              setSelectedDate(date);
-            }}
-          />
+          <DatePicker selectedYear={selectedYear} selectedMonth={selectedMonth} selectedDate={selectedDate}
+            setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} setSelectedDate={setSelectedDate} />
           <TripTimingsPicker
             selectedStartTime={startTime}
             selectedEndTime={endTime}

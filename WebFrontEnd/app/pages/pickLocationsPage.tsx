@@ -55,35 +55,34 @@ export default function PickLocationsPage() {
   return (
     <View>
       <TopBar />
-        <View style={tw`flex flex-row justify-around`}>
-          <DashBoard></DashBoard>
-          <View style={tw`my-5`}>
-            <Text style={tw`text-2xl font-bold mb-3`}>Recommended Locations</Text>
-            <View style={tw`flex flex-row flex-wrap`}>
-              {destinationsData.map((destination) => (
-                <LocationComponent
-                  key={destination.id}
-                  name = {destination.name}
-                  characteristics = {destination.characteristics}
-                  onClick={() => handleDestinationClick(destination)}
-                  isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
-                />
-              ))}
-            </View>
-            <Text style={tw`text-2xl font-bold my-5`}>Itineraries to check out!</Text>
-            <View style={tw`flex flex-row flex-wrap`}>
-              <ItineraryComponent />
-              <ItineraryComponent />
-              <ItineraryComponent />
-            </View>
+      <View style={tw`flex flex-row justify-around`}>
+        <DashBoard></DashBoard>
+        <View style={tw`my-5`}>
+          <Text style={tw`text-2xl font-bold mb-3`}>Recommended Locations</Text>
+          <View style={tw`flex flex-row flex-wrap`}>
+            {destinationsData.map((destination) => (
+              <LocationComponent
+                key={destination.id}
+                name = {destination.name}
+                characteristics = {destination.characteristics}
+                onClick={() => handleDestinationClick(destination)}
+                isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
+              />
+            ))}
           </View>
-          <View style={tw`w-2/12 justify-center h-3/6 items-center`}>
-            <TouchableOpacity style={tw`bg-black rounded-3xl`} onPress={() => handlePickDestinations()}>
-              <Text style={tw`text-white text-center p-2 px-5`}>Confirm Selections</Text>
-            </TouchableOpacity>
+          <Text style={tw`text-2xl font-bold my-5`}>Itineraries to check out!</Text>
+          <View style={tw`flex flex-row flex-wrap`}>
+            <ItineraryComponent />
+            <ItineraryComponent />
+            <ItineraryComponent />
           </View>
         </View>
-
+        <View style={tw`w-2/12 justify-center h-3/6 items-center`}>
+          <TouchableOpacity style={tw`bg-black rounded-3xl`} onPress={() => handlePickDestinations()}>
+            <Text style={tw`text-white text-center p-2 px-5`}>Confirm Selections</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
