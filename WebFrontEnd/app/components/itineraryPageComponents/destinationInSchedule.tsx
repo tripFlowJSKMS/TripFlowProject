@@ -4,43 +4,26 @@ import tw from 'twrnc';
 import formatDuration from '@/app/helpers/formatDuration';
 import formatTime from '@/app/helpers/formatTime';
 import { DestinationType } from '../../../../Shared/types';
-import TimeSlots from '../../helpers/createTimeSlots';
 
 interface DestinationInScheduleProps {
+    firstTimeSlot: number,
     destination: DestinationType;
     startingTime: number;
     endingTime: number;
 }
 
-export default function DestinationInSchedule({ destination, startingTime, endingTime }: DestinationInScheduleProps) {
+export default function DestinationInSchedule({ firstTimeSlot, destination, startingTime, endingTime }: DestinationInScheduleProps) {
     const duration = endingTime - startingTime;
     const startTimeFormatted = formatTime(startingTime);
     const endTimeFormatted = formatTime(endingTime);
-    
+    const startingTimeSlot = (startingTime - firstTimeSlot) / 30;
+    const durationWidth = duration / 30;
+
     return (
-        <View style={styles.card}>
+        <View style={tw`bg-gray-300 p-2 absolute w-${40 * durationWidth} ml-${startingTimeSlot * 40}`}>
           <Text style={tw`text-lg font-semibold`}>{destination.name}</Text>
           <Text style={tw`text-gray-500`}>{formatDuration(duration)}</Text>
-          <Text style={tw`text-sm text-gray-500`}>{`${startTimeFormatted} - ${endTimeFormatted}`}</Text>
+          <Text style={tw`text-gray-500`}>{`${startTimeFormatted} - ${endTimeFormatted}`}</Text>
         </View>
       );
 }
-
-const styles = ({
-    card: {
-      minWidth: 150,
-      marginHorizontal: 8,
-      padding: 16,
-      borderRadius: 8,
-      backgroundColor: 'white',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-    },
-  });
-  
