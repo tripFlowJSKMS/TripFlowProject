@@ -44,6 +44,7 @@ app.post("/api/register", async (req, res) => {
 // Start Planning Page API
 app.post("/api/start-planning-page", async (req, res) => {
   try {
+    console.log(req.body);
     const validatedDetails: GenerateDesirableDestinationsType =
       generateDesirableDestinationsSchema.parse(req.body); 
     const destinations: Destination[] = await generateDesirableDestinations(
