@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 
@@ -12,8 +12,6 @@ interface DatePickerProps {
 }
 
 export default function DatePicker({ selectedYear, selectedMonth, selectedDate, setSelectedYear, setSelectedMonth, setSelectedDate }: DatePickerProps) {
-
-  const years = Array.from({ length: 10 }, (_, i) => selectedYear - 5 + i);
 
   const monthNames: string[] = [
     "January",
@@ -100,26 +98,16 @@ export default function DatePicker({ selectedYear, selectedMonth, selectedDate, 
               <Text style={tw`font-semibold text-gray-600 text-xs`}>Sat</Text>
           </View>
 
-          <View style={{ ...styles.dateContainer, alignItems: "center" }}>
+          <View style={tw`flex flex-row flex-wrap`}>
             {generateDatesForMonth(selectedYear, selectedMonth).map(
-              (date, index) =>
-                date !== null ? (
-                  <TouchableOpacity
-                    key={`date-${date}`}
-                    onPress={() => handleDateChange(date)}
-                    style={[
-                      styles.dateItem,
-                      date === selectedDate && styles.selectedItem,
-                    ]}
-                  >
-                    <Text style={styles.dateText}>{date}</Text>
+              date => date !== null
+                ? (
+                  <TouchableOpacity onPress={() => handleDateChange(date)}
+                    style={tw.style(`w-1/7 p-2 border border-gray-400 rounded-lg`, date === selectedDate && `bg-blue-500`)}>
+                    <Text style={tw`text-center text-base`}>{date}</Text>
                   </TouchableOpacity>
-                ) : (
-                  <View
-                    key={`empty-${index}`}
-                    style={styles.emptyDateItem}
-                  ></View>
-                ),
+                )
+                : <View style={tw`w-1/7`} />
             )}
           </View>
         </View>
@@ -129,11 +117,6 @@ export default function DatePicker({ selectedYear, selectedMonth, selectedDate, 
 }
 
 const styles = {
-  dateContainer: tw`flex flex-row flex-wrap`,
-  dateItem: tw`w-1/7 p-2 border border-gray-400 rounded-lg items-center justify-center`,
-  emptyDateItem: tw`w-1/7`,
-  selectedItem: tw`bg-blue-500`,
-  dateText: tw`text-center text-base text-black`,
   row: tw`flex flex-row items-center justify-between`,
   arrowButton: tw`p-2 border border-gray-400 rounded-full`,
   yearMonthContainer: tw`w-[50]`,
