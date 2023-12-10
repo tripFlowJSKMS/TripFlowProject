@@ -100,14 +100,16 @@ export default function DatePicker({ selectedYear, selectedMonth, selectedDate, 
 
           <View style={tw`flex flex-row flex-wrap`}>
             {generateDatesForMonth(selectedYear, selectedMonth).map(
-              date => date !== null
+              (date, index) => date !== null
                 ? (
-                  <TouchableOpacity onPress={() => handleDateChange(date)}
+                  <TouchableOpacity 
+                    key={`${date}-${index}`}
+                    onPress={() => handleDateChange(date)}
                     style={tw.style(`w-1/7 p-2 border border-gray-400 rounded-lg`, date === selectedDate && `bg-blue-500`)}>
                     <Text style={tw`text-center text-base`}>{date}</Text>
                   </TouchableOpacity>
                 )
-                : <View style={tw`w-1/7`} />
+                : <View key={`placeholder-${index}`} style={tw`w-1/7`} />
             )}
           </View>
         </View>

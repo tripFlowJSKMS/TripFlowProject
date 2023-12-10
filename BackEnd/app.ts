@@ -14,6 +14,8 @@ import { editLocationsInputSchema } from "../Shared/types/pickLocations";
 
 import express from "express";
 import { recalibrate, tripFlowAlgorithm } from "./Algorithm/main";
+import createPromptFromData from "./openAI/gpt4helpers";
+
 var cors = require("cors");
 const app = express();
 
@@ -105,6 +107,34 @@ app.post("/api/recalibrate", async (req, res) => {
     res.status(400).json({ error: "Invalid input or API error " });
   }
 });
+
+app.post("/api/callGPT", async (req, res) => {
+  try {
+    // Convert your data to a text prompt
+    const prompt = createPromptFromData(req.body);
+    console.log(prompt);
+  
+    // const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer YOUR_OPENAI_API_KEY` // Replace with your actual API key
+    //   },
+    //   body: JSON.stringify({
+    //     prompt: prompt,
+    //     temperature: 0.5, // Adjust as needed
+    //     max_tokens: 150, // Adjust as needed
+    //   }),
+    // });
+  
+    // const responseData = await response.json();
+    // return responseData;
+    return "testing";
+  } catch (error) {
+    console.error("Error calling GPT:", error);
+    res.status(400).json({error: "Invalid input or API error "});
+  }
+})
 
 app.listen(3000, () => {
   console.log("Backend server is running on port 3000");

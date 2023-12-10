@@ -32,7 +32,6 @@ export const destinationSchema = z.object({
   DIST_TIME_RATIO: z.number(),
 });
 
-
 export const paxNumberEnum = z.enum(["1", "2", "3-5", "6 or more"]);
 
 export const scheduleEnum = z.enum(["Relaxed", "Normal", "Packed"]);

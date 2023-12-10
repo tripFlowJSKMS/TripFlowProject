@@ -5,13 +5,14 @@ import tw from "twrnc";
 // npm i --save https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz (not the usual npm i xlsx)
 import XLSX from 'xlsx';
 import mammoth from 'mammoth';
- 
+import { callGPT } from '@/api/callGPT';
 
 const FileUpload = () => {
   const [files, setFiles] = useState([]);
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
+      setFiles(prevFiles => [...prevFiles, ...acceptedFiles]);
       const reader = new FileReader();
       const fileType = file.name.split('.').pop().toLowerCase();
   
@@ -21,8 +22,6 @@ const FileUpload = () => {
           let textContent = '';
           if (fileType === 'xlsx' || fileType === 'xls') {
             const data = new Uint8Array(arrayBuffer);
-            console.log(data);
-            console.log(XLSX);
             const workbook = XLSX.read(data, { type: 'array' });
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
@@ -40,6 +39,9 @@ const FileUpload = () => {
           }
           // Process textContent for non-PDF files...
           console.log(textContent);
+          callGPT(textContent).then(response => {
+            console.log('GPT-4 Response:', response);
+        });
         }
       };
   
@@ -66,15 +68,16 @@ const FileUpload = () => {
   });
 
   return (
-    // Unfortunately this must be div and not View - not sure how it will affect production 
     <div style={tw`p-5 border-2 border-dashed border-gray-400 rounded-lg mr-[8%] mt-[20%] absolute right-0`} {...getRootProps()}>
       <input {...getInputProps()} />
       <Text style={tw`text-gray-700 text-center`}>Drop the files here or click to select files</Text>
-      {files.map(file => (
-        <View key={file.path} style={tw`mt-2`}> {/* Use `path` or `name` as a key, but `path` can handle cases where two files have the same name */}
-          <Text>{file.name}</Text>
+      {files.length > 0 && (
+        <View style={tw`mt-2`}>
+          {files.map((file, index) => (
+            <Text key={index} style={tw`text-gray-700`}>{file.name}</Text> // Display the file name
+          ))}
         </View>
-      ))}
+      )}
     </div>
   );
 };
