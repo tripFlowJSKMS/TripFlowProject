@@ -9,6 +9,7 @@
         "react-native-document-picker": "^9.0.1",
         "ts-node": "^10.9.1",
         "typescript": "^5.1.6",
+        "xlsx": "^0.18.5",
         "zod": "^3.21.4"
     }
 }

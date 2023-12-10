@@ -28,6 +28,7 @@
     "expo-router": "^1.2.0",
     "expo-splash-screen": "~0.18.1",
     "expo-status-bar": "~1.4.2",
+    "mammoth": "^1.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
@@ -52,6 +53,7 @@
     "tailwind-merge": "^1.13.2",
     "twrnc": "^3.6.1",
     "typescript": "^4.9.4",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz",
     "zod": "^3.22.2",
     "zustand": "^4.3.9"
   },
