@@ -78,12 +78,7 @@ export default function StartPlanningPage() {
           <Text style={tw`font-bold text-4xl`}>Your ideal trip awaits</Text>
           <DatePicker selectedYear={selectedYear} selectedMonth={selectedMonth} selectedDate={selectedDate}
             setSelectedYear={setSelectedYear} setSelectedMonth={setSelectedMonth} setSelectedDate={setSelectedDate} />
-          <TripTimingsPicker
-            selectedStartTime={startTime}
-            selectedEndTime={endTime}
-            onStartTimeChange={setStartTime}
-            onEndTimeChange={setEndTime}
-          />
+          <TripTimingsPicker selectedStartTime={startTime} selectedEndTime={endTime} onStartTimeChange={setStartTime} onEndTimeChange={setEndTime} />
         </View>
 
         <View style={tw`w-3/12`}>
@@ -92,22 +87,9 @@ export default function StartPlanningPage() {
             onDestinationLocationChange={setDestinationLocation}
           />
           <View style={tw`flex flex-row justify-between`}>
-            <CustomPicker<PaxNumberType>
-              title="Pax"
-              options={paxOptions}
-              width="3"
-              selectedValue={paxNumber}
-              onValueChange={(value) => setPaxNumber(value)}
-            />
-            <CustomPicker
-              title="Dietary Preference"
-              options={dietaryPreferences}
-              width="7"
-              selectedValue={dietaryPreference}
-              onValueChange={(value) =>
-                setDietaryPreference(value as DietaryPreferenceType)
-              }
-            />
+            <CustomPicker<PaxNumberType> title="Pax" options={paxOptions} width="3" selectedValue={paxNumber} onValueChange={(value) => setPaxNumber(value)} />
+            <CustomPicker title="Dietary Preference" options={dietaryPreferences} width="7"
+              selectedValue={dietaryPreference} onValueChange={(value) => setDietaryPreference(value as DietaryPreferenceType)} />
           </View>
           <PacePicker onPaceChange={(value: ScheduleType) => setPace(value)} />
         </View>
