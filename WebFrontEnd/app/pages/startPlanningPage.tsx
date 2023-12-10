@@ -18,7 +18,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/lib/navigation";
 import {
   AreasOfInterestType,
-  DestinationType,
   DietaryPreferenceType,
   PaxNumberType,
   ScheduleType,
@@ -89,8 +88,8 @@ export default function StartPlanningPage() {
   return (
     <View style={tw`flex flex-col h-full`}>
       <TopBar />
-      <ScrollView contentContainerStyle={tw`flex justify-center p-10`}>
-        <View style={tw`flex justify-center p-10`}>
+      <ScrollView contentContainerStyle={tw`flex justify-center pl-[2%]`}>
+        <View style={tw`flex justify-center p-[3%]`}>
           <Title parameter="Your ideal trip awaits" />
           <View style={tw`w-[70%]`}>
             <View style={tw`flex flex-row w-full`}>
@@ -124,7 +123,7 @@ export default function StartPlanningPage() {
                     selectedValue={paxNumber}
                     onValueChange={(value) => setPaxNumber(value)}
                   />
-                  <View style={tw`w-20%`}></View>
+                  <View style={tw`w-[20%]`}></View>
                   <CustomPicker
                     title="Dietary Preference"
                     options={dietaryPreferences}
@@ -140,7 +139,7 @@ export default function StartPlanningPage() {
                   onPaceChange={(value: ScheduleType) => setPace(value)}
                 />
               </View>
-              <View style={tw`border-r border-gray-100 h-150 ml-[8%] mr-[8%]`} />
+              <View style={tw`border-r border-gray-100 ml-[8%] mr-[8%]`} />
               <AreasOfInterestPicker
                 onAreasOfInterestChange={(value: AreasOfInterestType[]) =>
                   setAreasOfInterests(value)
