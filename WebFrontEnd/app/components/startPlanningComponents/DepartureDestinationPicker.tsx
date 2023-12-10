@@ -38,38 +38,34 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Text style={tw`text-5x1 font-bold w-full mt-4 mb-4`}>Departure</Text>
-        <TextInput
-          style={tw`h-10 border rounded-md p-2`}
-          value={departureQuery}
-          onChangeText={(text) => {
-            setDepartureQuery(text);
-            setDepartureData(filterCountries(text));
-            setIsDepartureListVisible(true);
-            setIsDestinationListVisible(false);
-          }}
-          placeholder="Search for a city"
-          placeholderTextColor="#888"
-        />
-      </View>
+    <View style={tw`z-10`}>
+      <Text style={tw`text-xl font-bold w-full my-3`}>Departure</Text>
+      <TextInput
+        style={tw`border rounded-md p-3`}
+        value={departureQuery}
+        onChangeText={(text) => {
+          setDepartureQuery(text);
+          setDepartureData(filterCountries(text));
+          setIsDepartureListVisible(true);
+          setIsDestinationListVisible(false);
+        }}
+        placeholder="Search for a city"
+        placeholderTextColor="#888"
+      />
 
-      <View style={styles.inputContainer}>
-        <Text style={tw`text-5x1 font-bold w-full mt-4 mb-4`}>Destination</Text>
-        <TextInput
-          style={tw`h-10 border rounded-md p-2`}
-          value={destinationQuery}
-          onChangeText={(text) => {
-            setDestinationQuery(text);
-            setDestinationData(filterCountries(text));
-            setIsDepartureListVisible(false);
-            setIsDestinationListVisible(true);
-          }}
-          placeholder="Search for a city"
-          placeholderTextColor="#888"
-        />
-      </View>
+      <Text style={tw`text-xl font-bold w-full my-3`}>Destination</Text>
+      <TextInput
+        style={tw`border rounded-md p-3`}
+        value={destinationQuery}
+        onChangeText={(text) => {
+          setDestinationQuery(text);
+          setDestinationData(filterCountries(text));
+          setIsDepartureListVisible(false);
+          setIsDestinationListVisible(true);
+        }}
+        placeholder="Search for a city"
+        placeholderTextColor="#888"
+      />
 
       {(isDepartureListVisible && departureQuery.length > 0 && departureData.length != 0) && (
         <FlatList
@@ -101,13 +97,6 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
 }
 
 const styles = StyleSheet.create({
-    container: {
-        position: 'relative',
-        zIndex: 3,
-    },
-    inputContainer: {
-        zIndex: 1, // Ensure the input container is above the FlatLists
-    },
     list: {
         position: 'absolute',
         left: 0,

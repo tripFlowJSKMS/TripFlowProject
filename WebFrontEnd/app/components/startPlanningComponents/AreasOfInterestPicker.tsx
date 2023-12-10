@@ -15,7 +15,7 @@ export default function AreasOfInterestPicker( { onAreasOfInterestChange }: Area
             const temp: AreasOfInterestType[] = selectedInterests.filter(item => item !== interest)
             setSelectedInterests(temp);
             onAreasOfInterestChange(temp)
-            
+
         } else {
             const temp: AreasOfInterestType[] = [...selectedInterests, interest]
             setSelectedInterests(temp);
@@ -24,15 +24,14 @@ export default function AreasOfInterestPicker( { onAreasOfInterestChange }: Area
     };
 
     return (
-        <View>
-            <Text style={tw`text-center text-5x1 font-bold w-full mt-4`}>Areas of Interest</Text>
-            <View style={tw`flex flex-wrap justify-center mt-4`}>
+        <View style={tw`w-full items-center`}>
+            <Text style={tw`text-center text-xl font-bold mb-3`}>Areas of Interest</Text>
                 {areasOfInterest.map((interest, index) => (
                     <TouchableOpacity
                         key={index}
                         onPress={() => handleInterestToggle(interest)}
                         style={[
-                            tw`bg-gray-300 rounded-full px-4 py-2 m-2`,
+                            tw`bg-gray-300 rounded-full p-2 m-2 w-full`,
                             selectedInterests.includes(interest) && tw`bg-blue-500`,
                         ]}
                     >
@@ -41,7 +40,6 @@ export default function AreasOfInterestPicker( { onAreasOfInterestChange }: Area
                         </Text>
                     </TouchableOpacity>
                 ))}
-            </View>
         </View>
     );
 }

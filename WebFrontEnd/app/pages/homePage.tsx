@@ -1,6 +1,5 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import tw from "twrnc";
-import Title from "../components/title";
 import HomePageTopBar from '../components/homePageComponents/HomePageTopBar'
 import HomePageDashboard from "../components/homePageComponents/HomePageDashboard";
 import ItineraryComponent from "../components/itineraryComponent";
@@ -10,31 +9,20 @@ import { RootStackParamList } from "@/lib/navigation";
 import FileUpload from "../components/homePageComponents/FileUpload";
 
 export default function HomePage() {
-
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    const navigateToStartPlanningPage = () => {
-      navigation.navigate('StartPlanning'); // Make sure 'StartPlanning' matches the screen name in your navigation stack
-    };
-
     return (
-        <View style={tw`h-full`}>
-          <HomePageTopBar navigation={navigateToStartPlanningPage}/>
-    
-          <View style={tw`flex flex-col items-center w-full h-[20%]`}>
-            <HomePageDashboard></HomePageDashboard>
-          </View>
-    
-          <View style={tw`h-20% flex ml-[10%] mt-[3%]`}>
-            <Title size="2" parameter="Check out these itineraries"/>
+        <View style={tw`flex items-center`}>
+          <HomePageTopBar />
+          <HomePageDashboard />
+          <View style={tw`w-9/12`}>
+            <Text style={tw`w-50% text-xl font-bold w-full mt-4 mb-4`}>Check out these itineraries</Text>
             <View style={tw`flex flex-row flex-wrap`}>
               <ItineraryComponent />
               <ItineraryComponent />
               <ItineraryComponent />
             </View>
           </View>
-
+        
           <FileUpload/>
-    
         </View>
       );
 }

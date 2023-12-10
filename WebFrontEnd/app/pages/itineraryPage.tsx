@@ -20,25 +20,22 @@ export default function ItineraryPage() {
   const timeSlots = createTimeSlots(startTimeFormatted, endTimeFormatted);
 
   return (
-    <View style={tw`flex flex-col h-full`}>
+    <View style={tw`h-full`}>
       <TopBar />
-      <ScrollView style={tw`bg-white`} horizontal={true}>
-        <View style={tw`flex flex-row`}>
-          {/* Time Slot Headers */}
-          {timeSlots.map((time, index) => (
-            <View key={index} style={tw`p-2 w-15`}>
-              <Text style={tw`text-center`}>{time}</Text>
-            </View>
-          ))}
+      <ScrollView horizontal={true}>
+        <View>
+          <View style={tw`flex-row`}>
+            {timeSlots.map(time =>
+              <Text style={tw`w-40`}>{time}</Text>
+            )}
+          </View>
+          <View style={tw`flex-row my-10`}>
+            {finalItinerary.map(item =>
+              <DestinationInSchedule firstTimeSlot={travellingPreferences.startTime} destination={item.destination} startingTime={item.startingTime} endingTime={item.endingTime} />
+            )}
+          </View>
         </View>
-
-        <View style={tw`flex flex-row`}> 
-          {/* Itinerary Cards */}
-          {finalItinerary.map((item, index) => (
-            <DestinationInSchedule key={index} destination={item.destination} startingTime={item.startingTime} endingTime={item.endingTime}/>
-          ))}
-        </View> 
-      </ScrollView> 
+      </ScrollView>
     </View>
   );
 }

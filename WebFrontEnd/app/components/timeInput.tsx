@@ -16,22 +16,19 @@ export default function TimeInput({ value, setValue }: TimeInputProps) {
         timeOptions.push(timeString);
       }
     }
-  
+
     return (
-      <View style={tw`mb-4 w-100%`}>
-        <View style={tw`flex-row items-center`}>
-          <Picker selectedValue={value} onValueChange={(itemValue) => setValue(itemValue)} style={tw`w-100% h-10 border border-black rounded-lg p-2`}>
-            {timeOptions.map((time, index) => (
-              <Picker.Item key={index} label={time} value={time} />
-            ))}
-          </Picker>
-        </View>
+      <View style={tw`w-5/12`}>
+        <Picker selectedValue={value} onValueChange={(itemValue) => setValue(itemValue)} style={tw`w-100% h-10 border border-black rounded-lg p-2`}>
+          {timeOptions.map((time, index) => (
+            <Picker.Item key={index} label={time} value={time} />
+          ))}
+        </Picker>
       </View>
     );
   }
-  
-  
-  
-  
-  
-  
+
+
+
+
+

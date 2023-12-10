@@ -3,14 +3,15 @@ import { View, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 
 interface DatePickerProps {
-  onDateChange: (year: number, month: number, date: number) => void;
+  selectedYear: number,
+  selectedMonth: number,
+  selectedDate: number,
+  setSelectedYear: React.Dispatch<React.SetStateAction<number>>,
+  setSelectedMonth: React.Dispatch<React.SetStateAction<number>>,
+  setSelectedDate: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function DatePicker({ onDateChange }: DatePickerProps) {
-  const currentDate = new Date();
-  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
-  const [selectedDate, setSelectedDate] = useState(currentDate.getDay());
+export default function DatePicker({ selectedYear, selectedMonth, selectedDate, setSelectedYear, setSelectedMonth, setSelectedDate }: DatePickerProps) {
 
   const years = Array.from({ length: 10 }, (_, i) => selectedYear - 5 + i);
 
@@ -49,68 +50,38 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
 
   const handleYearChange = (year: number) => {
     setSelectedYear(year);
-    onDateChange(year, selectedMonth, selectedDate);
   };
 
   const handleMonthChange = (month: number) => {
     setSelectedMonth(month);
-    onDateChange(selectedYear, month, selectedDate);
   };
 
   const handleDateChange = (date: number) => {
     setSelectedDate(date);
-    onDateChange(selectedYear, selectedMonth, date);
   };
 
   return (
     <View>
-      <Text style={tw`text-center text-5x1 font-bold w-full mt-4`}>
-        Travel Dates
-      </Text>
-      <View style={tw`w-full border-t border-gray-100 my-2`} />
-      <View style={tw`flex flex-col items-center justify-center`}>
+      <Text style={tw`text-center text-xl font-bold w-full my-3`}>Travel Dates</Text>
+      <View>
         <View style={styles.row}>
-          <TouchableOpacity
-            style={tw`p-2 border border-gray-400 rounded-full`}
-            onPress={() => handleYearChange(selectedYear - 1)}
-          >
+          <TouchableOpacity style={styles.arrowButton} onPress={() => handleYearChange(selectedYear - 1)}>
             <Text>{"<"}</Text>
           </TouchableOpacity>
-          <View style={styles.yearMonthContainer}>
             <Text style={styles.headerText}>{selectedYear}</Text>
-          </View>
-          <TouchableOpacity
-            style={tw`p-2 border border-gray-400 rounded-full`}
-            onPress={() => handleYearChange(selectedYear + 1)}
-          >
+          <TouchableOpacity style={styles.arrowButton} onPress={() => handleYearChange(selectedYear + 1)}>
             <Text>{">"}</Text>
           </TouchableOpacity>
         </View>
-
         <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.arrowButton}
-            onPress={() =>
-              handleMonthChange(
-                selectedMonth - 1 === 0 ? 12 : selectedMonth - 1,
-              )
-            }
-          >
+          <TouchableOpacity style={styles.arrowButton}
+            onPress={() => handleMonthChange(selectedMonth - 1 === 0 ? 12 : selectedMonth - 1)}>
             <Text>{"<"}</Text>
           </TouchableOpacity>
-          <View style={styles.yearMonthContainer}>
             <Text style={styles.headerText}>
               {monthNames[selectedMonth - 1]}
             </Text>
-          </View>
-          <TouchableOpacity
-            style={styles.arrowButton}
-            onPress={() =>
-              handleMonthChange(
-                selectedMonth + 1 === 13 ? 1 : selectedMonth + 1,
-              )
-            }
-          >
+          <TouchableOpacity style={styles.arrowButton} onPress={() => handleMonthChange(selectedMonth + 1 === 13 ? 1 : selectedMonth + 1, )}>
             <Text>{">"}</Text>
           </TouchableOpacity>
         </View>
@@ -118,45 +89,15 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
         {/* I know this is not centered and the proper way to do it is instantiate one header
             and put the corresponding dates below in a grid format but i cant seem to get the logic out.
             If anyone can do it please revise this portion of the code */}
-        <View style={styles.calendar}>
-          <View
-            style={tw`flex flex-row justify-between pb-[3%]`}
-          >
-            <View
-              style={tw`flex items-center w-1/7 justify-center text-center`}
-            >
+        <View>
+          <View style={tw`flex flex-row justify-around py-3`}>
               <Text style={tw`font-semibold text-gray-600 text-xs`}>Sun</Text>
-            </View>
-            <View
-              style={tw`flex items-center w-1/7 justify-center text-center`}
-            >
               <Text style={tw`font-semibold text-gray-600 text-xs`}>Mon</Text>
-            </View>
-            <View
-              style={tw`flex items-center w-1/7 justify-center text-center`}
-            >
               <Text style={tw`font-semibold text-gray-600 text-xs`}>Tue</Text>
-            </View>
-            <View
-              style={tw`flex items-center w-1/7 justify-center text-center`}
-            >
               <Text style={tw`font-semibold text-gray-600 text-xs`}>Wed</Text>
-            </View>
-            <View
-              style={tw`flex items-center w-1/7 justify-center text-center`}
-            >
               <Text style={tw`font-semibold text-gray-600 text-xs`}>Thu</Text>
-            </View>
-            <View
-              style={tw`flex items-center w-1/7 justify-center text-center`}
-            >
               <Text style={tw`font-semibold text-gray-600 text-xs`}>Fri</Text>
-            </View>
-            <View
-              style={tw`flex items-center w-1/7 justify-center text-center`}
-            >
               <Text style={tw`font-semibold text-gray-600 text-xs`}>Sat</Text>
-            </View>
           </View>
 
           <View style={{ ...styles.dateContainer, alignItems: "center" }}>
@@ -188,13 +129,12 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
 }
 
 const styles = {
-  calendar: tw`mt-4`,
   dateContainer: tw`flex flex-row flex-wrap`,
   dateItem: tw`w-1/7 p-2 border border-gray-400 rounded-lg items-center justify-center`,
   emptyDateItem: tw`w-1/7`,
   selectedItem: tw`bg-blue-500`,
   dateText: tw`text-center text-base text-black`,
-  row: tw`flex flex-row items-center justify-center`,
+  row: tw`flex flex-row items-center justify-between`,
   arrowButton: tw`p-2 border border-gray-400 rounded-full`,
   yearMonthContainer: tw`w-[50]`,
   headerText: tw`text-lg font-bold mx-4 text-center`,
