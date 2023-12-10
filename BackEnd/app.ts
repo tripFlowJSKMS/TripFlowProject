@@ -1,4 +1,4 @@
-// import z from "zod";
+require('dotenv').config();
 import "dotenv/config";
 import { Destination } from "./Algorithm/Destination";
 import {
@@ -15,9 +15,14 @@ import { editLocationsInputSchema } from "../Shared/types/pickLocations";
 import express from "express";
 import { recalibrate, tripFlowAlgorithm } from "./Algorithm/main";
 import createPromptFromData from "./openAI/gpt4helpers";
+import OpenAI from "openai";
 
 var cors = require("cors");
 const app = express();
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 import {
   generateDesirableDestinations,
@@ -110,31 +115,55 @@ app.post("/api/recalibrate", async (req, res) => {
 
 app.post("/api/callGPT", async (req, res) => {
   try {
-    // Convert your data to a text prompt
-    const prompt = createPromptFromData(req.body);
-    console.log(prompt);
-  
+    // const prompt = createPromptFromData(req.body);
+
+    console.log(`Using API Key: ${process.env.OPENAI_API_KEY}`);
+
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          "role": "system",
+          "content": "You will be given an itinerary plan. List down each itinerary item in the following format if the details are available: Date, Time, Event."
+        },
+        {
+          "role": "user",
+          "content": req.body
+        }
+      ],
+      temperature: 0.1,
+      max_tokens: 500,
+    });
+
+
     // const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
     //   method: 'POST',
     //   headers: {
     //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer YOUR_OPENAI_API_KEY` // Replace with your actual API key
+    //     'Authorization': `Bearer ${OPENAI_API_KEY}`
     //   },
     //   body: JSON.stringify({
     //     prompt: prompt,
-    //     temperature: 0.5, // Adjust as needed
-    //     max_tokens: 150, // Adjust as needed
+    //     temperature: 0.1,
+    //     max_tokens: 500,
     //   }),
     // });
-  
+
+    // if (!response.ok) {
+    //   throw new Error(`Error from OpenAI: ${response.status} ${response.statusText}`);
+    // }
+
+    const responseData = await response;
     // const responseData = await response.json();
-    // return responseData;
-    return "testing";
+    console.log(responseData);
+    res.json(responseData); // Send the response data back to the client
   } catch (error) {
     console.error("Error calling GPT:", error);
-    res.status(400).json({error: "Invalid input or API error "});
+    res.status(400).json({ error: "Invalid input or API error" });
   }
-})
+});
+
 
 app.listen(3000, () => {
   console.log("Backend server is running on port 3000");
