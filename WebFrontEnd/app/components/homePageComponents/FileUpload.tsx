@@ -40,8 +40,19 @@ const FileUpload = () => {
           // Process textContent for non-PDF files...
           console.log(textContent);
           callGPT(textContent).then(response => {
-            console.log('GPT-4 Response:', response);
-        });
+            const responseSegmented: string[] = response.split("\n");
+            responseSegmented.forEach((item) => {
+              const itemSegmented: string[] = item.split(",").map(item => item.trim());
+              // remove the leading '- '
+              let date: string = itemSegmented[0].substring(2,);
+              let time: string = itemSegmented[1];
+              let event: string = itemSegmented[2];
+              // think about how to parse it and give to wj
+              console.log(date);
+              console.log(time);
+              console.log(event);
+            });
+          });
         }
       };
   

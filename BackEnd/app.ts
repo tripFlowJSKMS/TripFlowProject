@@ -1,4 +1,3 @@
-require('dotenv').config();
 import "dotenv/config";
 import { Destination } from "./Algorithm/Destination";
 import {
@@ -115,49 +114,31 @@ app.post("/api/recalibrate", async (req, res) => {
 
 app.post("/api/callGPT", async (req, res) => {
   try {
-    // const prompt = createPromptFromData(req.body);
-
-    console.log(`Using API Key: ${process.env.OPENAI_API_KEY}`);
-
-
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
         {
           "role": "system",
-          "content": "You will be given an itinerary plan. List down each itinerary item in the following format if the details are available: Date, Time, Event."
+          "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date, Time, Event. Infer the details where possible and indicate 'NIL' if any information is not available. Enumerate the items with a dash."
         },
         {
           "role": "user",
-          "content": req.body
+          "content": JSON.stringify(req.body)
         }
       ],
       temperature: 0.1,
       max_tokens: 500,
     });
 
+    let message: string = '';
+    if (response.choices) {
+      if (response.choices[0].message.content) {
+        message = response.choices[0].message.content;
+      }
+    }
+    console.log(message);
+    res.json(message);
 
-    // const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${OPENAI_API_KEY}`
-    //   },
-    //   body: JSON.stringify({
-    //     prompt: prompt,
-    //     temperature: 0.1,
-    //     max_tokens: 500,
-    //   }),
-    // });
-
-    // if (!response.ok) {
-    //   throw new Error(`Error from OpenAI: ${response.status} ${response.statusText}`);
-    // }
-
-    const responseData = await response;
-    // const responseData = await response.json();
-    console.log(responseData);
-    res.json(responseData); // Send the response data back to the client
   } catch (error) {
     console.error("Error calling GPT:", error);
     res.status(400).json({ error: "Invalid input or API error" });
