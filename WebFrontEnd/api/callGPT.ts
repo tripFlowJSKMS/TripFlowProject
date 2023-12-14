@@ -10,12 +10,11 @@ export async function callGPT(prompt: GPTPromptType) {
             prompt
         },
     );
-    console.log(response.data);
 
-    // is it response or sth nested in response?
     if (!isValidBody(response.data, gptPromptSchema)) {
         throw new Error("Invalid response");
     }
+    
     const gptResponse: GPTResponseType = response.data;
     return gptResponse;
 }

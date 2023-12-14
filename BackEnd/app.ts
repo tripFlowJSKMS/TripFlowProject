@@ -13,7 +13,6 @@ import { editLocationsInputSchema } from "../Shared/types/pickLocations";
 
 import express from "express";
 import { recalibrate, tripFlowAlgorithm } from "./Algorithm/main";
-import createPromptFromData from "./openAI/gpt4helpers";
 import OpenAI from "openai";
 
 var cors = require("cors");
@@ -119,7 +118,7 @@ app.post("/api/callGPT", async (req, res) => {
       messages: [
         {
           "role": "system",
-          "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date, Time, Event. Infer the details where possible and indicate 'NIL' if any information is not available. Enumerate the items with a dash."
+          "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date (DD/MM format), Time (HH:MM format), Event. Infer the details where possible and indicate 'NIL' if any information is not available. Enumerate the items with a dash."
         },
         {
           "role": "user",
@@ -136,7 +135,6 @@ app.post("/api/callGPT", async (req, res) => {
         message = response.choices[0].message.content;
       }
     }
-    console.log(message);
     res.json(message);
 
   } catch (error) {
