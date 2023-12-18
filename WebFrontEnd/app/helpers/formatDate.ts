@@ -4,4 +4,3 @@ export default function formatDate(year: number, month: number, date: number): s
     const formattedDateStr = `${year}-${formattedMonth}-${formattedDate}`;
     return formattedDateStr;
 }
-  
