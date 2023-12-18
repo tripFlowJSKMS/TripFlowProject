@@ -6,87 +6,89 @@ import tw from "twrnc";
 import XLSX from 'xlsx';
 import mammoth from 'mammoth';
 import { callGPT } from '@/api/callGPT';
+import { GPTScrapedEventType } from '../../../../Shared/types/callGPT';
+import { useDispatch } from 'react-redux';
+import { setIndividualEventArr } from '@/lib/reducers/individualEventArrReducer';
 
 const FileUpload = () => {
-  const [files, setFiles] = useState([]);
-
-  const onDrop = useCallback((acceptedFiles) => {
-    acceptedFiles.forEach((file) => {
-      setFiles(prevFiles => [...prevFiles, ...acceptedFiles]);
-      const reader = new FileReader();
-      const fileType = file.name.split('.').pop().toLowerCase();
+  const [file, setFile] = useState(null);
+  const dispatch = useDispatch();
   
-      reader.onload = (event) => {
-        const arrayBuffer = event.target.result as ArrayBuffer;
-        if (arrayBuffer) {
-          let textContent = '';
-          if (fileType === 'xlsx' || fileType === 'xls') {
-            const data = new Uint8Array(arrayBuffer);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
-            textContent = JSON.stringify(jsonData, null, 2);
-            // Handle Excel textContent as needed...
-          } else if (fileType === 'docx') {
-            // Handle Word textContent as needed...
-            // mammoth.extractRawText({ arrayBuffer: result }).then((output) => {
-            //   textContent = output.value;
-            // });
-          } else if (fileType === 'pdf') {
-            // PDFs should be handled server-side due to complexity...
-            // uploadPdfToServer(file);
-          }
-          // Process textContent for non-PDF files...
-          console.log(textContent);
-          callGPT(textContent).then(response => {
-            const responseSegmented: string[] = response.split("\n");
-            responseSegmented.forEach((item) => {
-              const itemSegmented: string[] = item.split(",").map(item => item.trim());
-              // remove the leading '- '
-              let date: string = itemSegmented[0].substring(2,);
-              let time: string = itemSegmented[1];
-              let event: string = itemSegmented[2];
-              // think about how to parse it and give to wj
-              console.log(date);
-              console.log(time);
-              console.log(event);
-            });
-          });
+  const onDrop = useCallback(async (acceptedFiles: Blob[]) => {
+    let individualEventArr: GPTScrapedEventType[] = [];
+    // Keep to 1 file for MVP 
+    const uploadedFile = acceptedFiles[0];
+    setFile(uploadedFile);
+    const reader = new FileReader();
+    const fileType = uploadedFile.name.split('.').pop().toLowerCase();
+  
+    reader.onload = async (event) => {
+      const arrayBuffer = event.target.result as ArrayBuffer;
+      if (arrayBuffer) {
+        let textContent = '';
+        if (fileType === 'xlsx' || fileType === 'xls') {
+          const data = new Uint8Array(arrayBuffer);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+          textContent = JSON.stringify(jsonData, null, 2);
+        } else if (fileType === 'docx') {
+          // Handle Word textContent as needed...
+          // mammoth.extractRawText({ arrayBuffer: result }).then((output) => {
+          //   textContent = output.value;
+          // });
+        } else if (fileType === 'pdf') {
+          // PDFs should be handled server-side due to complexity...???
+          // uploadPdfToServer(file);
         }
-      };
-  
-      reader.onerror = (error) => {
-        console.error('FileReader error:', error);
-      };
-  
-      // Read the file according to its type
-      if (fileType === 'docx' || fileType === 'xlsx' || fileType === 'xls') {
-        reader.readAsArrayBuffer(file);
-      } else if (fileType === 'pdf') {
-        // For PDF, you would send the file to a server-side endpoint
-        // uploadPdfToServer(file);
+
+        const response = await callGPT(textContent);
+        const responseSegmented: string[] = response.split("\n");
+        responseSegmented.forEach((item) => {
+          const itemSegmented: string[] = item.split(",").map(item => item.trim());
+          // remove the leading '- '
+          let date: string = itemSegmented[0].substring(2,);
+          // Can deal with the (.approx) more meaningfully after MVP
+          let time: string = itemSegmented[1].replace(/\(\.approx\)/g, "");
+          let event: string = itemSegmented[2];
+          const individualEvent: GPTScrapedEventType = {date, time, event}; 
+          individualEventArr.push(individualEvent);
+        });
+
+        
+        console.log(individualEventArr);
+        dispatch(setIndividualEventArr(individualEventArr));
+        console.log("successfully dispatched");          
       }
-    });
+    };
+
+    reader.onerror = (error) => {
+      console.error('FileReader error:', error);
+    };
+
+    // Read the file according to its type
+    if (fileType === 'docx' || fileType === 'xlsx' || fileType === 'xls') {
+      reader.readAsArrayBuffer(uploadedFile);
+    } else if (fileType === 'pdf') {
+      // For PDF, you would send the file to a server-side endpoint
+      // uploadPdfToServer(file);
+    }
+    
   }, []);
   
-
-
-  // Include 'multiple: true' in the useDropzone configuration if it's not already
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    multiple: true // Allows multiple files to be dropped
+    multiple: false
   });
 
   return (
     <div style={tw`p-5 border-2 border-dashed border-gray-400 rounded-lg mr-[8%] mt-[20%] absolute right-0`} {...getRootProps()}>
       <input {...getInputProps()} />
-      <Text style={tw`text-gray-700 text-center`}>Drop the files here or click to select files</Text>
-      {files.length > 0 && (
+      <Text style={tw`text-gray-700 text-center`}>Drop the file here or click to select a file</Text>
+      {file && (
         <View style={tw`mt-2`}>
-          {files.map((file, index) => (
-            <Text key={index} style={tw`text-gray-700`}>{file.name}</Text> // Display the file name
-          ))}
+          <Text style={tw`text-gray-700`}>{file.name}</Text>
         </View>
       )}
     </div>

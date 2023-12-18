@@ -12,6 +12,9 @@ export default function ItineraryPage() {
   // Retrieve the finalItinerary from the Redux store
   const finalItinerary = useSelector((state: RootState) => state.itineraryInputDestination.itinerary);
   const travellingPreferences = useSelector((state: RootState) => state.travellingPreferences.travellingPreferences);
+  // Retrieve the fixed plans which the users have made already 
+  const fixedPlansItems = useSelector((state: RootState) => state.individualEventArr.allEvents);
+
   const totalSlots = (travellingPreferences.endTime - travellingPreferences.startTime) / 30;
   console.log(`Total slots: ${totalSlots}`);
 

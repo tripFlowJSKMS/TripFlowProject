@@ -5,14 +5,16 @@ import editLocationsInputDestinationReducer, { EditLocationsInputDestinationStat
 import itineraryInputDestinationReducer, { ItineraryInputDestinationState } from './itineraryInputDestinationReducer';
 import editLocationsOutputDestinationReducer, { EditLocationsOutputDestinationState } from './editLocationsOutputDestinationReducer';
 import travellingPreferencesReducer, { TravellingPreferencesState } from './travellingPreferencesReducer';
+import individualEventArrReducer, { IndividualEventArrState } from './individualEventArrReducer';
 
 const rootReducer = combineReducers({
   travellingPreferences: travellingPreferencesReducer,
-  startPlanningOutputDestination: startPlanningOutputDestinationReducer, // Add more reducers as needed
+  startPlanningOutputDestination: startPlanningOutputDestinationReducer,
   pickLocationsOutputDestination: pickLocationsOutputDestinationReducer,
   editLocationsInputDestination: editLocationsInputDestinationReducer,
   editLocationsOutputDestination: editLocationsOutputDestinationReducer,
   itineraryInputDestination: itineraryInputDestinationReducer,
+  individualEventArr: individualEventArrReducer,
 });
 
 export type RootState = {
@@ -22,6 +24,7 @@ export type RootState = {
   editLocationsInputDestination: EditLocationsInputDestinationState;
   editLocationsOutputDestination: EditLocationsOutputDestinationState;
   itineraryInputDestination: ItineraryInputDestinationState;
+  individualEventArr: IndividualEventArrState;
 }
 
 export default rootReducer;
