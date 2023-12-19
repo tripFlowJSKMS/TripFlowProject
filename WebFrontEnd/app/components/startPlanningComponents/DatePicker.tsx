@@ -72,27 +72,29 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
     const selectedDateObject: Date = getDateFromNumber(year, month, date); // Ensure month is zero-indexed here
     const endDateObject: Date = getDateFromString(localEndDate.substring(0,4), localEndDate.substring(5,7), localEndDate.substring(8,10));
     const startDateObject: Date = getDateFromString(localStartDate.substring(0,4), localStartDate.substring(5,7), localStartDate.substring(8,10));
-    console.log("Current date object: " + currentDateObject);
-    console.log("Selected date object: " + selectedDateObject);
-    console.log("Start date object: " + startDateObject);
-    console.log("End date object: " + endDateObject);
+    // console.log("Current date object: " + currentDateObject);
+    // console.log("Selected date object: " + selectedDateObject);
+    // console.log("Start date object: " + startDateObject);
+    // console.log("End date object: " + endDateObject);
     if (selectedDateObject < currentDateObject) {
       console.log("guard clause activated");
       return;
     }
     const newDate: string = formatDate(selectedDateObject.getFullYear(), selectedDateObject.getMonth(), selectedDateObject.getDate()); 
+    // Out API calls still use 1-index for month
+    const oneIndexedNewDate: string = formatDate(selectedDateObject.getFullYear(), selectedDateObject.getMonth() + 1, selectedDateObject.getDate());
     if (isPickingStart) {
-      setStartDate(newDate);
+      setStartDate(oneIndexedNewDate);
       setLocalStartDate(newDate);
       if (selectedDateObject > endDateObject) {
-        setEndDate(newDate);
+        setEndDate(oneIndexedNewDate);
         setLocalEndDate(newDate);
       } 
     } else {
-      setEndDate(newDate);
+      setEndDate(oneIndexedNewDate);
       setLocalEndDate(newDate);
       if (selectedDateObject < startDateObject) {
-        setStartDate(newDate);
+        setStartDate(oneIndexedNewDate);
         setLocalStartDate(newDate);
       }
     }
