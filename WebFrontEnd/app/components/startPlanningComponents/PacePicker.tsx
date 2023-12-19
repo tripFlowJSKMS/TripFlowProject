@@ -25,15 +25,15 @@ export default function PacePicker({ onPaceChange }: PacePickerProps) {
     <View>
       <Text style={tw`text-xl font-bold my-5`}>Pace</Text>
       <View style={tw`flex flex-row w-full items-center justify-between`}>
-        <TouchableOpacity onPress={() => handleIconClick("Relaxed")} style={selectedValue === "Relaxed" && tw`text-2xl`}>
+        <TouchableOpacity onPress={() => handleIconClick("Relaxed")} style={selectedValue === "Relaxed" && tw`text-4xl`}>
           <FontAwesomeIcon icon={faPersonWalking} />
         </TouchableOpacity>
         <FontAwesomeIcon icon={faArrowRight} />
-        <TouchableOpacity onPress={() => handleIconClick("Normal")} style={selectedValue === "Normal" && tw`text-2xl`}>
+        <TouchableOpacity onPress={() => handleIconClick("Normal")} style={selectedValue === "Normal" && tw`text-4xl`}>
           <FontAwesomeIcon icon={faPersonRunning} />
         </TouchableOpacity>
         <FontAwesomeIcon icon={faArrowRight} />
-        <TouchableOpacity onPress={() => handleIconClick("Packed")} style={selectedValue === "Packed" && tw`text-2xl`}>
+        <TouchableOpacity onPress={() => handleIconClick("Packed")} style={selectedValue === "Packed" && tw`text-4xl`}>
           <FontAwesomeIcon icon={faPersonSnowboarding} />
         </TouchableOpacity>
       </View>

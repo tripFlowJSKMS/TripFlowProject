@@ -14,9 +14,8 @@ export default function ItineraryPage() {
   const travellingPreferences = useSelector((state: RootState) => state.travellingPreferences.travellingPreferences);
   // Retrieve the fixed plans which the users have made already 
   const fixedPlansItems = useSelector((state: RootState) => state.individualEventArr.allEvents);
-
+  console.log(fixedPlansItems);
   const totalSlots = (travellingPreferences.endTime - travellingPreferences.startTime) / 30;
-  console.log(`Total slots: ${totalSlots}`);
 
   const startTimeFormatted: string = formatTime(travellingPreferences.startTime);
   const endTimeFormatted: string = formatTime(travellingPreferences.endTime);
