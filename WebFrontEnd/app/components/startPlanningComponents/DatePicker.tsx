@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
-import formatDate from "@/app/helpers/formatDate";
+import { formatDate } from "@/app/helpers/dateTimeHelpers/dateTimeFunctions";
 
 interface DatePickerProps {
   currentDate: string,

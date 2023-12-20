@@ -5,13 +5,12 @@ import TopBar from "../components/topBar";
 import DatePicker from "../components/startPlanningComponents/DatePicker";
 import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
 import DepartureDestinationPicker from "../components/startPlanningComponents/DepartureDestinationPicker";
-import CustomPicker from "../components/CustomPicker";
 import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
 import { startPlanning } from "@/api/startPlanning";
 import { useDispatch } from "react-redux";
 import { setStartPlanningOutputDestinations } from "@/lib/reducers/startPlanningOutputDestinationReducer";
-import formatDate from "../helpers/formatDate";
+import { formatDate } from "../helpers/dateTimeHelpers/dateTimeFunctions";
 import {
   AreasOfInterestType,
   DietaryPreferenceType,
@@ -19,10 +18,10 @@ import {
   ScheduleType,
 } from "../../../Shared/types";
 import { setTravellingPreferences } from "@/lib/reducers/travellingPreferencesReducer";
+import PaxPicker from "../components/startPlanningComponents/PaxPicker";
+import DietaryPreferencePicker from "../components/startPlanningComponents/DietaryPreferencePicker";
 
 export default function StartPlanningPage({ navigation }) {
-  const paxOptions: PaxNumberType[] = ["1", "2", "3-5", "6 or more"];
-  const dietaryPreferences: DietaryPreferenceType[] = ["Normal", "Vegetarian", "Halal", "Vegan"];
 
   const currentDateCopy = new Date();
   const currentDate= formatDate(currentDateCopy.getFullYear(), currentDateCopy.getMonth(), currentDateCopy.getDate());
@@ -36,7 +35,7 @@ export default function StartPlanningPage({ navigation }) {
   const [paxNumber, setPaxNumber] = useState<PaxNumberType>("1");
   const [dietaryPreference, setDietaryPreference] = useState<DietaryPreferenceType>("Normal");
   const [pace, setPace] = useState<ScheduleType>("Normal");
-  const [areasOfInterests, setAreasOfInterests] = useState<Array<AreasOfInterestType>>([]);
+  const [areasOfInterests, setAreasOfInterests] = useState<AreasOfInterestType[]>([]);
   const dispatch = useDispatch();
 
   const handleStartPlanning = async () => {
@@ -68,7 +67,7 @@ export default function StartPlanningPage({ navigation }) {
     <View style={tw`flex items-center`}>
       <TopBar />
       <View style={tw`flex flex-row justify-between w-9/12 m-15`}>
-        <View style={tw`md:w-full w-4/12`}>
+        <View style={tw`w-4/12`}>
           <Text style={tw`font-bold text-4xl`}>Your Ideal Trip Awaits</Text>
           <DatePicker currentDate={currentDate} startDate={startDate} endDate={endDate} setStartDate={setStartDate}
             setEndDate={setEndDate} />
@@ -76,16 +75,13 @@ export default function StartPlanningPage({ navigation }) {
         </View>
 
         <View style={tw`w-3/12`}>
-          <DepartureDestinationPicker
-            onDepartureLocationChange={setDepartureLocation}
-            onDestinationLocationChange={setDestinationLocation}
-          />
-          <View style={tw`flex flex-row justify-between`}>
-            <CustomPicker<PaxNumberType> title="Pax" options={paxOptions} width="3" selectedValue={paxNumber} onValueChange={(value) => setPaxNumber(value)} />
-            <CustomPicker title="Dietary Preference" options={dietaryPreferences} width="7"
-              selectedValue={dietaryPreference} onValueChange={(value) => setDietaryPreference(value as DietaryPreferenceType)} />
+          <DepartureDestinationPicker departureQuery={departureLocation} destinationQuery={destinationLocation}
+              onDepartureLocationChange={setDepartureLocation} onDestinationLocationChange={setDestinationLocation} />
+          <View style={tw`flex flex-wrap flex-row justify-between`}>
+            <PaxPicker setPaxNumber={setPaxNumber}  />
+            <DietaryPreferencePicker setDietaryPreference={setDietaryPreference} />
           </View>
-          <PacePicker onPaceChange={(value: ScheduleType) => setPace(value)} />
+          <PacePicker pace={pace} setPace={setPace} />
         </View>
 
         <View style={tw`flex w-2/12 items-center justify-evenly`}>

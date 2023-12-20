@@ -1,12 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
-import formatDuration from '@/app/helpers/formatDuration';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from "@/lib/navigation";
-import formatTime from '@/app/helpers/formatTime';
+import { formatTime, formatDuration } from '@/app/helpers/dateTimeHelpers/dateTimeFunctions';
 import { DestinationType } from '../../../../Shared/types';
-import { useNavigation } from "@react-navigation/core";
 
 interface DestinationInScheduleProps {
     firstTimeSlot: number,

@@ -11,27 +11,27 @@ function filterCountries(query: string): string[] {
 }
 
 interface DepartureDestinationPickerProps {
-  onDepartureLocationChange: (value: string) => void;
-  onDestinationLocationChange: (value: string) => void;
+  departureQuery: string,
+  destinationQuery: string,
+  onDepartureLocationChange: (value: string) => void,
+  onDestinationLocationChange: (value: string) => void
 }
 
-export default function DepartureDestinationPicker({ onDepartureLocationChange, onDestinationLocationChange }: DepartureDestinationPickerProps) {
-  const [departureQuery, setDepartureQuery] = useState('');
-  const [destinationQuery, setDestinationQuery] = useState('');
+export default function DepartureDestinationPicker({ departureQuery, destinationQuery, onDepartureLocationChange, onDestinationLocationChange }: DepartureDestinationPickerProps) {
   const [departureData, setDepartureData] = useState([]);
   const [destinationData, setDestinationData] = useState([]);
-  const [isDepartureListVisible, setIsDepartureListVisible] = useState(false);
-  const [isDestinationListVisible, setIsDestinationListVisible] = useState(false);
+  const [isDepartureListVisible, setIsDepartureListVisible] = useState<boolean>(false);
+  const [isDestinationListVisible, setIsDestinationListVisible] = useState<boolean>(false);
 
   const handleDepartureItemPress = (item: string) => {
-    setDepartureQuery(item);
+    onDepartureLocationChange(item);
     setDepartureData([]);
     onDepartureLocationChange(item);
     setIsDepartureListVisible(false); // Close departure FlatList
   };
 
   const handleDestinationItemPress = (item: string) => {
-    setDestinationQuery(item);
+    onDestinationLocationChange(item);
     setDestinationData([]);
     onDestinationLocationChange(item);
     setIsDestinationListVisible(false); // Close destination FlatList
@@ -44,7 +44,7 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
         style={tw`border rounded-md p-3`}
         value={departureQuery}
         onChangeText={(text) => {
-          setDepartureQuery(text);
+          onDepartureLocationChange(text);
           setDepartureData(filterCountries(text));
           setIsDepartureListVisible(true);
           setIsDestinationListVisible(false);
@@ -58,7 +58,7 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
         style={tw`border rounded-md p-3`}
         value={destinationQuery}
         onChangeText={(text) => {
-          setDestinationQuery(text);
+          onDestinationLocationChange(text);
           setDestinationData(filterCountries(text));
           setIsDepartureListVisible(false);
           setIsDestinationListVisible(true);
@@ -72,7 +72,7 @@ export default function DepartureDestinationPicker({ onDepartureLocationChange, 
           data={departureData}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleDepartureItemPress(item)}>
-              <Text style={tw`p-2 text-lg border-b`}>{item}</Text>
+              <Text style={tw`p-2 text-base border-b`}>{item}</Text>
             </TouchableOpacity>
           )}
           style={[styles.list, { top: '50%' }]} // Adjust top as necessary

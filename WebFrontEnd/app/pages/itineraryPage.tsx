@@ -5,7 +5,7 @@ import { RootState } from '@/lib/reducers/reducers';
 import tw from "twrnc";
 import DestinationInSchedule from '../components/itineraryPageComponents/destinationInSchedule';
 import TopBar from '../components/topBar';
-import createTimeSlots from '../helpers/createTimeSlots';
+import { createTimeSlots } from '../helpers/dateTimeHelpers/dateTimeFunctions';
 
 export default function ItineraryPage() {
   // Retrieve the finalItinerary from the Redux store
