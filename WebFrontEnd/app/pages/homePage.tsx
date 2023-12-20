@@ -3,9 +3,6 @@ import tw from "twrnc";
 import HomePageTopBar from '../components/homePageComponents/HomePageTopBar'
 import HomePageDashboard from "../components/homePageComponents/HomePageDashboard";
 import ItineraryComponent from "../components/itineraryComponent";
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@/lib/navigation";
 import FileUpload from "../components/homePageComponents/FileUpload";
 
 export default function HomePage() {
@@ -21,7 +18,6 @@ export default function HomePage() {
               <ItineraryComponent />
             </View>
           </View>
-        
           <FileUpload/>
         </View>
       );

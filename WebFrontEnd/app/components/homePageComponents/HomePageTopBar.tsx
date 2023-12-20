@@ -18,7 +18,6 @@ export default function HomePageTopBar() {
           <Text style={tw`text-white text-lg font-semibold`}>S</Text>
         </TouchableOpacity>
       </View>
-
     </View>
   );
 }

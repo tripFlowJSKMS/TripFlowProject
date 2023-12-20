@@ -11,7 +11,7 @@ interface DatePickerProps {
   setEndDate: React.Dispatch<React.SetStateAction<String>>;
 }
 
-// JavaScript's Date object uses zero-indexed months (0 for January) so we align our UI with it 
+// JavaScript's Date object uses zero-indexed months (0 for January) so we align our UI with it
 export default function DatePicker({ currentDate, startDate, endDate, setStartDate, setEndDate }: DatePickerProps) {
 
   const currentDateYear: string = currentDate.substring(0,4); // 2023
@@ -53,7 +53,7 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
   const generateDatesForMonth = (year: number, month: number): (number | string)[] => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfWeek = new Date(year, month, 1).getDay();
-    return Array.from({ length: daysInMonth + firstDayOfWeek }, (_, i) => 
+    return Array.from({ length: daysInMonth + firstDayOfWeek }, (_, i) =>
     i >= firstDayOfWeek ? i - firstDayOfWeek + 1 : `placeholder-${i}`);
   }
 
@@ -66,9 +66,9 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
     return new Date(parseInt(year), parseInt(month), parseInt(date))
   }
 
-  const currentDateObject: Date = getDateFromString(currentDateYear, currentDateMonth, currentDateDate); 
+  const currentDateObject: Date = getDateFromString(currentDateYear, currentDateMonth, currentDateDate);
 
-  const adjustStartEndDate = (year: number, month: number, date: number): void => {    
+  const adjustStartEndDate = (year: number, month: number, date: number): void => {
     const selectedDateObject: Date = getDateFromNumber(year, month, date); // Ensure month is zero-indexed here
     const endDateObject: Date = getDateFromString(localEndDate.substring(0,4), localEndDate.substring(5,7), localEndDate.substring(8,10));
     const startDateObject: Date = getDateFromString(localStartDate.substring(0,4), localStartDate.substring(5,7), localStartDate.substring(8,10));
@@ -80,7 +80,7 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
       console.log("guard clause activated");
       return;
     }
-    const newDate: string = formatDate(selectedDateObject.getFullYear(), selectedDateObject.getMonth(), selectedDateObject.getDate()); 
+    const newDate: string = formatDate(selectedDateObject.getFullYear(), selectedDateObject.getMonth(), selectedDateObject.getDate());
     // Out API calls still use 1-index for month
     const oneIndexedNewDate: string = formatDate(selectedDateObject.getFullYear(), selectedDateObject.getMonth() + 1, selectedDateObject.getDate());
     if (isPickingStart) {
@@ -89,7 +89,7 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
       if (selectedDateObject > endDateObject) {
         setEndDate(oneIndexedNewDate);
         setLocalEndDate(newDate);
-      } 
+      }
     } else {
       setEndDate(oneIndexedNewDate);
       setLocalEndDate(newDate);
@@ -150,7 +150,7 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
     // console.log(startDate);
     // console.log(endDate);
     return date >= startDate && date <= endDate;
-  } 
+  }
 
   const dates1 = generateDatesForMonth(selectedYear, selectedMonth);
   const dates2 = generateDatesForMonth(selectedYear2, selectedMonth2);
@@ -187,10 +187,10 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
           const dateObject = getDateFromNumber(selectedYear, selectedMonth, date);
           const inRange = isDateInRange(dateObject, localStartDate, localEndDate);
           const buttonStyle = inRange ? tw`bg-blue-500` : tw``;
-          
+
           return (
-            <TouchableOpacity 
-              key={`${date}-${index}`} 
+            <TouchableOpacity
+              key={`${date}-${index}`}
               onPress={() => handleDateChange(selectedYear, selectedMonth, date)}
               style={tw.style(`w-1/7 p-2 border border-gray-400 rounded-lg`, buttonStyle)}>
               <Text style={tw`text-center text-base`}>{date}</Text>
@@ -209,10 +209,10 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
           const dateObject = getDateFromNumber(selectedYear2, selectedMonth2, date);
           const inRange = isDateInRange(dateObject, localStartDate, localEndDate);
           const buttonStyle = inRange ? tw`bg-blue-500` : tw``;
-          
+
           return (
-            <TouchableOpacity 
-              key={`${date}-${index}`} 
+            <TouchableOpacity
+              key={`${date}-${index}`}
               onPress={() => handleDateChange(selectedYear2, selectedMonth2, date)}
               style={tw.style(`w-1/7 p-2 border border-gray-400 rounded-lg`, buttonStyle)}>
               <Text style={tw`text-center text-base`}>{date}</Text>
