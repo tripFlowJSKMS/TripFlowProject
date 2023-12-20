@@ -1,10 +1,7 @@
-import { Link } from "expo-router";
-import { useState } from "react";
-import { ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 
 export default function ItineraryComponent() {
-    const [value, setValue] = useState("");
 
     return (
       <TouchableOpacity style={tw`flex rounded shadow-lg h-75 w-65 mr-5 mb-20`}>

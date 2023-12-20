@@ -13,15 +13,15 @@ import { setIndividualEventArr } from '@/lib/reducers/individualEventArrReducer'
 const FileUpload = () => {
   const [file, setFile] = useState(null);
   const dispatch = useDispatch();
-  
+
   const onDrop = useCallback(async (acceptedFiles: Blob[]) => {
     let individualEventArr: GPTScrapedEventType[] = [];
-    // Keep to 1 file for MVP 
+    // Keep to 1 file for MVP
     const uploadedFile = acceptedFiles[0];
     setFile(uploadedFile);
     const reader = new FileReader();
     const fileType = uploadedFile.name.split('.').pop().toLowerCase();
-  
+
     reader.onload = async (event) => {
       const arrayBuffer = event.target.result as ArrayBuffer;
       if (arrayBuffer) {
@@ -52,14 +52,14 @@ const FileUpload = () => {
           // Can deal with the (.approx) more meaningfully after MVP
           let time: string = itemSegmented[1].replace(/\(\.approx\)/g, "");
           let event: string = itemSegmented[2];
-          const individualEvent: GPTScrapedEventType = {date, time, event}; 
+          const individualEvent: GPTScrapedEventType = {date, time, event};
           individualEventArr.push(individualEvent);
         });
 
-        
+
         console.log(individualEventArr);
         dispatch(setIndividualEventArr(individualEventArr));
-        console.log("successfully dispatched");          
+        console.log("successfully dispatched");
       }
     };
 
@@ -74,16 +74,16 @@ const FileUpload = () => {
       // For PDF, you would send the file to a server-side endpoint
       // uploadPdfToServer(file);
     }
-    
+
   }, []);
-  
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: false
   });
 
   return (
-    <div style={tw`p-5 border-2 border-dashed border-gray-400 rounded-lg mr-[8%] mt-[20%] absolute right-0`} {...getRootProps()}>
+    <div style={tw`p-5 border-2 border-dashed border-gray-400 rounded-lg`} {...getRootProps()}>
       <input {...getInputProps()} />
       <Text style={tw`text-gray-700 text-center`}>Drop the file here or click to select a file</Text>
       {file && (

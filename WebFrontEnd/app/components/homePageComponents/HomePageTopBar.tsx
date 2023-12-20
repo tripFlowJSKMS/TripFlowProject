@@ -9,7 +9,7 @@ export default function HomePageTopBar() {
 
   return (
     <View style={tw`flex flex-row items-center w-full justify-between p-3`}>
-      <Text style={tw`text-xl font-bold m-2`}>TripFlow</Text>
+      <Text style={tw`text-xl font-bold`}>TripFlow</Text>
       <View style={tw`flex flex-row`}>
         <TouchableOpacity onPress={() => navigation.navigate('StartPlanning')}>
           <Text style={tw`text-4xl font-semibold mx-5`}>+</Text>

@@ -171,7 +171,7 @@ export default function DatePicker({ currentDate, startDate, endDate, setStartDa
       </View>
 
       {/* Day Headers */}
-      <View style={tw`flex flex-row justify-around py-[3%]`}>
+      <View style={tw`flex flex-row justify-around py-3`}>
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
           <Text key={day} style={tw`font-semibold text-gray-600 text-xs`}>{day}</Text>
         ))}

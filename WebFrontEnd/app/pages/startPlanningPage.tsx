@@ -11,9 +11,6 @@ import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOf
 import { startPlanning } from "@/api/startPlanning";
 import { useDispatch } from "react-redux";
 import { setStartPlanningOutputDestinations } from "@/lib/reducers/startPlanningOutputDestinationReducer";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@/lib/navigation";
 import formatDate from "../helpers/formatDate";
 import {
   AreasOfInterestType,
@@ -23,7 +20,7 @@ import {
 } from "../../../Shared/types";
 import { setTravellingPreferences } from "@/lib/reducers/travellingPreferencesReducer";
 
-export default function StartPlanningPage() {
+export default function StartPlanningPage({ navigation }) {
   const paxOptions: PaxNumberType[] = ["1", "2", "3-5", "6 or more"];
   const dietaryPreferences: DietaryPreferenceType[] = ["Normal", "Vegetarian", "Halal", "Vegan"];
 
@@ -41,8 +38,6 @@ export default function StartPlanningPage() {
   const [pace, setPace] = useState<ScheduleType>("Normal");
   const [areasOfInterests, setAreasOfInterests] = useState<Array<AreasOfInterestType>>([]);
   const dispatch = useDispatch();
-
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleStartPlanning = async () => {
     try {
@@ -70,11 +65,11 @@ export default function StartPlanningPage() {
   };
 
   return (
-    <View style={tw`items-center`}>
+    <View style={tw`flex items-center`}>
       <TopBar />
       <View style={tw`flex flex-row justify-between w-9/12 m-15`}>
-        <View style={tw`w-4/12`}>
-          <Text style={tw`font-bold text-4xl`}>Your ideal trip awaits</Text>
+        <View style={tw`md:w-full w-4/12`}>
+          <Text style={tw`font-bold text-4xl`}>Your Ideal Trip Awaits</Text>
           <DatePicker currentDate={currentDate} startDate={startDate} endDate={endDate} setStartDate={setStartDate}
             setEndDate={setEndDate} />
           <TripTimingsPicker selectedStartTime={startTime} selectedEndTime={endTime} onStartTimeChange={setStartTime} onEndTimeChange={setEndTime} />

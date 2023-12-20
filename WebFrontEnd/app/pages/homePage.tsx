@@ -10,15 +10,17 @@ export default function HomePage() {
         <View style={tw`flex items-center`}>
           <HomePageTopBar />
           <HomePageDashboard />
-          <View style={tw`w-9/12`}>
-            <Text style={tw`w-50% text-xl font-bold w-full mt-4 mb-4`}>Check out these itineraries</Text>
-            <View style={tw`flex flex-row flex-wrap`}>
-              <ItineraryComponent />
-              <ItineraryComponent />
-              <ItineraryComponent />
+          <View style={tw`flex flex-row w-9/12 justify-between items-center`}>
+            <View style={tw`w-9/12`}>
+              <Text style={tw`text-xl font-bold mt-4 mb-4`}>Check Out These Itineraries</Text>
+              <View style={tw`flex flex-row flex-wrap`}>
+                <ItineraryComponent />
+                <ItineraryComponent />
+                <ItineraryComponent />
+              </View>
             </View>
+            <FileUpload/>
           </View>
-          <FileUpload/>
         </View>
       );
 }

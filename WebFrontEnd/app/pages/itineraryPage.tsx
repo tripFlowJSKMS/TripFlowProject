@@ -12,7 +12,7 @@ export default function ItineraryPage() {
   // Retrieve the finalItinerary from the Redux store
   const finalItinerary = useSelector((state: RootState) => state.itineraryInputDestination.itinerary);
   const travellingPreferences = useSelector((state: RootState) => state.travellingPreferences.travellingPreferences);
-  // Retrieve the fixed plans which the users have made already 
+  // Retrieve the fixed plans which the users have made already
   const fixedPlansItems = useSelector((state: RootState) => state.individualEventArr.allEvents);
   console.log(fixedPlansItems);
   const totalSlots = (travellingPreferences.endTime - travellingPreferences.startTime) / 30;
@@ -28,7 +28,7 @@ export default function ItineraryPage() {
         <View>
           <View style={tw`flex-row`}>
             {timeSlots.map(time =>
-              <Text style={tw`w-40`}>{time}</Text>
+              <Text style={tw`w-20`}>{time}</Text>
             )}
           </View>
           <View style={tw`flex-row my-10`}>

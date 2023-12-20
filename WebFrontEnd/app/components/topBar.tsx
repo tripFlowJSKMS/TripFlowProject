@@ -6,7 +6,7 @@ import { Link } from "expo-router";
 export default function TopBar() {
   return (
     <View style={tw`flex-row w-full items-center justify-between p-6 bg-black`}>
-      <View style={tw`flex-row border-red-700`}>
+      <View style={tw`flex-row`}>
         <Text style={tw`text-lg font-semibold mx-2 text-white`}>TripFlow</Text>
         <Link href="/pages/Page1">
           <Text style={tw`text-lg font-semibold mx-2 text-white`}>About Us</Text>
