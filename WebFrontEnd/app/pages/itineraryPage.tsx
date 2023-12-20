@@ -5,7 +5,6 @@ import { RootState } from '@/lib/reducers/reducers';
 import tw from "twrnc";
 import DestinationInSchedule from '../components/itineraryPageComponents/destinationInSchedule';
 import TopBar from '../components/topBar';
-import formatTime from '../helpers/formatTime';
 import createTimeSlots from '../helpers/createTimeSlots';
 
 export default function ItineraryPage() {
@@ -15,11 +14,8 @@ export default function ItineraryPage() {
   // Retrieve the fixed plans which the users have made already
   const fixedPlansItems = useSelector((state: RootState) => state.individualEventArr.allEvents);
   console.log(fixedPlansItems);
-  const totalSlots = (travellingPreferences.endTime - travellingPreferences.startTime) / 30;
 
-  const startTimeFormatted: string = formatTime(travellingPreferences.startTime);
-  const endTimeFormatted: string = formatTime(travellingPreferences.endTime);
-  const timeSlots = createTimeSlots(startTimeFormatted, endTimeFormatted);
+  const timeSlots = createTimeSlots(travellingPreferences.startTime, travellingPreferences.endTime);
 
   return (
     <View style={tw`h-full`}>
@@ -28,7 +24,7 @@ export default function ItineraryPage() {
         <View>
           <View style={tw`flex-row`}>
             {timeSlots.map(time =>
-              <Text style={tw`w-20`}>{time}</Text>
+              <Text key={time} style={tw`w-20`}>{time}</Text>
             )}
           </View>
           <View style={tw`flex-row my-10`}>
