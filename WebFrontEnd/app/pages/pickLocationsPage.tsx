@@ -16,13 +16,12 @@ import { setPickLocationsOutputDestinations } from "@/lib/reducers/pickLocations
 import { setEditLocationsInputDestinations } from "@/lib/reducers/editLocationsInputDestinationReducer";
 import { pickLocations } from "@/api/pickLocations";
 
-export default function PickLocationsPage() {
+export default function PickLocationsPage({ navigation }) {
 
   const destinationsData: StartPlanningOutputType = useSelector((state: RootState) => state.startPlanningOutputDestination.destinations);
   const [selectedDestinations, setSelectedDestinations] = useState<DestinationType[]>([]);
   const dispatch = useDispatch();
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const navigateToEditLocationsPage = () => {
     navigation.navigate("EditLocations");
   };

@@ -22,7 +22,6 @@ import PaxPicker from "../components/startPlanningComponents/PaxPicker";
 import DietaryPreferencePicker from "../components/startPlanningComponents/DietaryPreferencePicker";
 
 export default function StartPlanningPage({ navigation }) {
-
   const currentDateCopy = new Date();
   const currentDate= formatDate(currentDateCopy.getFullYear(), currentDateCopy.getMonth(), currentDateCopy.getDate());
   const [startDate, setStartDate] = useState(currentDate);

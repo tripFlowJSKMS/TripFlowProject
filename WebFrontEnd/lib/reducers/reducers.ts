@@ -6,6 +6,7 @@ import itineraryInputDestinationReducer, { ItineraryInputDestinationState } from
 import editLocationsOutputDestinationReducer, { EditLocationsOutputDestinationState } from './editLocationsOutputDestinationReducer';
 import travellingPreferencesReducer, { TravellingPreferencesState } from './travellingPreferencesReducer';
 import individualEventArrReducer, { IndividualEventArrState } from './individualEventArrReducer';
+import destinationNotesReducer, { DestinationNotesState } from './destinationNotesReducer';
 
 const rootReducer = combineReducers({
   travellingPreferences: travellingPreferencesReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   editLocationsOutputDestination: editLocationsOutputDestinationReducer,
   itineraryInputDestination: itineraryInputDestinationReducer,
   individualEventArr: individualEventArrReducer,
+  destinationNotes: destinationNotesReducer
 });
 
 export type RootState = {
@@ -25,6 +27,7 @@ export type RootState = {
   editLocationsOutputDestination: EditLocationsOutputDestinationState;
   itineraryInputDestination: ItineraryInputDestinationState;
   individualEventArr: IndividualEventArrState;
+  destinationNotes: DestinationNotesState;
 }
 
 export default rootReducer;

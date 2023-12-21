@@ -16,6 +16,7 @@ import TopBar from '../components/topBar';
 import DashBoard from '../components/dashBoard';
 import LocationComponent from '../components/locationComponent';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { setDestinationNotes } from '@/lib/reducers/destinationNotesReducer';
 
 export default function EditLocationsPage() {
 
@@ -50,6 +51,7 @@ export default function EditLocationsPage() {
       console.log("INSPECTOR LOG: Generated Itinerary for user to be displated");
       console.log(finalItinerary);
       dispatch(setItineraryInputDestinations(finalItinerary));
+      dispatch(setDestinationNotes(finalItinerary));
       console.log("INSPECTOR LOG: Navigating to Itinerary Page");
       navigateToItineraryPage();
     } catch (error) {

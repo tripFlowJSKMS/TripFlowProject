@@ -8,13 +8,12 @@ import TopBar from '../components/topBar';
 import { createTimeSlots } from '../helpers/dateTimeHelpers/dateTimeFunctions';
 
 export default function ItineraryPage() {
+  const travellingPreferences = useSelector((state: RootState) => state.travellingPreferences.travellingPreferences);
   // Retrieve the finalItinerary from the Redux store
   const finalItinerary = useSelector((state: RootState) => state.itineraryInputDestination.itinerary);
-  const travellingPreferences = useSelector((state: RootState) => state.travellingPreferences.travellingPreferences);
   // Retrieve the fixed plans which the users have made already
   const fixedPlansItems = useSelector((state: RootState) => state.individualEventArr.allEvents);
-  console.log(fixedPlansItems);
-
+  const destinationNotes = useSelector((state: RootState) => state.destinationNotes.destinationNotes);
   const timeSlots = createTimeSlots(travellingPreferences.startTime, travellingPreferences.endTime);
 
   return (
@@ -29,7 +28,7 @@ export default function ItineraryPage() {
           </View>
           <View style={tw`flex-row my-10`}>
             {finalItinerary.map(item =>
-              <DestinationInSchedule firstTimeSlot={travellingPreferences.startTime} destination={item.destination} startingTime={item.startingTime} endingTime={item.endingTime} />
+              <DestinationInSchedule key={item.destination.id} destinationNotes={destinationNotes[item.destination.name]} firstTimeSlot={travellingPreferences.startTime} destination={item.destination} startingTime={item.startingTime} endingTime={item.endingTime} />
             )}
           </View>
         </View>
