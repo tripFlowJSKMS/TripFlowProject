@@ -3,14 +3,20 @@ import { Edge } from "./Edge";
 
 export class DestinationNode {
     private destination: Destination;
+    private stringDate: string;
     private startTime: number;
     private endTime: number;
     private outgoingEdgeList: Edge[] = [];
 
-    constructor(destination: Destination, startTime: number, endTime: number) {
+    constructor(destination: Destination, stringDate: string, startTime: number, endTime: number) {
+        this.stringDate = stringDate;
         this.destination = destination;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    getStringDate(): string { 
+        return this.stringDate;
     }
 
     getStartTime(): number {
@@ -33,7 +39,7 @@ export class DestinationNode {
         return this.outgoingEdgeList;
     }
 
-    noTimeClash(destinationNode: DestinationNode, dayEndTime: number): boolean {
+    noTimeLimitClash(destinationNode: DestinationNode, dayEndTime: number): boolean {
         return this.destination.isPossiblePlan(this.endTime, destinationNode.startTime, dayEndTime, destinationNode.destination);
     }
 
@@ -41,8 +47,8 @@ export class DestinationNode {
         return this.destination == node.destination;
     }
 
-    itineraryFormat(): {destination: Destination, startingTime: number, endingTime: number} {
-        return this.destination.itineraryFormat(this.startTime, this.endTime);
+    itineraryFormat(): {destination: Destination, stringDate: string, startingTime: number, endingTime: number} {
+        return this.destination.itineraryFormat(this.stringDate, this.startTime, this.endTime);
     }
 
 }

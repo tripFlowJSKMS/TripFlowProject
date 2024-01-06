@@ -43,15 +43,15 @@ function createItinerary(locationName: string, openingTime: number,
   return newInformation;
 }
 
-export function getAllItinerary() {
+export function getAllDestinations() {
   const allItinerary = prisma.itineraryMatrix.findMany();
   return allItinerary;
 }
 
 async function run() {
-  const allItinerary = await getAllItinerary();
-  console.log("All Itineraries:");
-  console.log(allItinerary);
+  const allDestinations = await getAllDestinations();
+  console.log("All Destinations:");
+  console.log(allDestinations);
 }
 
 // // Call the run function to print out all the output

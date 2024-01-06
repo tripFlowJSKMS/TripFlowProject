@@ -2,10 +2,14 @@ import z from "zod";
 import "dotenv/config";
 import {
   getAllInformation,
-  getAllItinerary,
+  getAllDestinations,
 } from "../../Shared/prisma/prismaCode/main";
 import { Destination } from "./Destination";
-import { planItinerary } from "./helperFunctions";
+import { 
+  planItinerary,
+  getDateFromString,
+  calculateTotalTravellingDays,  
+} from "./helperFunctions";
 import {
   RegistrationDetailsType,
   RecalibrateItineraryType,
@@ -15,11 +19,12 @@ import {
 import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlanning";
 import { EditLocationsInputType } from "../../Shared/types/pickLocations";
 import { TripFlowAlgorithmType } from "../../Shared/types/editLocations";
+import { GPTScrapedEventType } from "../../Shared/types/callGPT";
 
 const RELAXED_MULTIPLIER: number = 1.25;
 const PACKED_MULTIPLIER: number = 0.75;
 
-// Let's assume for every additional day they are touring, we generate 10 more destinations for them to choose from
+// Let's assume for every additional day they are touring, we generate 3 more destinations for them to choose from
 const GENERATE_DESTINATIONS_MULTIPLIER: number = 3;
 let name: string;
 let startDate: string;
@@ -35,6 +40,21 @@ let pace: string;
 let desirableDestinations: Destination[];
 let selectedDestinations: Set<number>;
 let selectedCharacteristics: Map<string, number>;
+let dateTimePrePlannedEvents: Map<string, [string, string][]> = new Map();
+
+export async function storePrePlannedEvents(events: GPTScrapedEventType[]) {
+  events.forEach((prePlannedEvent) => {
+    const {
+      date,
+      time, 
+      event,
+    } = prePlannedEvent; 
+
+    let dateEvents = dateTimePrePlannedEvents.get(date) || [];
+    dateEvents.push([time, event]);
+    dateTimePrePlannedEvents.set(date, dateEvents);
+  });
+}
 
 export async function tripFlowAlgorithm(
   details: TripFlowAlgorithmType
@@ -71,7 +91,7 @@ export async function tripFlowAlgorithm(
     endingTime: number;
   }> = [];
   try {
-    itinerary = planItinerary(destinationArr, startTime, endTime);
+    itinerary = planItinerary(destinationArr, startDate, endDate, startTime, endTime, dateTimePrePlannedEvents);
   } catch (error) {
     console.error("Error validating itinerary details:", error);
   }
@@ -118,8 +138,8 @@ export async function generateDesirableDestinations(
   desirableDestinations = [];
 
   try {
-    const itineraryData: any[] = await getAllItinerary();
-    itineraryData.forEach((itinerary) => {
+    const destinationData: any[] = await getAllDestinations();
+    destinationData.forEach((destination) => {
       const {
         id,
         locationName,
@@ -129,7 +149,7 @@ export async function generateDesirableDestinations(
         characteristics,
         longitude,
         latitude,
-      } = itinerary;
+      } = destination;
 
       let actualTimeRequired: number = timeRequired;
 
@@ -141,7 +161,7 @@ export async function generateDesirableDestinations(
         actualTimeRequired = timeRequired;
       }
 
-      const destination: Destination = new Destination(
+      const destinationData: Destination = new Destination(
         id,
         locationName,
         openingTime,
@@ -153,9 +173,9 @@ export async function generateDesirableDestinations(
       );
 
       // change this as a parameter later
-      destination.setWeight(areasOfInterests);
+      destinationData.setWeight(areasOfInterests);
 
-      desirableDestinations.push(destination);
+      desirableDestinations.push(destinationData);
     });
   } catch (error) {
     console.error("Error fetching itinerary data:", error);
@@ -167,8 +187,7 @@ export async function generateDesirableDestinations(
     return weightB - weightA; // Sort in descending order
   });
 
-  // const numberOfDays: number = endDate - startDate
-  const numberOfDays: number = 1; // for MVP
+  const numberOfDays: number = calculateTotalTravellingDays(startDate, endDate);
   const totalNumberRecommended: number =
     numberOfDays * GENERATE_DESTINATIONS_MULTIPLIER;
 
@@ -273,7 +292,7 @@ export async function recalibrate(
       endingTime: number;
     }> = [];
     try {
-      itinerary = planItinerary(remainingDestinations, currentTime, endTime);
+      itinerary = planItinerary(remainingDestinations, startDate, endDate, startTime, endTime, dateTimePrePlannedEvents);
     } catch (error) {
       console.error("Error validating itinerary details:", error);
     }

@@ -4,19 +4,73 @@ import { Edge } from "./Edge";
 
 var earliestNodes: DestinationNode[] = [];
 var allPaths: [DestinationNode[], number][] = [];
- 
-export function planItinerary(destinations: Destination[], startTime: number, endTime: number): Array<{destination: Destination, startingTime: number, endingTime: number}> {
-  const nodes: DestinationNode[] = createNodes(destinations, startTime);
+// At some point we will replace this with actual coordinates by parsing in the user's travel plan to google maps api
+const DUMMY_GPT_LONGITUDE: number = -122.42;
+const DUMMY_GPT_LATITUDE: number = 37.78;
+
+export function getDateFromString(ymd: string): Date {
+  // E.g. 2023-12-29
+  // month in a JavaScript Date object is zero-indexed so need to -1 (if not done before)
+  return new Date(parseInt(ymd.substring(0,4)), parseInt(ymd.substring(5,7)) - 1, parseInt(ymd.substring(8,10)));
+}
+
+export function calculateTotalTravellingDays(startDate: string, endDate: string): number {
+  return ((getDateFromString(endDate).getTime() - getDateFromString(startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1
+}
+
+export function addDaysToStringDate(dateStr: string, daysToAdd: number): string {
+  const date = new Date(dateStr);
+  date.setDate(date.getDate() + daysToAdd);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+export function timeToMinutes(time: string): number {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+export function planItinerary(
+  destinations: Destination[], 
+  startDate: string, 
+  endDate: string, 
+  startTime: number, 
+  endTime: number, 
+  dateTimePrePlannedEvents: Map<string, [string, string][]>
+  ): Array<{destination: Destination, startingTime: number, endingTime: number}> {
+
+  const prePlannedEventsTimeSlots: Map<string, [number, number, string][]> = extractGptTimeOutput(dateTimePrePlannedEvents);
+  const nodes: DestinationNode[] = createNodes(destinations, startDate, endDate, startTime, endTime, prePlannedEventsTimeSlots);
   createEdges(nodes, endTime);
-  const supernode: DestinationNode = createSuperNode(endTime);
+  const supernode: DestinationNode = createSuperNode(startDate, endTime);
   traversal(supernode, [], [], 0);
   const heaviestPath: DestinationNode[] = quickSelect(allPaths, allPaths.length - 1) as DestinationNode[];
   const itinerary: Array<{destination: Destination, startingTime: number, endingTime: number}> = generateItinerary(heaviestPath);
   return itinerary;
 }
 
-function generateItinerary(nodes: DestinationNode[]): Array<{destination: Destination, startingTime: number, endingTime: number}> {
-  const itinerary: Array<{destination: Destination, startingTime: number, endingTime: number}> = [];
+// Date: [Time, Event] => Date: [StartTime, EndTime, Event]
+function extractGptTimeOutput(
+  dateTimePrePlannedEvents: Map<string, [string, string][]>
+  ): Map<string, [number, number, string][]> {
+  const convertedEvents = new Map<string, [number, number, string][]>();
+
+  dateTimePrePlannedEvents.forEach((timeEvents, date) => {
+    const convertedTimeEvents: [number, number, string][] = timeEvents.map(([startEndTime, eventName]) => {
+      const startTime: number = timeToMinutes(startEndTime.substring(0,5));
+      const endTime: number = timeToMinutes(startEndTime.substring(6,11));
+      return [startTime, endTime, eventName];
+    });
+    convertedEvents.set(date, convertedTimeEvents);
+  });
+
+  return convertedEvents;
+}
+
+function generateItinerary(nodes: DestinationNode[]): Array<{destination: Destination, stringDate: string, startingTime: number, endingTime: number}> {
+  const itinerary: Array<{destination: Destination, stringDate: string, startingTime: number, endingTime: number}> = [];
   for (let i = 0; i < nodes.length; i++) {
     itinerary[i] = nodes[i].itineraryFormat();
   }
@@ -118,10 +172,10 @@ function isFeasibleEdge(sourceNode: DestinationNode, destinationNode: Destinatio
   if (sourceNode.equals(destinationNode)) {
     return false;
   }
-  return sourceNode.noTimeClash(destinationNode, dayEndTime);
+  return sourceNode.noTimeLimitClash(destinationNode, dayEndTime);
 }
 
-function createSuperNode(endTime: number): DestinationNode {
+function createSuperNode(stringDate: string, endTime: number): DestinationNode {
   // Find the earliest start time among all nodes. The supernode only needs to connect
   // to the earliest DestinationNode for each Destination to save computation time.
 
@@ -135,7 +189,7 @@ function createSuperNode(endTime: number): DestinationNode {
 
   // Create the supernode with the earliest start time
   const dummyDestination: Destination = new Destination(0, "Supernode", earliestStartTime, earliestStartTime, 0, [], 0, 0);
-  const supernode: DestinationNode = new DestinationNode(dummyDestination, earliestStartTime, earliestStartTime);
+  const supernode: DestinationNode = new DestinationNode(dummyDestination, stringDate, earliestStartTime, earliestStartTime);
 
   // Add edges from the supernode to the earliest node of each destination
   for (const startNode of earliestNodes) {
@@ -158,20 +212,69 @@ function createEdges(destinationNodes: DestinationNode[], endTime: number): void
 
 // The difference between Destination and DestinationNode is that there is only ONE destination.
 // However, each destination will have many nodes because of the timeslot we visit it.
-function createNodes(destinations: Destination[], startTime: number): DestinationNode[] {
+function createNodes(destinations: Destination[], startDateString: string, endDateString: string, startTime: number, endTime: number, prePlannedEventsTimeSlots: Map<string, [number, number, string][]>): DestinationNode[] {
+  const travellingDays: number = calculateTotalTravellingDays(startDateString, endDateString);
+  const tripFlowNodes: DestinationNode[] = createTripFlowNodes(travellingDays, destinations, startDateString, endDateString, startTime, endTime, prePlannedEventsTimeSlots);
+  const gptNodes: DestinationNode[] = createGptNodes(prePlannedEventsTimeSlots);
+  console.log("GPT nodes created");
+  console.log(gptNodes);
+  return tripFlowNodes.concat(gptNodes);
+}
+
+function createGptNodes(prePlannedEventsTimeSlots: Map<string, [number, number, string][]>) {
   const nodes: DestinationNode[] = [];
-  for (const destination of destinations) {
-      const numTimeSlots: number = destination.calculateNumTimeSlots();
-      let earliestPossibleNode: boolean = true;
-      for (let i = 0; i < numTimeSlots; i++) {
-          const node: DestinationNode = destination.generateNode(i); 
-          nodes.push(node);
-          if (node.getStartTime() >= startTime && earliestPossibleNode) {
-            earliestNodes.push(node);
-            earliestPossibleNode = false;
-          }
+  let dummyId: number = -1;
+  prePlannedEventsTimeSlots.forEach((startEndEvents, date) => {
+    startEndEvents.forEach(([prePlannedStartTime, prePlannedEndTime, eventName]) => {
+      const duration: number = prePlannedEndTime - prePlannedStartTime;
+      // dummy ids
+      const destination: Destination = new Destination(
+        dummyId, 
+        eventName, 
+        prePlannedStartTime, 
+        prePlannedEndTime, 
+        duration,
+        [],
+        DUMMY_GPT_LONGITUDE,
+        DUMMY_GPT_LATITUDE,
+      );
+      dummyId--;
+
+      // 0 for timeslot multiplier
+      const node: DestinationNode | null = destination.generateNode(date, 0, prePlannedEventsTimeSlots, true); 
+      if (node != null) {
+        nodes.push(node);
       }
+    });
+  });
+  return nodes;
+}
+
+function createTripFlowNodes(travellingDays: number, destinations: Destination[], startDateString: string, endDateString: string, startTime: number, endTime: number, prePlannedEventsTimeSlots: Map<string, [number, number, string][]>): DestinationNode[] {
+  const nodes: DestinationNode[] = [];
+
+  for (const destination of destinations) {
+    const numTimeSlots: number = destination.calculateNumTimeSlots();
+    let earliestPossibleNode: boolean = true;
+    const destinationTourDuration: number = destination.getTourDuration();
+    for (let d = 0; d < travellingDays; d++) {
+      for (let i = 0; i < numTimeSlots; i++) {
+        const currStringDate: string = addDaysToStringDate(startDateString, d);
+        const node: DestinationNode | null = destination.generateNode(currStringDate, i, prePlannedEventsTimeSlots, false); 
+        if (node == null) {
+          continue;
+        }
+        nodes.push(node);
+        // if this node falls within the user specified time range and COULD be the earliestPossibleNode for the particular Destination 
+        const nodeStartTime: number = node.getStartTime();
+        if ((nodeStartTime >= startTime) && (nodeStartTime + destinationTourDuration <= endTime) && (earliestPossibleNode)) {
+          earliestNodes.push(node);
+          earliestPossibleNode = false;
+        }
+      }
+    }  
   }
+
   return nodes;
 }
   

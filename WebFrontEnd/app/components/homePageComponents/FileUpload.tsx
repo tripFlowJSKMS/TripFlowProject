@@ -15,7 +15,6 @@ const FileUpload = () => {
   const dispatch = useDispatch();
 
   const onDrop = useCallback(async (acceptedFiles: Blob[]) => {
-    let individualEventArr: GPTScrapedEventType[] = [];
     // Keep to 1 file for MVP
     const uploadedFile = acceptedFiles[0];
     setFile(uploadedFile);
@@ -43,23 +42,8 @@ const FileUpload = () => {
           // uploadPdfToServer(file);
         }
 
-        const response = await callGPT(textContent);
-        const responseSegmented: string[] = response.split("\n");
-        responseSegmented.forEach((item) => {
-          const itemSegmented: string[] = item.split(",").map(item => item.trim());
-          // remove the leading '- '
-          let date: string = itemSegmented[0].substring(2,);
-          // Can deal with the (.approx) more meaningfully after MVP
-          let time: string = itemSegmented[1].replace(/\(\.approx\)/g, "");
-          let event: string = itemSegmented[2];
-          const individualEvent: GPTScrapedEventType = {date, time, event};
-          individualEventArr.push(individualEvent);
-        });
-
-
-        console.log(individualEventArr);
-        dispatch(setIndividualEventArr(individualEventArr));
-        console.log("successfully dispatched");
+        callGPT(textContent);
+        
       }
     };
 
