@@ -81,10 +81,43 @@ export class Destination {
       return numTimeSlots
     }
 
-    generateNode(timeslotMultiplier: number): DestinationNode {
+    generateNode(stringDate: string, timeslotMultiplier: number, prePlannedEventsTimeSlots: Map<string, [number, number, string][]>, isGptNode: boolean): DestinationNode | null {
       const startTime: number = this.openingTime + (timeslotMultiplier * this.TIME_SLOT);
       const endTime: number = startTime + this.tourDuration;
-      return new DestinationNode(this, startTime, endTime);
+      if (isGptNode) {
+        return new DestinationNode(this, stringDate, startTime, endTime);
+      }
+      if (!prePlannedEventsTimeSlots.has(stringDate)) {
+        return new DestinationNode(this, stringDate, startTime, endTime);
+      }
+      console.log(prePlannedEventsTimeSlots);
+      console.log(stringDate);
+      const currDayPrePlannedEventsArr: [number, number, string][] | undefined = prePlannedEventsTimeSlots.get(stringDate);
+      console.log(currDayPrePlannedEventsArr);
+
+      if (!currDayPrePlannedEventsArr) {
+        console.log("SHOULDNT REACH HERE");
+        console.log("No preplanned events found for the given date");
+        return new DestinationNode(this, stringDate, startTime, endTime);
+      }
+
+      for (const [prePlannedStartTime, prePlannedEndTime, eventName] of currDayPrePlannedEventsArr) {
+        if (prePlannedStartTime === undefined || prePlannedEndTime === undefined) {
+          console.log("Invalid event time for " + eventName);
+          continue; // Skip this iteration due to invalid data
+        }
+    
+        if (startTime >= prePlannedEndTime) {
+          return new DestinationNode(this, stringDate, startTime, endTime);
+        }
+    
+        if (endTime <= prePlannedStartTime) {
+          return new DestinationNode(this, stringDate, startTime, endTime);
+        }
+      }
+    
+      return null;
+
     }
 
     getTravelTime(destination: Destination): number {
@@ -130,8 +163,8 @@ export class Destination {
           (leaveSourceTime + travellingTime <= reachDestinationTime);
     }
 
-    itineraryFormat(startTime: number, endTime: number): {destination: Destination, startingTime: number, endingTime: number} {
-      return {destination: this, startingTime: startTime, endingTime: endTime};
+    itineraryFormat(stringDate: string, startTime: number, endTime: number): {destination: Destination, stringDate: string, startingTime: number, endingTime: number} {
+      return {destination: this, stringDate: stringDate, startingTime: startTime, endingTime: endTime};
     }
 
 }

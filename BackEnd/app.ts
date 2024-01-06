@@ -12,7 +12,7 @@ import { EditLocationsInputType, tripFlowAlgorithmType } from "../Shared/types/p
 import { editLocationsInputSchema } from "../Shared/types/pickLocations";
 
 import express from "express";
-import { recalibrate, tripFlowAlgorithm } from "./Algorithm/main";
+import { recalibrate, storePrePlannedEvents, tripFlowAlgorithm } from "./Algorithm/main";
 import OpenAI from "openai";
 
 var cors = require("cors");
@@ -28,6 +28,7 @@ import {
   bumpNeglectedPreferences,
 } from "./Algorithm/main";
 import { TripFlowAlgorithmType } from "../Shared/types/editLocations";
+import { GPTScrapedEventType } from "../Shared/types/callGPT";
 
 
 app.use(express.json());
@@ -49,7 +50,6 @@ app.post("/api/register", async (req, res) => {
 // Start Planning Page API
 app.post("/api/start-planning-page", async (req, res) => {
   try {
-    console.log(req.body);
     const validatedDetails: GenerateDesirableDestinationsType =
       generateDesirableDestinationsSchema.parse(req.body); 
     const destinations: Destination[] = await generateDesirableDestinations(
@@ -111,6 +111,7 @@ app.post("/api/recalibrate", async (req, res) => {
   }
 });
 
+// File Upload into GPT API 
 app.post("/api/callGPT", async (req, res) => {
   try {
     const response = await openai.chat.completions.create({
@@ -118,7 +119,7 @@ app.post("/api/callGPT", async (req, res) => {
       messages: [
         {
           "role": "system",
-          "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date (DD/MM format), Time (HH:MM format), Event. Infer the details where possible and indicate 'NIL' if any information is not available. Enumerate the items with a dash."
+          "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date (YYYY-MM-DD format), Time (HH:MM format), Event. Infer the details if any information is unavailable and never leave a field empty. Enumerate the items with a dash."
         },
         {
           "role": "user",
@@ -130,12 +131,29 @@ app.post("/api/callGPT", async (req, res) => {
     });
 
     let message: string = '';
+    let individualEventArr: GPTScrapedEventType[] = [];
     if (response.choices) {
       if (response.choices[0].message.content) {
         message = response.choices[0].message.content;
       }
     }
-    res.json(message);
+
+    const responseSegmented: string[] = message.split("\n");
+    responseSegmented.forEach((item) => {
+      const itemSegmented: string[] = item.split(",").map(item => item.trim());
+      // remove the leading '- '
+      let date: string = itemSegmented[0].substring(2,);
+      // Can deal with the (.approx) more meaningfully after MVP
+      let time: string = itemSegmented[1].replace(/\(\.approx\)/g, "");
+      let event: string = itemSegmented[2];
+      const individualEvent: GPTScrapedEventType = {date, time, event};
+      individualEventArr.push(individualEvent);
+    });
+
+    storePrePlannedEvents(individualEventArr);
+    // dispatch(setIndividualEventArr(individualEventArr));
+    // console.log("successfully dispatched");
+    // res.json(message);
 
   } catch (error) {
     console.error("Error calling GPT:", error);

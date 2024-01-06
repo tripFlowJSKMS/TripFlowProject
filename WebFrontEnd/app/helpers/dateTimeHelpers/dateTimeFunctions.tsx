@@ -17,7 +17,7 @@ export function createTimeIntervals(): { [timeString: string]: number } {
 export function timeToMinutes(time: string): number {
     const [hours, minutes] = time.split(":").map(Number);
     return hours * 60 + minutes;
-  }
+}
 
 // Converts time from mnutes to HH:MM
 export function formatTime(timeInMinutes: number) {
