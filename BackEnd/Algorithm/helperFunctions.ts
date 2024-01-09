@@ -39,7 +39,7 @@ export function planItinerary(
   startTime: number, 
   endTime: number, 
   dateTimePrePlannedEvents: Map<string, [string, string][]>
-  ): Array<{destination: Destination, startingTime: number, endingTime: number}> {
+  ): Array<{destination: Destination, stringDate: string, startingTime: number, endingTime: number}> {
 
   const prePlannedEventsTimeSlots: Map<string, [number, number, string][]> = extractGptTimeOutput(dateTimePrePlannedEvents);
   const nodes: DestinationNode[] = createNodes(destinations, startDate, endDate, startTime, endTime, prePlannedEventsTimeSlots);
@@ -47,7 +47,7 @@ export function planItinerary(
   const supernode: DestinationNode = createSuperNode(startDate, endTime);
   traversal(supernode, [], [], 0);
   const heaviestPath: DestinationNode[] = quickSelect(allPaths, allPaths.length - 1) as DestinationNode[];
-  const itinerary: Array<{destination: Destination, startingTime: number, endingTime: number}> = generateItinerary(heaviestPath);
+  const itinerary: Array<{destination: Destination, stringDate: string, startingTime: number, endingTime: number}> = generateItinerary(heaviestPath);
   return itinerary;
 }
 
@@ -166,11 +166,14 @@ function isFeasibleEdge(sourceNode: DestinationNode, destinationNode: Destinatio
   Check if the edge is feasible based on the time constraints and tour duration.
   Return true if the edge is feasible, false otherwise.
   An edge is feasible only when the DESTINATION can be toured for its full duration after
-  considering ALL time constraints (endTime of source, travelling time, tourDuration of
-  destination).
+  considering ALL time constraints (date of source end end, endTime of source, travelling time, tourDuration of
+  destination, etc.).
   */
   if (sourceNode.equals(destinationNode)) {
     return false;
+  }
+  if (getDateFromString(sourceNode.getStringDate()) < getDateFromString(destinationNode.getStringDate())) {
+    return true;
   }
   return sourceNode.noTimeLimitClash(destinationNode, dayEndTime);
 }
@@ -188,7 +191,7 @@ function createSuperNode(stringDate: string, endTime: number): DestinationNode {
   }
 
   // Create the supernode with the earliest start time
-  const dummyDestination: Destination = new Destination(0, "Supernode", earliestStartTime, earliestStartTime, 0, [], 0, 0);
+  const dummyDestination: Destination = new Destination(0, "Supernode", earliestStartTime, earliestStartTime, 0, [], 0, 0, false);
   const supernode: DestinationNode = new DestinationNode(dummyDestination, stringDate, earliestStartTime, earliestStartTime);
 
   // Add edges from the supernode to the earliest node of each destination
@@ -216,8 +219,6 @@ function createNodes(destinations: Destination[], startDateString: string, endDa
   const travellingDays: number = calculateTotalTravellingDays(startDateString, endDateString);
   const tripFlowNodes: DestinationNode[] = createTripFlowNodes(travellingDays, destinations, startDateString, endDateString, startTime, endTime, prePlannedEventsTimeSlots);
   const gptNodes: DestinationNode[] = createGptNodes(prePlannedEventsTimeSlots);
-  console.log("GPT nodes created");
-  console.log(gptNodes);
   return tripFlowNodes.concat(gptNodes);
 }
 
@@ -237,6 +238,7 @@ function createGptNodes(prePlannedEventsTimeSlots: Map<string, [number, number, 
         [],
         DUMMY_GPT_LONGITUDE,
         DUMMY_GPT_LATITUDE,
+        true
       );
       dummyId--;
 

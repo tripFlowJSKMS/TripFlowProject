@@ -1,4 +1,8 @@
+import { number } from "zod";
 import { DestinationNode } from "./DestinationNode";
+
+// Large weight value ensures that GPT destinations are ALWAYS chosen (to simulate business trip plans to be of top priority)
+const GPT_LARGE_WEIGHT_VALUE: number = 100;
 
 export class Destination {
     private id: number;
@@ -15,7 +19,7 @@ export class Destination {
   
     constructor(id: number, name: string, openingTime: number, 
         closingTime: number, tourDuration: number, characteristics: string[],
-        longitude: number, latitude: number) {
+        longitude: number, latitude: number, isGptDestination: boolean) {
       this.id = id;
       this.name = name;
       this.openingTime = openingTime;
@@ -24,6 +28,9 @@ export class Destination {
       this.characteristics = characteristics;
       this.longitude = longitude;
       this.latitude = latitude;
+      if (isGptDestination) {
+        this.weight = GPT_LARGE_WEIGHT_VALUE;
+      }
     }
 
     getLongitude(): number {
@@ -38,6 +45,7 @@ export class Destination {
       return this.weight;
     }
   
+    // Normal nodes will have a weight between 0-1
     setWeight(preferences: string[]): void {  
       let matchCount: number = 0;
       for (const preference of preferences) {
@@ -49,6 +57,11 @@ export class Destination {
       // Calculate the percentage match and store it in the weights map
       const percentageMatch: number = matchCount / preferences.length;
       this.weight = percentageMatch;
+    }
+
+    // Set to 100 by 
+    setTripFlowNodesWeight(numberWeight: number) {
+      this.weight = numberWeight;
     }
   
     getCharacteristics(): string[] {

@@ -12,9 +12,25 @@ export default function ItineraryPage() {
   // Retrieve the finalItinerary from the Redux store
   const finalItinerary = useSelector((state: RootState) => state.itineraryInputDestination.itinerary);
   // Retrieve the fixed plans which the users have made already
-  const fixedPlansItems = useSelector((state: RootState) => state.individualEventArr.allEvents);
+  // const fixedPlansItems = useSelector((state: RootState) => state.individualEventArr.allEvents);
   const destinationNotes = useSelector((state: RootState) => state.destinationNotes.destinationNotes);
   const timeSlots = createTimeSlots(travellingPreferences.startTime, travellingPreferences.endTime);
+
+  const getDateRangeArray = (startDate, endDate) => {
+    let dateArray = [];
+    let currentDate = new Date(startDate);
+    let end = new Date(endDate);
+
+    while (currentDate <= end) {
+      dateArray.push(currentDate.toISOString().split('T')[0]);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dateArray;
+  };
+  const dateRange = getDateRangeArray(travellingPreferences.startDate, travellingPreferences.endDate);
+  console.log(dateRange);
+
 
   return (
     <View style={tw`h-full`}>
