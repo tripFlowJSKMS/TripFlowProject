@@ -80,8 +80,10 @@ app.post("/api/planning-page", async (req, res) => {
     const validatedDetails: TripFlowAlgorithmType = tripFlowAlgorithmType.parse(
       req.body.selectedDestinations
     );
+    console.log(validatedDetails);
     const itinerary: Array<{
       destination: Destination;
+      stringDate: string;
       startingTime: number;
       endingTime: number;
     }> = await tripFlowAlgorithm(validatedDetails);

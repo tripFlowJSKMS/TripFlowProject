@@ -45,8 +45,6 @@ export default function EditLocationsPage() {
     dispatch(setEditLocationsOutputDestinations(selectedDestinations));
     const allDestinations: DestinationType[] = [...prevSelectedData, ...selectedDestinations];
     try {
-      console.log("INSPECTOR LOG: User's final selection of destinations");
-      console.log(allDestinations);
       const finalItinerary = await editLocations(allDestinations);
       console.log("INSPECTOR LOG: Generated Itinerary for user to be displated");
       console.log(finalItinerary);

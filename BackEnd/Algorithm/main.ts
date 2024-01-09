@@ -59,7 +59,7 @@ export async function storePrePlannedEvents(events: GPTScrapedEventType[]) {
 export async function tripFlowAlgorithm(
   details: TripFlowAlgorithmType
 ): Promise<
-  Array<{ destination: Destination; startingTime: number; endingTime: number }>
+  Array<{ destination: Destination; stringDate: string; startingTime: number; endingTime: number }>
 > {
   const destinationArr: Destination[] = details.map(
     (details) => {
@@ -81,12 +81,14 @@ export async function tripFlowAlgorithm(
         tourDuration,
         characteristics,
         longitude,
-        latitude
+        latitude,
+        false
       );
     }
   );
   let itinerary: Array<{
     destination: Destination;
+    stringDate: string;
     startingTime: number;
     endingTime: number;
   }> = [];
@@ -169,7 +171,8 @@ export async function generateDesirableDestinations(
         actualTimeRequired,
         characteristics.split(","),
         longitude,
-        latitude
+        latitude,
+        false
       );
 
       // change this as a parameter later
@@ -277,7 +280,8 @@ export async function recalibrate(
         tourDuration,
         characteristics,
         longitude,
-        latitude
+        latitude,
+        false
       );
     });
   const issue: RecalibrateType = details.issue;
