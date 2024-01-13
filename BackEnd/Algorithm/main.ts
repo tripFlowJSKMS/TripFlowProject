@@ -35,7 +35,7 @@ let departureLocation: string;
 let destinationLocation: string;
 let paxNumber: number;
 let dietaryPreference: string;
-let areasOfInterests: string[];
+let areasOfInterest: string[];
 let pace: string;
 let desirableDestinations: Destination[];
 let selectedDestinations: Set<number>;
@@ -80,6 +80,7 @@ export async function tripFlowAlgorithm(
         closingTime,
         tourDuration,
         characteristics,
+        areasOfInterest,
         longitude,
         latitude,
         false
@@ -129,7 +130,7 @@ export async function generateDesirableDestinations(
     }
     dietaryPreference = details.dietaryPreference;
     pace = details.pace;
-    areasOfInterests = details.areasOfInterests;
+    areasOfInterest = details.areasOfInterests;
   } catch (error) {
     console.error(
       "Error validating generate desirable destinations details:",
@@ -170,14 +171,13 @@ export async function generateDesirableDestinations(
         closingTime,
         actualTimeRequired,
         characteristics.split(","),
+        areasOfInterest,
         longitude,
         latitude,
         false
       );
-
       // change this as a parameter later
-      destinationData.setWeight(areasOfInterests);
-
+      // destinationData.setWeight(areasOfInterest);
       desirableDestinations.push(destinationData);
     });
   } catch (error) {
@@ -224,7 +224,7 @@ export async function bumpNeglectedPreferences(
     const { id, characteristics } = details;
     selectedDestinations.add(id);
     for (const characteristic of characteristics) {
-      if (areasOfInterests.includes(characteristic)) {
+      if (areasOfInterest.includes(characteristic)) {
         const currentValue = selectedCharacteristics.get(characteristic) ?? 0;
         selectedCharacteristics.set(characteristic, currentValue + 1);
       }
@@ -279,6 +279,7 @@ export async function recalibrate(
         closingTime,
         tourDuration,
         characteristics,
+        areasOfInterest,
         longitude,
         latitude,
         false
