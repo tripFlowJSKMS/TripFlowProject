@@ -80,7 +80,6 @@ app.post("/api/planning-page", async (req, res) => {
     const validatedDetails: TripFlowAlgorithmType = tripFlowAlgorithmType.parse(
       req.body.selectedDestinations
     );
-    console.log(validatedDetails);
     const itinerary: Array<{
       destination: Destination;
       stringDate: string;
@@ -121,7 +120,7 @@ app.post("/api/callGPT", async (req, res) => {
       messages: [
         {
           "role": "system",
-          "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date (YYYY-MM-DD format), Time (HH:MM format), Event. Infer the details if any information is unavailable and never leave a field empty. Enumerate the items with a dash."
+          "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date (YYYY-MM-DD format), Timeslot (HH:MM-HH:MM format), Event. Infer the details if any information is unavailable and never leave a field empty. Start time and End time should never be the same. Enumerate the items with a dash."
         },
         {
           "role": "user",

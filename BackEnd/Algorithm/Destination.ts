@@ -1,8 +1,4 @@
-import { number } from "zod";
 import { DestinationNode } from "./DestinationNode";
-
-// Large weight value ensures that GPT destinations are ALWAYS chosen (to simulate business trip plans to be of top priority)
-const GPT_LARGE_WEIGHT_VALUE: number = 100;
 
 export class Destination {
     private id: number;
@@ -16,9 +12,11 @@ export class Destination {
     private latitude: number;
     private readonly TIME_SLOT: number = 30; // We assume 30 min timeslots for our algo
     private readonly DIST_TIME_RATIO: number = 1; // We assume it takes 1 min to travel 1 km
+    // Large weight value ensures that GPT destinations are ALWAYS chosen (to simulate business trip plans to be of top priority)
+    static GPT_LARGE_WEIGHT_VALUE: number = 100;
   
     constructor(id: number, name: string, openingTime: number, 
-        closingTime: number, tourDuration: number, characteristics: string[],
+        closingTime: number, tourDuration: number, characteristics: string[], areasOfInterest: string[],
         longitude: number, latitude: number, isGptDestination: boolean) {
       this.id = id;
       this.name = name;
@@ -29,7 +27,9 @@ export class Destination {
       this.longitude = longitude;
       this.latitude = latitude;
       if (isGptDestination) {
-        this.weight = GPT_LARGE_WEIGHT_VALUE;
+        this.weight = Destination.GPT_LARGE_WEIGHT_VALUE;
+      } else {
+        this.setWeight(areasOfInterest);
       }
     }
 
@@ -47,6 +47,10 @@ export class Destination {
   
     // Normal nodes will have a weight between 0-1
     setWeight(preferences: string[]): void {  
+      if (preferences.length == 0) {
+        this.weight = 0;
+        return;
+      }
       let matchCount: number = 0;
       for (const preference of preferences) {
         if (this.characteristics.includes(preference)) {
@@ -103,14 +107,8 @@ export class Destination {
       if (!prePlannedEventsTimeSlots.has(stringDate)) {
         return new DestinationNode(this, stringDate, startTime, endTime);
       }
-      console.log(prePlannedEventsTimeSlots);
-      console.log(stringDate);
       const currDayPrePlannedEventsArr: [number, number, string][] | undefined = prePlannedEventsTimeSlots.get(stringDate);
-      console.log(currDayPrePlannedEventsArr);
-
       if (!currDayPrePlannedEventsArr) {
-        console.log("SHOULDNT REACH HERE");
-        console.log("No preplanned events found for the given date");
         return new DestinationNode(this, stringDate, startTime, endTime);
       }
 

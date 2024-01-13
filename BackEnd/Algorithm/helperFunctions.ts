@@ -3,10 +3,12 @@ import { DestinationNode } from "./DestinationNode";
 import { Edge } from "./Edge";
 
 var earliestNodes: DestinationNode[] = [];
-var allPaths: [DestinationNode[], number][] = [];
+// var allPaths: [DestinationNode[], number][] = [];
+var heaviestPath: [DestinationNode[], number] = [[], 0];
 // At some point we will replace this with actual coordinates by parsing in the user's travel plan to google maps api
 const DUMMY_GPT_LONGITUDE: number = -122.42;
 const DUMMY_GPT_LATITUDE: number = 37.78;
+var gptDestinationNumber: number = 0;
 
 export function getDateFromString(ymd: string): Date {
   // E.g. 2023-12-29
@@ -45,9 +47,9 @@ export function planItinerary(
   const nodes: DestinationNode[] = createNodes(destinations, startDate, endDate, startTime, endTime, prePlannedEventsTimeSlots);
   createEdges(nodes, endTime);
   const supernode: DestinationNode = createSuperNode(startDate, endTime);
-  traversal(supernode, [], [], 0);
-  const heaviestPath: DestinationNode[] = quickSelect(allPaths, allPaths.length - 1) as DestinationNode[];
-  const itinerary: Array<{destination: Destination, stringDate: string, startingTime: number, endingTime: number}> = generateItinerary(heaviestPath);
+  traversal(supernode, [], new Set(), 0);
+  const itinerary: Array<{destination: Destination, stringDate: string, startingTime: number, endingTime: number}> = generateItinerary(heaviestPath[0]);
+  
   return itinerary;
 }
 
@@ -77,58 +79,6 @@ function generateItinerary(nodes: DestinationNode[]): Array<{destination: Destin
   return itinerary;
 }
 
-function quickSelect(arr: [DestinationNode[], number][], k: number): DestinationNode[] {
-  const sortedArr = arr.slice();
-  const result = partition(sortedArr, 0, sortedArr.length - 1, k - 1);
-  return result[0];
-}
-
-function partition(arr: [DestinationNode[], number][], left: number, right: number, k: number): [DestinationNode[], number] {
-  while (left <= right) {
-    const pivotIndex = getPivotIndex(left, right);
-    const partitionIndex = partitionAroundPivot(arr, left, right, pivotIndex);
-    
-    if (partitionIndex === k) {
-      return arr[partitionIndex];
-    } else if (k < partitionIndex) {
-      right = partitionIndex - 1;
-    } else {
-      left = partitionIndex + 1;
-    }
-  }
-
-  console.log("DEV: Did you input realistic timings?");
-  console.log("something went wrong, shouldn't have come out");
-  return [[], -1];
-};
-
-function getPivotIndex(left: number, right: number): number {
-  const randomIndex = Math.floor(Math.random() * (right - left + 1)) + left;
-  return randomIndex;
-};
-
-function partitionAroundPivot(arr: [DestinationNode[], number][], left: number, right: number, pivotIndex: number): number {
-  const pivotValue = arr[pivotIndex][1];
-  swap(arr, pivotIndex, right);
-  let partitionIndex = left;
-  
-  for (let i = left; i < right; i++) {
-    if (arr[i][1] < pivotValue) {
-      swap(arr, i, partitionIndex);
-      partitionIndex++;
-    }
-  }
-  
-  swap(arr, partitionIndex, right);
-  return partitionIndex;
-};
-
-function swap(arr: [DestinationNode[], number][], i: number, j: number): void {
-  const temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-};
-
 /*
 Dijkstra only relaxes the edges of the min-estimate node, but we have to record all possible paths as long as the 
 Destination has not been visited before. The key constraint that causes Dijkstra to fail is that once we visit a particular 
@@ -136,30 +86,66 @@ DestinationNode, the rest of the DestinationNodes in the Destination set all can
 Consequently, Dijkstra would not have considered valid combinations that yield a lower estimate now but will end up with a larger 
 weight sum at the end of the path. 
 */
-
 function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
-  itinerarySoFar: Destination[], weightSoFar: number): void {
+  itinerarySet: Set<Destination>, weightSoFar: number): void {
   const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
   if (outgoingEdges.length == 0) {
-    allPaths.push([pathSoFar, weightSoFar]);
+    const heaviestWeightSoFar: number = heaviestPath[1];
+    if (weightSoFar < heaviestWeightSoFar) {
+      return;
+    }
+    if (weightSoFar == heaviestWeightSoFar && heaviestWeightSoFar !== 0) {
+      const currPathLastDestinationNode: DestinationNode = pathSoFar[pathSoFar.length - 1];
+      const heaviestPathLastDestinationNode: DestinationNode = heaviestPath[0][heaviestPath[0].length - 1];
+      const currPathEndDate: string = currPathLastDestinationNode.getStringDate();
+      const heaviestPathEndDate: string = heaviestPathLastDestinationNode.getStringDate();
+      if (getDateFromString(currPathEndDate) > getDateFromString(heaviestPathEndDate)) {
+        return;
+      }
+      const currPathEndTime: number = currPathLastDestinationNode.getEndTime();
+      const heaviestPathEndTime: number = heaviestPathLastDestinationNode.getEndTime();
+      if (currPathEndTime >= heaviestPathEndTime) {
+        return;
+      }
+    }
+    heaviestPath = [pathSoFar, weightSoFar]; 
   } else {
     for (const edge of outgoingEdges) {
       const destinationNode: DestinationNode = edge.getDestinationNode();
       const destination: Destination = destinationNode.getDestination();
-      // Accept ABA even if ABCA is possible since we will get the largest weight path in the end 
-      if (itinerarySoFar.includes(destination)) {
-        allPaths.push([pathSoFar, weightSoFar]);
+
+      if (itinerarySet.has(destination)) {
+        const heaviestWeightSoFar: number = heaviestPath[1];
+        if (weightSoFar < heaviestWeightSoFar) {
+          continue;
+        }
+        if (weightSoFar == heaviestWeightSoFar && heaviestWeightSoFar !== 0) {
+          const currPathLastDestinationNode: DestinationNode = pathSoFar[pathSoFar.length - 1];
+          const heaviestPathLastDestinationNode: DestinationNode = heaviestPath[0][heaviestPath[0].length - 1];
+          const currPathEndDate: string = currPathLastDestinationNode.getStringDate();
+          const heaviestPathEndDate: string = heaviestPathLastDestinationNode.getStringDate();
+          if (getDateFromString(currPathEndDate) > getDateFromString(heaviestPathEndDate)) {
+            continue;
+          }
+          const currPathEndTime: number = currPathLastDestinationNode.getEndTime();
+          const heaviestPathEndTime: number = heaviestPathLastDestinationNode.getEndTime();
+          if (currPathEndTime >= heaviestPathEndTime) {
+            continue;
+          }
+        }
+        heaviestPath = [pathSoFar, weightSoFar]; 
       } else {
         const updatedPath: DestinationNode[] = [...pathSoFar];
         updatedPath.push(destinationNode);
-        const updatedItinerary: Destination[] = [...itinerarySoFar];
-        updatedItinerary.push(destination);
+        const updatedItinerarySet: Set<Destination> = new Set(itinerarySet);
+        updatedItinerarySet.add(destination);
         const updatedWeight: number = weightSoFar + destinationNode.getDestination().getWeight();
-        traversal(destinationNode, updatedPath, updatedItinerary, updatedWeight);
+        traversal(destinationNode, updatedPath, updatedItinerarySet, updatedWeight);
       }
     }
   } 
-  }
+}
+
 
 function isFeasibleEdge(sourceNode: DestinationNode, destinationNode: DestinationNode, dayEndTime: number): boolean {
   /*
@@ -174,6 +160,9 @@ function isFeasibleEdge(sourceNode: DestinationNode, destinationNode: Destinatio
   }
   if (getDateFromString(sourceNode.getStringDate()) < getDateFromString(destinationNode.getStringDate())) {
     return true;
+  }
+  if (getDateFromString(sourceNode.getStringDate()) > getDateFromString(destinationNode.getStringDate())) {
+    return false;
   }
   return sourceNode.noTimeLimitClash(destinationNode, dayEndTime);
 }
@@ -191,7 +180,7 @@ function createSuperNode(stringDate: string, endTime: number): DestinationNode {
   }
 
   // Create the supernode with the earliest start time
-  const dummyDestination: Destination = new Destination(0, "Supernode", earliestStartTime, earliestStartTime, 0, [], 0, 0, false);
+  const dummyDestination: Destination = new Destination(0, "Supernode", earliestStartTime, earliestStartTime, 0, [], [], 0, 0, false);
   const supernode: DestinationNode = new DestinationNode(dummyDestination, stringDate, earliestStartTime, earliestStartTime);
 
   // Add edges from the supernode to the earliest node of each destination
@@ -236,6 +225,7 @@ function createGptNodes(prePlannedEventsTimeSlots: Map<string, [number, number, 
         prePlannedEndTime, 
         duration,
         [],
+        [],
         DUMMY_GPT_LONGITUDE,
         DUMMY_GPT_LATITUDE,
         true
@@ -245,8 +235,10 @@ function createGptNodes(prePlannedEventsTimeSlots: Map<string, [number, number, 
       // 0 for timeslot multiplier
       const node: DestinationNode | null = destination.generateNode(date, 0, prePlannedEventsTimeSlots, true); 
       if (node != null) {
+        gptDestinationNumber++;
         nodes.push(node);
-      }
+        earliestNodes.push(node);
+      }    
     });
   });
   return nodes;
