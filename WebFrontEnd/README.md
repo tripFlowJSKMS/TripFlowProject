@@ -1,6 +1,6 @@
 # Frontend for TripFlow
 
-React Native on the frontend with Expo, and Zustand for state management.
+React Native on the frontend with Expo, and Redux for state management.
 
 ## Project setup
 
