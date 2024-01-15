@@ -33,9 +33,9 @@ export async function startPlanning({
   );
 
   if (!isValidBody(response.data, startPlanningOutputSchema)) {
-    return Response.json({ message: "Invalid response" });
+    throw new Error("Invalid response body");
   }
   const destinations: DestinationType[] = response.data.destinations;
 
-  return response.data.destinations;
+  return destinations;
 }
