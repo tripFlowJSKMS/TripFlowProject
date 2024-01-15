@@ -1,27 +1,53 @@
-import { View, Text, TouchableOpacity, FlatList, TextInput, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
-import tw from 'twrnc';
+import {
+  View,
+  Text,
+  Pressable,
+  FlatList,
+  TextInput,
+  StyleSheet,
+} from "react-native";
+import React, { useState } from "react";
+import tw from "twrnc";
 
+<<<<<<< Updated upstream
 const cities: string[] = ['Singapore', 'Cambodia', 'Laos', 'Malaysia', 'Thailand'];
+=======
+const cities: string[] = [
+  "Singapore",
+  "Singaaa",
+  "Singggb",
+  "Cambodia",
+  "Laos",
+  "Malaysia",
+  "Thailand",
+];
+>>>>>>> Stashed changes
 
 function filterCountries(query: string): string[] {
-  return cities.filter(country =>
-    country.toLowerCase().startsWith(query.toLowerCase())
+  return cities.filter((country) =>
+    country.toLowerCase().startsWith(query.toLowerCase()),
   );
 }
 
 interface DepartureDestinationPickerProps {
-  departureQuery: string,
-  destinationQuery: string,
-  onDepartureLocationChange: (value: string) => void,
-  onDestinationLocationChange: (value: string) => void
+  departureQuery: string;
+  destinationQuery: string;
+  onDepartureLocationChange: (value: string) => void;
+  onDestinationLocationChange: (value: string) => void;
 }
 
-export default function DepartureDestinationPicker({ departureQuery, destinationQuery, onDepartureLocationChange, onDestinationLocationChange }: DepartureDestinationPickerProps) {
+export default function DepartureDestinationPicker({
+  departureQuery,
+  destinationQuery,
+  onDepartureLocationChange,
+  onDestinationLocationChange,
+}: DepartureDestinationPickerProps) {
   const [departureData, setDepartureData] = useState([]);
   const [destinationData, setDestinationData] = useState([]);
-  const [isDepartureListVisible, setIsDepartureListVisible] = useState<boolean>(false);
-  const [isDestinationListVisible, setIsDestinationListVisible] = useState<boolean>(false);
+  const [isDepartureListVisible, setIsDepartureListVisible] =
+    useState<boolean>(false);
+  const [isDestinationListVisible, setIsDestinationListVisible] =
+    useState<boolean>(false);
 
   const handleDepartureItemPress = (item: string) => {
     onDepartureLocationChange(item);
@@ -67,44 +93,48 @@ export default function DepartureDestinationPicker({ departureQuery, destination
         placeholderTextColor="#888"
       />
 
-      {(isDepartureListVisible && departureQuery.length > 0 && departureData.length != 0) && (
-        <FlatList
-          data={departureData}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleDepartureItemPress(item)}>
-              <Text style={tw`p-2 text-base border-b`}>{item}</Text>
-            </TouchableOpacity>
-          )}
-          style={[styles.list, { top: '50%' }]} // Adjust top as necessary
-          keyboardShouldPersistTaps="handled"
-        />
-      )}
+      {isDepartureListVisible &&
+        departureQuery.length > 0 &&
+        departureData.length != 0 && (
+          <FlatList
+            data={departureData}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => handleDepartureItemPress(item)}>
+                <Text style={tw`p-2 text-base border-b`}>{item}</Text>
+              </Pressable>
+            )}
+            style={[styles.list, { top: "50%" }]} // Adjust top as necessary
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
 
-      {(isDestinationListVisible && destinationQuery.length > 0 && destinationData.length != 0) && (
-        <FlatList
-          data={destinationData}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleDestinationItemPress(item)}>
-              <Text style={tw`p-2 text-lg border-b`}>{item}</Text>
-            </TouchableOpacity>
-          )}
-          style={[styles.list, { top: '100%' }]} // Adjust top to place it below the Destination input
-          keyboardShouldPersistTaps="handled"
-        />
-      )}
+      {isDestinationListVisible &&
+        destinationQuery.length > 0 &&
+        destinationData.length != 0 && (
+          <FlatList
+            data={destinationData}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => handleDestinationItemPress(item)}>
+                <Text style={tw`p-2 text-lg border-b`}>{item}</Text>
+              </Pressable>
+            )}
+            style={[styles.list, { top: "100%" }]} // Adjust top to place it below the Destination input
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-    list: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        maxHeight: 200,
-        borderWidth: 1,
-        borderColor: 'gray',
-        backgroundColor: 'white',
-        zIndex: 4, // This should be higher than the input container
-    },
+  list: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    maxHeight: 200,
+    borderWidth: 1,
+    borderColor: "gray",
+    backgroundColor: "white",
+    zIndex: 4, // This should be higher than the input container
+  },
 });

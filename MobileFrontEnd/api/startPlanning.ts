@@ -4,6 +4,8 @@ import { isValidBody } from "@/lib/utils";
 import { DestinationType } from "../../Shared/types";
 import { startPlanningOutputSchema } from "@/types/startPlanningTypes";
 
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
 export async function startPlanning({
   startDate,
   endDate,
@@ -16,9 +18,8 @@ export async function startPlanning({
   pace,
   areasOfInterests,
 }: GenerateDesirableDestinationsType) {
-  const response = await axios.post(
-    "http://localhost:3000/api/start-planning-page",
-    {
+  try {
+    const response = await axios.post(`${API_URL}/api/start-planning-page`, {
       startDate,
       endDate,
       startTime,
@@ -29,13 +30,25 @@ export async function startPlanning({
       dietaryPreference,
       pace,
       areasOfInterests,
-    },
-  );
+    });
 
+<<<<<<< Updated upstream
   if (!isValidBody(response.data, startPlanningOutputSchema)) {
     throw new Error("Invalid response body");
   }
   const destinations: DestinationType[] = response.data.destinations;
 
   return destinations;
+=======
+    if (!isValidBody(response.data, startPlanningOutputSchema)) {
+      throw new Error("Invalid response body");
+    }
+    const destinations: DestinationType[] = response.data.destinations;
+
+    return destinations;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Invalid input or API error");
+  }
+>>>>>>> Stashed changes
 }
