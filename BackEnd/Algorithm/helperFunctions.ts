@@ -146,7 +146,6 @@ function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[],
   } 
 }
 
-
 function isFeasibleEdge(sourceNode: DestinationNode, destinationNode: DestinationNode, dayEndTime: number): boolean {
   /*
   Check if the edge is feasible based on the time constraints and tour duration.
@@ -191,7 +190,6 @@ function createSuperNode(stringDate: string, endTime: number): DestinationNode {
   }
   return supernode; 
 }
-
 function createEdges(destinationNodes: DestinationNode[], endTime: number): void {
   for (const start of destinationNodes) {
       for (const end of destinationNodes) {
@@ -243,7 +241,6 @@ function createGptNodes(prePlannedEventsTimeSlots: Map<string, [number, number, 
   });
   return nodes;
 }
-
 function createTripFlowNodes(travellingDays: number, destinations: Destination[], startDateString: string, endDateString: string, startTime: number, endTime: number, prePlannedEventsTimeSlots: Map<string, [number, number, string][]>): DestinationNode[] {
   const nodes: DestinationNode[] = [];
 
