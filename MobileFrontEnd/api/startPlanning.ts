@@ -32,23 +32,15 @@ export async function startPlanning({
       areasOfInterests,
     });
 
-<<<<<<< Updated upstream
-  if (!isValidBody(response.data, startPlanningOutputSchema)) {
-    throw new Error("Invalid response body");
-  }
-  const destinations: DestinationType[] = response.data.destinations;
-
-  return destinations;
-=======
     if (!isValidBody(response.data, startPlanningOutputSchema)) {
       throw new Error("Invalid response body");
     }
     const destinations: DestinationType[] = response.data.destinations;
+    console.log(response.data);
 
     return destinations;
   } catch (error) {
     console.error(error);
     throw new Error("Invalid input or API error");
   }
->>>>>>> Stashed changes
 }

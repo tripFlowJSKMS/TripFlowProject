@@ -22,7 +22,6 @@ export default function RecommendedLocations({
       </View>
       <ScrollView
         horizontal
-        pagingEnabled
         style={tw`flex-grow-0`}
         contentContainerStyle={tw`gap-4 mb-3`}
       >

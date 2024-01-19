@@ -69,9 +69,18 @@ export default function ItineraryPlanning() {
       paxNumber = "6 or more";
     }
 
+    // Function to format date to YYYY-MM-DD as per backend requirements
+    const formatDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+
+      return `${year}-${month}-${day}`;
+    };
+
     const onboardingDetails: GenerateDesirableDestinationsType = {
-      startDate: startDate.toUTCString(),
-      endDate: endDate.toUTCString(),
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
       startTime,
       endTime,
       departureLocation,
