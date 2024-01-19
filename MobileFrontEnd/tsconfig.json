@@ -5,6 +5,7 @@
     "paths": {
       "@/*": ["./*"],
       "shared/*": ["../shared/*"]
-    }
+    },
+    "strictNullChecks": true
   }
 }

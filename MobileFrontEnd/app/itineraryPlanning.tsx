@@ -16,6 +16,8 @@ import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlann
 import { startPlanning } from "@/api/startPlanning";
 import RecommendedLocations from "@/components/itineraryPlanning/RecommendedLocations";
 import RecommendedItineraries from "@/components/itineraryPlanning/RecommendedItineraries";
+import { editLocations } from "@/api/editLocations";
+import { DestinationType } from "../../Shared/types";
 
 const placeholderImage = require("../assets/sand-castle-on-clearwater-beach-photo.jpg");
 
@@ -46,7 +48,8 @@ export default function ItineraryPlanning() {
     preferences,
   } = useOnboardingStore();
 
-  const { destinations, setDestinations } = useItineraryStore();
+  const { destinations, setDestinations, itinerary, setItinerary } =
+    useItineraryStore();
 
   useEffect(() => {
     // setIsLoading(false);
@@ -58,15 +61,14 @@ export default function ItineraryPlanning() {
     let paxNumber: "1" | "2" | "3-5" | "6 or more";
     if (pax === 1) {
       paxNumber = "1";
-    }
-    if (pax === 2) {
+    } else if (pax === 2) {
       paxNumber = "2";
-    }
-    if (pax >= 3 && pax <= 5) {
+    } else if (pax >= 3 && pax <= 5) {
       paxNumber = "3-5";
-    }
-    if (pax >= 6) {
+    } else if (pax >= 6) {
       paxNumber = "6 or more";
+    } else {
+      throw new Error("Invalid pax number");
     }
 
     // Function to format date to YYYY-MM-DD as per backend requirements
@@ -97,8 +99,11 @@ export default function ItineraryPlanning() {
       setDestinations(destinationsAPIResponse);
     };
 
-    const generateItinerary = async () => {
-      // const itineraryAPIResponse = await
+    const generateItinerary = async (destinations: DestinationType[]) => {
+      const itineraryAPIResponse = await editLocations(destinations);
+
+      // setItinerary(itineraryAPIResponse);
+      // FIX TYPING FOR ITINERARY
     };
 
     try {
