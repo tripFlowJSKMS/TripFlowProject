@@ -3,7 +3,6 @@ import { DestinationNode } from "./DestinationNode";
 import { Edge } from "./Edge";
 
 var earliestNodes: DestinationNode[] = [];
-// var allPaths: [DestinationNode[], number][] = [];
 var heaviestPath: [DestinationNode[], number] = [[], 0];
 // At some point we will replace this with actual coordinates by parsing in the user's travel plan to google maps api
 const DUMMY_GPT_LONGITUDE: number = -122.42;
@@ -20,14 +19,18 @@ export function calculateTotalTravellingDays(startDate: string, endDate: string)
   return ((getDateFromString(endDate).getTime() - getDateFromString(startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1
 }
 
-export function addDaysToStringDate(dateStr: string, daysToAdd: number): string {
-  const date = new Date(dateStr);
-  date.setDate(date.getDate() + daysToAdd);
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+// Javascript Date object is time-zone sensitive when we do the math. 
+export function addDaysToStringDate(dateStr, daysToAdd) {
+  const date = new Date(`${dateStr}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + daysToAdd);
+  // Format the year, month, and day in YYYY-MM-DD format using UTC values
+  const year = date.getUTCFullYear();
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+  const day = date.getUTCDate().toString().padStart(2, '0');
+
   return `${year}-${month}-${day}`;
 }
+
 
 export function timeToMinutes(time: string): number {
   const [hours, minutes] = time.split(":").map(Number);
@@ -88,6 +91,7 @@ weight sum at the end of the path.
 */
 function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[], 
   itinerarySet: Set<Destination>, weightSoFar: number): void {
+  
   const outgoingEdges: Edge[] = currNode.getOutgoingEdgeList();
   if (outgoingEdges.length == 0) {
     const heaviestWeightSoFar: number = heaviestPath[1];
@@ -146,7 +150,6 @@ function traversal(currNode: DestinationNode, pathSoFar: DestinationNode[],
   } 
 }
 
-
 function isFeasibleEdge(sourceNode: DestinationNode, destinationNode: DestinationNode, dayEndTime: number): boolean {
   /*
   Check if the edge is feasible based on the time constraints and tour duration.
@@ -196,7 +199,7 @@ function createEdges(destinationNodes: DestinationNode[], endTime: number): void
   for (const start of destinationNodes) {
       for (const end of destinationNodes) {
           if (isFeasibleEdge(start, end, endTime)) {
-              start.addOutgoingEdge(end);
+            start.addOutgoingEdge(end);
           }
       }
   }
@@ -243,7 +246,6 @@ function createGptNodes(prePlannedEventsTimeSlots: Map<string, [number, number, 
   });
   return nodes;
 }
-
 function createTripFlowNodes(travellingDays: number, destinations: Destination[], startDateString: string, endDateString: string, startTime: number, endTime: number, prePlannedEventsTimeSlots: Map<string, [number, number, string][]>): DestinationNode[] {
   const nodes: DestinationNode[] = [];
 
