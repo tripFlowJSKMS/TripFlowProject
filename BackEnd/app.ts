@@ -18,6 +18,7 @@ import OpenAI from "openai";
 var cors = require("cors");
 const app = express();
 
+// On Mac, go BackEnd and run export OPENAI_API_KEY=...
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });

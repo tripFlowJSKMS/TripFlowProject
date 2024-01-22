@@ -1,7 +1,6 @@
 import { Provider } from 'react-redux';
 import store from "@/lib/store";
 import AppNavigator from "./pages/appNavigator";
-import HomePage from './pages/homePage';
 export default function App() {
   return (
     <Provider store={store}>
