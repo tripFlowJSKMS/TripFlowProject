@@ -102,15 +102,12 @@ export default function ItineraryPlanning() {
     const generateItinerary = async (destinations: DestinationType[]) => {
       const itineraryAPIResponse = await editLocations(destinations);
 
-      // setItinerary(itineraryAPIResponse);
-      // FIX TYPING FOR ITINERARY
+      setItinerary(itineraryAPIResponse);
     };
 
     try {
       fetchDestinations().then(() =>
-        new Promise((resolve) => setTimeout(resolve, 1000)).then(() =>
-          setIsLoading(false),
-        ),
+        generateItinerary(destinations).then(() => setIsLoading(false)),
       );
     } catch (error) {
       console.log(error);

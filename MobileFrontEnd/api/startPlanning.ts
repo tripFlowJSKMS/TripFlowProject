@@ -1,7 +1,6 @@
 import axios from "axios";
 import { GenerateDesirableDestinationsType } from "../../Shared/types/startPlanning";
 import { isValidBody } from "@/lib/utils";
-import { DestinationType } from "../../Shared/types";
 import { startPlanningOutputSchema } from "@/types/startPlanningTypes";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -35,7 +34,7 @@ export async function startPlanning({
     if (!isValidBody(response.data, startPlanningOutputSchema)) {
       throw new Error("Invalid response body");
     }
-    const destinations: DestinationType[] = response.data.destinations;
+    const destinations = response.data.destinations;
 
     return destinations;
   } catch (error) {
