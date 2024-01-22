@@ -29,8 +29,6 @@ export default function ItineraryPage() {
     return dateArray;
   };
   const dateRange = getDateRangeArray(travellingPreferences.startDate, travellingPreferences.endDate);
-  console.log(dateRange);
-
 
   return (
     <View style={tw`h-full`}>

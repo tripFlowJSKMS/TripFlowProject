@@ -4,7 +4,8 @@ import { startPlanningOutputSchema } from "@/lib/types/startPlanningTypes";
 import { isValidBody } from "@/lib/utils";
 import { DestinationType } from "../../Shared/types";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+// const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = "http://localhost:3000"
 
 export async function startPlanning({
   startDate,
@@ -19,8 +20,6 @@ export async function startPlanning({
   areasOfInterests,
 }: GenerateDesirableDestinationsType) {
 
-  console.log("error arrives here");
-  console.log(`${API_URL}/api/start-planning-page`);
   const response = await axios.post(
     `${API_URL}/api/start-planning-page`,
     {

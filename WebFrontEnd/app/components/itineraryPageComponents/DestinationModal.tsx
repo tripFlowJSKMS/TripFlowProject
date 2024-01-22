@@ -37,8 +37,8 @@ export function DestinationModal({ isModalVisible, setModalVisible, destination,
         <Text style={tw`text-lg font-bold mb-4`}>{destination.name}</Text>
         <ScrollView style={tw`w-full`}>
           {destinationNotes.map((note, index) => (
-            <View style={tw`flex-row justify-between items-center`}>
-              <Text style={tw`w-9/12 border self-start m-2 p-4 rounded-lg`} key={index}>{note}</Text>
+            <View style={tw`flex-row justify-between items-center`} key={index}>
+              <Text style={tw`w-9/12 border self-start m-2 p-4 rounded-lg`} >{note}</Text>
               <TouchableOpacity style={tw`w-2/12`} onPress={() => handleDeleteNote(index)}><Text style={tw`text-center font-bold`}>X</Text></TouchableOpacity>
             </View>
           ))}
