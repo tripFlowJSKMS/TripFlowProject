@@ -102,6 +102,8 @@ export default function ItineraryPlanning() {
     const generateItinerary = async (destinations: DestinationType[]) => {
       const itineraryAPIResponse = await editLocations(destinations);
 
+      console.log(itineraryAPIResponse);
+
       setItinerary(itineraryAPIResponse);
     };
 

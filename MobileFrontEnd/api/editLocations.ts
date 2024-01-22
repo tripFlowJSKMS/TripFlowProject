@@ -7,12 +7,9 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export async function editLocations(selectedDestinations: DestinationType[]) {
   try {
-    const response = await axios.post(
-      `${API_URL}/api/planning-page/edit-locations`,
-      {
-        selectedDestinations,
-      },
-    );
+    const response = await axios.post(`${API_URL}/api/planning-page`, {
+      selectedDestinations,
+    });
 
     if (!isValidBody(response.data, generatedItinerarySchema)) {
       throw new Error("Invalid response");

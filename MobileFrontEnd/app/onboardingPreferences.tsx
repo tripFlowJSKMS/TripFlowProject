@@ -6,9 +6,9 @@ import { useState } from "react";
 import ProgressSegments from "@/components/UI/ProgressSegments";
 import StartPlanningDepartureView from "@/components/onboarding/StartPlanningDepartureView";
 import StartPlanningDateTimeView from "@/components/onboarding/StartPlanningDateTimeView";
-import { Link } from "expo-router";
 import StartPlanningPreferenceView from "@/components/onboarding/StartPlanningPreferenceView";
 import useOnboardingStore from "@/store/onboardingStore";
+import StartPlanningFileUploadView from "@/components/onboarding/StartPlanningFileUploadView";
 
 const { height, width } = Dimensions.get("window");
 
@@ -60,15 +60,7 @@ export default function OnboardingPage() {
           {isDepartureState && <StartPlanningDepartureView />}
           {isTimeState && <StartPlanningDateTimeView />}
           {isPreferencesState && <StartPlanningPreferenceView />}
-          {isShareState && (
-            <View style={tw`items-center justify-center gap-y-4`}>
-              <Link href="/itineraryPlanning" asChild>
-                <Button className="rounded-full h-48 w-48">
-                  <Text style={tw`text-2xl font-medium`}>Let's go!</Text>
-                </Button>
-              </Link>
-            </View>
-          )}
+          {isShareState && <StartPlanningFileUploadView />}
         </View>
         <View style={tw`absolute bottom-10 w-full px-10`}>
           <View style={tw`flex flex-row justify-center mb-4 gap-x-16`}>
