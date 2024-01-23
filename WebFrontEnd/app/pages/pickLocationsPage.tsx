@@ -9,9 +9,6 @@ import { RootState } from "@/lib/reducers/reducers";
 import { StartPlanningOutputType } from "../../../Shared/types/startPlanning";
 import { useState } from "react";
 import { DestinationType } from "../../../Shared/types";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@/lib/navigation";
 import { setPickLocationsOutputDestinations } from "@/lib/reducers/pickLocationsOutputDestinationReducer";
 import { setEditLocationsInputDestinations } from "@/lib/reducers/editLocationsInputDestinationReducer";
 import { pickLocations } from "@/api/pickLocations";
@@ -65,6 +62,15 @@ export default function PickLocationsPage({ navigation }) {
         <View style={tw`my-5`}>
           <Text style={tw`text-2xl font-bold mb-3`}>Recommended Locations</Text>
           <View style={tw`flex flex-row flex-wrap`}>
+            {/* {destinationsData.destinations.map((destination) => (
+              <LocationComponent
+                key={destination.id}
+                name = {destination.name}
+                characteristics = {destination.characteristics}
+                onClick={() => handleDestinationClick(destination)}
+                isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
+              />
+            ))} */}
             {destinationsData.map((destination) => (
               <LocationComponent
                 key={destination.id}

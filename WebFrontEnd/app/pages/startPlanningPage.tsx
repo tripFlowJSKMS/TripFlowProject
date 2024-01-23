@@ -4,6 +4,7 @@ import tw from "twrnc";
 import TopBar from "../components/topBar";
 import DatePicker from "../components/startPlanningComponents/DatePicker";
 import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
+import MyCalendarPicker from "../components/startPlanningComponents/CalendarPicker";
 import DepartureDestinationPicker from "../components/startPlanningComponents/DepartureDestinationPicker";
 import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
