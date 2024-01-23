@@ -4,6 +4,7 @@ import tw from "twrnc";
 import TopBar from "../components/topBar";
 import DatePicker from "../components/startPlanningComponents/DatePicker";
 import TripTimingsPicker from "../components/startPlanningComponents/TripTimingsPicker";
+import MyCalendarPicker from "../components/startPlanningComponents/CalendarPicker";
 import DepartureDestinationPicker from "../components/startPlanningComponents/DepartureDestinationPicker";
 import PacePicker from "../components/startPlanningComponents/PacePicker";
 import AreasOfInterestPicker from "../components/startPlanningComponents/AreasOfInterestPicker";
@@ -68,6 +69,7 @@ export default function StartPlanningPage({ navigation }) {
       <View style={tw`flex flex-row justify-between w-9/12 m-15`}>
         <View style={tw`w-4/12`}>
           <Text style={tw`font-bold text-4xl`}>Your Ideal Trip Awaits</Text>
+          {/* <MyCalendarPicker/> */}
           <DatePicker currentDate={currentDate} startDate={startDate} endDate={endDate} setStartDate={setStartDate}
             setEndDate={setEndDate} />
           <TripTimingsPicker selectedStartTime={startTime} selectedEndTime={endTime} onStartTimeChange={setStartTime} onEndTimeChange={setEndTime} />
