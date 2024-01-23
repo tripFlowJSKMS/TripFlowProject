@@ -15,6 +15,7 @@ import { RootStackParamList } from "@/lib/navigation";
 import { setPickLocationsOutputDestinations } from "@/lib/reducers/pickLocationsOutputDestinationReducer";
 import { setEditLocationsInputDestinations } from "@/lib/reducers/editLocationsInputDestinationReducer";
 import { pickLocations } from "@/api/pickLocations";
+import React from "react";
 
 export default function PickLocationsPage({ navigation }) {
   const destinationsData: StartPlanningOutputType = useSelector(

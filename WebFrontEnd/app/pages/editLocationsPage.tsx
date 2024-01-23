@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import tw from "twrnc";
 import { EditLocationsInputType } from "../../../Shared/types/pickLocations";
 import { PickLocationsOutputType } from "../../../Shared/types/pickLocations";
@@ -15,7 +15,6 @@ import { setItineraryInputDestinations } from "@/lib/reducers/itineraryInputDest
 import TopBar from "../components/topBar";
 import DashBoard from "../components/dashBoard";
 import LocationComponent from "../components/locationComponent";
-import { Pressable } from "react-native-gesture-handler";
 import { setDestinationNotes } from "@/lib/reducers/destinationNotesReducer";
 
 export default function EditLocationsPage() {

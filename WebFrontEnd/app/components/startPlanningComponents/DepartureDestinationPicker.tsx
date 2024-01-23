@@ -9,19 +9,7 @@ import {
 import React, { useState } from "react";
 import tw from "twrnc";
 
-<<<<<<< Updated upstream
 const cities: string[] = ['Singapore', 'Cambodia', 'Laos', 'Malaysia', 'Thailand'];
-=======
-const cities: string[] = [
-  "Singapore",
-  "Singaaa",
-  "Singggb",
-  "Cambodia",
-  "Laos",
-  "Malaysia",
-  "Thailand",
-];
->>>>>>> Stashed changes
 
 function filterCountries(query: string): string[] {
   return cities.filter((country) =>
