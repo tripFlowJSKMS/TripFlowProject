@@ -5,6 +5,9 @@
       "bundler": "metro"
     },
     "name": "ItineraryPlannerExpoApp",
-    "slug": "ItineraryPlannerExpoApp"
+    "slug": "ItineraryPlannerExpoApp",
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

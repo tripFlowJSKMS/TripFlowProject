@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from "react-native";
+import { Pressable, View } from "react-native";
 import tw from "twrnc";
 import { Text } from "react-native";
 import Input from "@/components/UI/Input";
@@ -6,24 +6,23 @@ import { dietaryPreferenceOptions } from "@/lib/content";
 import SelectInput from "@/components/UI/SelectInput";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
 import useOnboardingStore from "@/store/onboardingStore";
 
 const MAX_PAX = 9;
 
 export default function StartPlanningDepartureView() {
-  const onboardingStore = useOnboardingStore();
-
-  const departureLocation = onboardingStore.departureLocation;
-  const setDepartureLocation = onboardingStore.setDepartureLocation;
-  const destinationLocation = onboardingStore.destinationLocation;
-  const setDestinationLocation = onboardingStore.setDestinationLocation;
-  const pax = onboardingStore.pax;
-  const setPax = onboardingStore.setPax;
-  const dietaryPreference = onboardingStore.dietaryPreference;
-  const setDietaryPreference = onboardingStore.setDietaryPreference;
-  const pace = onboardingStore.pace;
-  const setPace = onboardingStore.setPace;
+  const {
+    departureLocation,
+    setDepartureLocation,
+    destinationLocation,
+    setDestinationLocation,
+    pax,
+    setPax,
+    dietaryPreference,
+    setDietaryPreference,
+    pace,
+    setPace,
+  } = useOnboardingStore();
 
   return (
     <>
@@ -33,6 +32,7 @@ export default function StartPlanningDepartureView() {
           onChangeText={(location) => setDepartureLocation(location)}
           label="Departure"
           placeholder="Malaysia, Kuala Lumpur"
+          className=""
         />
         <Input
           value={destinationLocation}
@@ -42,33 +42,33 @@ export default function StartPlanningDepartureView() {
         />
         <View style={tw`w-full flex-row gap-x-4`}>
           <View>
-            <Text style={tw`text-slate-500 opacity-95 mb-1`}>Pax</Text>
+            <Text style={tw`text-slate-500 text-base opacity-95 mb-1`}>
+              Pax
+            </Text>
             <View
               style={tw`bg-slate-800 rounded-xl flex flex-row gap-x-2 py-2 px-3`}
             >
-              <TouchableOpacity
+              <Pressable
                 onPress={() => {
                   if (pax > 1) setPax(pax - 1);
                 }}
-                delayPressOut={100}
                 style={tw`w-4 justify-center`}
               >
                 <Text style={tw`text-4xl text-slate-200`}>-</Text>
-              </TouchableOpacity>
+              </Pressable>
               <View
                 style={tw`bg-slate-200 items-center rounded-md justify-center`}
               >
                 <Text style={tw`text-xl px-4 font-semibold`}>{pax}</Text>
               </View>
-              <TouchableOpacity
+              <Pressable
                 onPress={() => {
                   if (pax < MAX_PAX) setPax(pax + 1);
                 }}
                 style={tw`w-4`}
-                delayPressOut={100}
               >
                 <Text style={tw`text-3xl text-slate-200`}>+</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
             {/* <Input value={pax.toString()} onChangeText={(value) => {
               const paxNumber = parseInt(value);

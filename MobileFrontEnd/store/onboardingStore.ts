@@ -4,6 +4,7 @@ import type {
   AreasOfInterestType,
   ScheduleType,
 } from "../../Shared/types";
+import * as DocumentPicker from "expo-document-picker";
 
 export interface Preference {
   name: AreasOfInterestType;
@@ -32,6 +33,7 @@ interface OnboardingStore {
   endTime: number;
   startDate: Date;
   endDate: Date;
+  file: DocumentPicker.DocumentPickerAsset | null;
   setDepartureLocation: (location: string) => void;
   setDestinationLocation: (location: string) => void;
   setPax: (pax: number) => void;
@@ -42,6 +44,7 @@ interface OnboardingStore {
   setStartDate: (date: Date) => void;
   setEndDate: (date: Date) => void;
   togglePreference: (name: AreasOfInterestType) => void;
+  setFile: (file: DocumentPicker.DocumentPickerAsset | null) => void;
 }
 
 const useOnboardingStore = create<OnboardingStore>((set) => ({
@@ -80,6 +83,7 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
   endTime: 1320,
   startDate: new Date(),
   endDate: new Date(),
+  file: null,
   setDepartureLocation: (location: string) => {
     set((state) => ({
       ...state,
@@ -138,6 +142,12 @@ const useOnboardingStore = create<OnboardingStore>((set) => ({
     set((state) => ({
       ...state,
       preferences: togglePreference(state.preferences, name),
+    }));
+  },
+  setFile: (file: DocumentPicker.DocumentPickerAsset | null) => {
+    set((state) => ({
+      ...state,
+      file: file,
     }));
   },
 }));
