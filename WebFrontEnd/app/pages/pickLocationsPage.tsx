@@ -12,6 +12,7 @@ import { DestinationType } from "../../../Shared/types";
 import { setPickLocationsOutputDestinations } from "@/lib/reducers/pickLocationsOutputDestinationReducer";
 import { setEditLocationsInputDestinations } from "@/lib/reducers/editLocationsInputDestinationReducer";
 import { pickLocations } from "@/api/pickLocations";
+import React from "react";
 
 export default function PickLocationsPage({ navigation }) {
 
@@ -56,7 +57,7 @@ export default function PickLocationsPage({ navigation }) {
         <View style={tw`my-5`}>
           <Text style={tw`text-2xl font-bold mb-3`}>Recommended Locations</Text>
           <View style={tw`flex flex-row flex-wrap`}>
-            {/* {destinationsData.map((destination) => (
+            {/* {destinationsData.destinations.map((destination) => (
               <LocationComponent
                 key={destination.id}
                 name = {destination.name}
@@ -65,7 +66,7 @@ export default function PickLocationsPage({ navigation }) {
                 isSelected={selectedDestinations.some(selected => selected.id === destination.id)}
               />
             ))} */}
-            {destinationsData.destinations.map((destination) => (
+            {destinationsData.map((destination) => (
               <LocationComponent
                 key={destination.id}
                 name = {destination.name}
