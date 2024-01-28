@@ -3,7 +3,11 @@ import { Destination } from "../Algorithm/Destination";
 import { Scraper } from "./Scraper";
 
 export class ScraperManager implements Scraper {
-  proximity: number = 5000;
+  proximity: number = 50;
+
+  constructor(proximity: number) {
+    this.proximity = proximity;
+  }
 
   getNearbyOpenDestinations(currentLocation: Destination, openingTime: number, closingTime: number): Destination[] {
     return [

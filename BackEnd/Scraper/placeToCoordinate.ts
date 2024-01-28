@@ -1,3 +1,6 @@
+// If recommended places are given from ChatGPT, this module
+// will be helpful in converting them into Destinations.
+
 import { Client } from "@googlemaps/google-maps-services-js";
 
 import { Coordinate } from "./Coordinate";
