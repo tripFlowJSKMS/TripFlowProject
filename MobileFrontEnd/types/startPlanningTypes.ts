@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { destinationType } from "./commonTypes";
+import { DestinationSchema } from "./commonTypes";
 
 /**
  * BIG types import directly from shared
@@ -18,5 +18,5 @@ export const areasOfInterestEnum = z.enum([
 ]);
 
 export const startPlanningOutputSchema = z.object({
-  destinations: z.array(destinationType),
+  destinations: z.array(DestinationSchema),
 });

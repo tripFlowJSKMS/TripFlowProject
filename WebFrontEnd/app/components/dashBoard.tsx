@@ -1,15 +1,13 @@
-import {
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ImageBackground, Text, Pressable, View } from "react-native";
 import tw from "twrnc";
 
 export default function DashBoard() {
   return (
-    <TouchableOpacity style={tw`min-w-60 w-2/12 m-10 flex rounded shadow-lg`}>
-      <ImageBackground source={require("../assets/sand-castle-on-clearwater-beach-photo.jpg")} style={tw`w-full h-full rounded shadow-lg`}>
+    <Pressable style={tw`min-w-60 w-2/12 m-10 flex rounded shadow-lg`}>
+      <ImageBackground
+        source={require("../assets/sand-castle-on-clearwater-beach-photo.jpg")}
+        style={tw`w-full h-full rounded shadow-lg`}
+      >
         <View style={tw`bg-sky-500 bg-opacity-65 items-center p-3`}>
           <Text style={tw`text-white text-3xl font-bold mb-5`}>Singapore</Text>
           <Text style={tw`text-white text-base font-medium`}>
@@ -19,6 +17,6 @@ export default function DashBoard() {
           </Text>
         </View>
       </ImageBackground>
-    </TouchableOpacity>
+    </Pressable>
   );
 }

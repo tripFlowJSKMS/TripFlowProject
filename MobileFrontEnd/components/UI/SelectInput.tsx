@@ -17,7 +17,11 @@ export default function SelectInput({
 }: SelectInputProps) {
   return (
     <View style={tw`w-full`}>
-      {label && <Text style={tw`text-slate-500 mb-1 opacity-95`}>{label}</Text>}
+      {label && (
+        <Text style={tw`text-slate-500 mb-1 text-base opacity-95`}>
+          {label}
+        </Text>
+      )}
       <View style={tw`border rounded-lg`}>
         <Picker
           selectedValue={selectedValue}
@@ -26,7 +30,7 @@ export default function SelectInput({
           {options.map((option) => {
             return (
               <Picker.Item
-                style={tw`text-sm`}
+                style={tw`text-base`}
                 key={option.name}
                 label={option.name}
                 value={option.value}

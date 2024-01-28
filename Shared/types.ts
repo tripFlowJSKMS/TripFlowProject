@@ -9,7 +9,7 @@ export const areasOfInterestEnum = z.enum([
   "Shopping",
   "Adventure",
   "Nature",
-  "Culture"
+  "Culture",
 ]);
 
 export const dietaryPreferenceEnum = z.enum([
@@ -31,6 +31,15 @@ export const destinationSchema = z.object({
   TIME_SLOT: z.number(),
   DIST_TIME_RATIO: z.number(),
 });
+
+export const itinerarySchema = z.array(
+  z.object({
+    destination: destinationSchema,
+    stringDate: z.string(),
+    startingTime: z.number(),
+    endingTime: z.number(),
+  })
+);
 
 export const paxNumberEnum = z.enum(["1", "2", "3-5", "6 or more"]);
 
@@ -56,3 +65,4 @@ export type RecalibrateItineraryType = z.infer<typeof recalibrateItineraryType>;
 export type RecalibrateType = z.infer<typeof recalibrateEnum>;
 export type RegistrationDetailsType = z.infer<typeof registrationDetailsType>;
 export type ScheduleType = z.infer<typeof scheduleEnum>;
+export type ItineraryType = z.infer<typeof itinerarySchema>;

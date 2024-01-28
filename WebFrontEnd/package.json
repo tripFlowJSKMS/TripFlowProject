@@ -36,6 +36,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-native": "0.71.14",
+    "react-native-calendar-picker": "^8.0.0",
     "react-native-document-picker": "^9.0.1",
     "react-native-dropdown-autocomplete": "^1.0.18",
     "react-native-fontawesome": "^7.0.0",

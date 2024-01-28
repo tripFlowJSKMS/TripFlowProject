@@ -7,7 +7,6 @@ import { DestinationType } from "../../Shared/types";
 // const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const API_URL = "http://localhost:3000";
 
-
 export async function pickLocations(selectedDestinations: EditLocationsInputType ) {
   const response = await axios.post(
     `${API_URL}/api/pick-locations-page`,

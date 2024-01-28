@@ -20,8 +20,6 @@ export async function startPlanning({
   areasOfInterests,
 }: GenerateDesirableDestinationsType) {
 
-  console.log("error arrives here");
-  console.log(`${API_URL}/api/start-planning-page`);
   const response = await axios.post(
     `${API_URL}/api/start-planning-page`,
     {

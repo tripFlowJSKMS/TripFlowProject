@@ -17,6 +17,6 @@ export async function editLocations(selectedDestinations: DestinationType[] ) {
     if (!isValidBody(response.data.itinerary, generatedItinerarySchema)) {
         throw new Error("Invalid response");
     }
-    const itinerary: Array<{ destination: DestinationType; startingTime: number; endingTime: number }> = response.data.itinerary;
+    const itinerary: Array<{ destination: DestinationType; stringDate: string; startingTime: number; endingTime: number }> = response.data.itinerary;
     return itinerary;
 }
