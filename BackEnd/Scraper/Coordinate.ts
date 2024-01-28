@@ -1,5 +1,6 @@
 // A class to represent a coordinate on the map
-// Simplified version of the TripFlow Destination class
+// Simplified intermediate representation of the 
+// TripFlow Destination class
 export class Coordinate {
   lat: number;
   lng: number;
