@@ -4,7 +4,8 @@ import { startPlanningOutputSchema } from "@/lib/types/startPlanningTypes";
 import { isValidBody } from "@/lib/utils";
 import { DestinationType } from "../../Shared/types";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+// const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = "http://localhost:3000";
 
 export async function startPlanning({
   startDate,

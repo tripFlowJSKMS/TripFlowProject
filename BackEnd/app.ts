@@ -10,13 +10,16 @@ import { GenerateDesirableDestinationsType } from "../Shared/types/startPlanning
 import { generateDesirableDestinationsSchema } from "../Shared/types/startPlanning";
 import { EditLocationsInputType, tripFlowAlgorithmType } from "../Shared/types/pickLocations";
 import { editLocationsInputSchema } from "../Shared/types/pickLocations";
-
+import xlsx from 'xlsx';
 import express from "express";
+import multer from "multer";
 import { recalibrate, storePrePlannedEvents, tripFlowAlgorithm } from "./Algorithm/main";
 import OpenAI from "openai";
 
 var cors = require("cors");
 const app = express();
+const upload = multer({ dest: 'uploads/' });
+
 
 // On Mac, go BackEnd and run export OPENAI_API_KEY=...
 const openai = new OpenAI({
@@ -113,6 +116,44 @@ app.post("/api/recalibrate", async (req, res) => {
   }
 });
 
+// Takes in user-uploaded file and parses the text content 
+app.post("/api/processFile", upload.single("file"), async (req, res) => {
+  try {
+    const uploadedFile = req.file;
+    if (!uploadedFile) {
+      return res.status(500).send('Uploaded file is undefined in backend');
+    } 
+    const fileName = uploadedFile.originalname
+    if (!fileName) {
+      return res.status(500).send('Uploaded file name is undefined in backend');
+    }
+    const fileType = fileName.split('.').pop()?.toLowerCase();
+
+    let textContent = "";
+    if (fileType === 'xlsx' || fileType === 'xls') {
+      const workbook = xlsx.readFile(uploadedFile.path);
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = xlsx.utils.sheet_to_json(worksheet);
+      textContent = JSON.stringify(jsonData, null, 2);
+    } else if (fileType === 'docx') {
+      // Process Word file
+    } else if (fileType === 'pdf') {
+      // Process PDF file
+    } else {
+      res.status(500).send('Unsupported file type');
+      return;
+    }
+
+    res.json({ textContent });
+    // // ...file processing logic...
+
+  } catch (error) {
+    console.error("Error receiving uploaded file:", error);
+    res.status(500).send('Error receiving uploaded file');
+  }
+});
+
 // File Upload into GPT API 
 app.post("/api/callGPT", async (req, res) => {
   try {
@@ -151,6 +192,8 @@ app.post("/api/callGPT", async (req, res) => {
       const individualEvent: GPTScrapedEventType = {date, time, event};
       individualEventArr.push(individualEvent);
     });
+
+    console.log(individualEventArr);
 
     storePrePlannedEvents(individualEventArr);
     // dispatch(setIndividualEventArr(individualEventArr));

@@ -6,6 +6,7 @@ import tw from "twrnc";
 import XLSX from 'xlsx';
 import mammoth from 'mammoth';
 import { callGPT } from '@/api/callGPT';
+import { processFile } from '@/api/processFile';
 import { GPTScrapedEventType } from '../../../../Shared/types/callGPT';
 import { useDispatch } from 'react-redux';
 import { setIndividualEventArr } from '@/lib/reducers/individualEventArrReducer';
@@ -18,45 +19,19 @@ const FileUpload = () => {
     // Keep to 1 file for MVP
     const uploadedFile = acceptedFiles[0];
     setFile(uploadedFile);
-    const reader = new FileReader();
-    const fileType = uploadedFile.name.split('.').pop().toLowerCase();
 
-    reader.onload = async (event) => {
-      const arrayBuffer = event.target.result as ArrayBuffer;
-      if (arrayBuffer) {
-        let textContent = '';
-        if (fileType === 'xlsx' || fileType === 'xls') {
-          const data = new Uint8Array(arrayBuffer);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet);
-          textContent = JSON.stringify(jsonData, null, 2);
-        } else if (fileType === 'docx') {
-          // Handle Word textContent as needed...
-          // mammoth.extractRawText({ arrayBuffer: result }).then((output) => {
-          //   textContent = output.value;
-          // });
-        } else if (fileType === 'pdf') {
-          // PDFs should be handled server-side due to complexity...???
-          // uploadPdfToServer(file);
-        }
+    const formData = new FormData();
+    formData.append('file', uploadedFile);
 
-        callGPT(textContent);
-        
+    try {
+      const parsedData = await processFile(formData);
+      try {
+        callGPT(parsedData);
+      } catch (error) {
+        console.error("Error calling GPT with parsed data:", error);
       }
-    };
-
-    reader.onerror = (error) => {
-      console.error('FileReader error:', error);
-    };
-
-    // Read the file according to its type
-    if (fileType === 'docx' || fileType === 'xlsx' || fileType === 'xls') {
-      reader.readAsArrayBuffer(uploadedFile);
-    } else if (fileType === 'pdf') {
-      // For PDF, you would send the file to a server-side endpoint
-      // uploadPdfToServer(file);
+    } catch (error) {
+      console.error("Error processing file:", error);
     }
 
   }, []);

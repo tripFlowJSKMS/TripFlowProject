@@ -3,7 +3,8 @@ import { generatedItinerarySchema } from "../lib/types/editLocationsTypes";
 import { isValidBody } from "@/lib/utils";
 import { DestinationType } from "../../Shared/types";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+// const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = "http://localhost:3000";
 
 export async function editLocations(selectedDestinations: DestinationType[] ) {
     const response = await axios.post(
