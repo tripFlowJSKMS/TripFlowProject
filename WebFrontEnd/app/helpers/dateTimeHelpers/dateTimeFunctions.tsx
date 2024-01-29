@@ -56,3 +56,20 @@ export function createTimeSlots(startTime: number, endTime: number) {
 
     return slots;
 }
+
+export function getDateRangeArray(startDate: string, endDate: string): string[] {
+  console.log("Get Date Range Array");
+  let dateArray: string[] = [];
+  let currentDate = new Date(startDate);
+  let end = new Date(endDate);
+
+  while (currentDate <= end) {
+    const currDateString: string = currentDate.toISOString().split('T')[0];
+    dateArray.push(currDateString);
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  console.log("GDR returned");
+
+  return dateArray;
+};

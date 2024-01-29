@@ -55,9 +55,6 @@ export default function EditLocationsPage() {
     ];
     try {
       const finalItinerary = await editLocations(allDestinations);
-      console.log(
-        "INSPECTOR LOG: Generated Itinerary for user to be displated",
-      );
       console.log(finalItinerary);
       dispatch(setItineraryInputDestinations(finalItinerary));
       dispatch(setDestinationNotes(finalItinerary));

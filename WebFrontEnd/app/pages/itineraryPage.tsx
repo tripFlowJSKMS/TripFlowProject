@@ -5,7 +5,7 @@ import { RootState } from '@/lib/reducers/reducers';
 import tw from "twrnc";
 import DestinationInSchedule from '../components/itineraryPageComponents/destinationInSchedule';
 import TopBar from '../components/topBar';
-import { createTimeSlots } from '../helpers/dateTimeHelpers/dateTimeFunctions';
+import { createTimeSlots, getDateRangeArray } from '../helpers/dateTimeHelpers/dateTimeFunctions';
 
 export default function ItineraryPage() {
   const travellingPreferences = useSelector((state: RootState) => state.travellingPreferences.travellingPreferences);
@@ -15,20 +15,7 @@ export default function ItineraryPage() {
   // const fixedPlansItems = useSelector((state: RootState) => state.individualEventArr.allEvents);
   const destinationNotes = useSelector((state: RootState) => state.destinationNotes.destinationNotes);
   const timeSlots = createTimeSlots(travellingPreferences.startTime, travellingPreferences.endTime);
-
-  const getDateRangeArray = (startDate, endDate) => {
-    let dateArray = [];
-    let currentDate = new Date(startDate);
-    let end = new Date(endDate);
-
-    while (currentDate <= end) {
-      dateArray.push(currentDate.toISOString().split('T')[0]);
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return dateArray;
-  };
-  const dateRange = getDateRangeArray(travellingPreferences.startDate, travellingPreferences.endDate);
+  const dateRange: string[] = getDateRangeArray(travellingPreferences.startDate, travellingPreferences.endDate);
 
   return (
     <View>
