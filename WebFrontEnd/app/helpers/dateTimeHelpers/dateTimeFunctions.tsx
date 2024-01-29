@@ -51,7 +51,7 @@ export function createTimeSlots(startTime: number, endTime: number) {
 
     while (currentTime.format(format) <= moment(formattedEndTime, format).format(format)) {
       slots.push(currentTime.format(format));
-      currentTime.add(0.5, 'hours');
+      currentTime.add(1, 'hours');
     }
 
     return slots;

@@ -25,16 +25,12 @@ export default function DestinationInSchedule({
 }: DestinationInScheduleProps) {
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const duration = endingTime - startingTime;
-  const timeInterval = 30;
+  const timeInterval = 60;
   const startingTimeSlot = (startingTime - firstTimeSlot) / timeInterval;
   const durationWidth = duration / timeInterval;
 
   return (
-    <View
-      style={tw`bg-gray-300 rounded p-2 absolute w-${20 * durationWidth} ml-${
-        startingTimeSlot * 20
-      }`}
-    >
+    <View style={tw`bg-gray-300 rounded p-2 absolute ml-10 w-40 h-${20 * durationWidth} mt-${startingTimeSlot * 20}`}>
       <View style={tw`flex-row`}>
         <Text style={tw`text-lg font-semibold`}>{destination.name}</Text>
         <Pressable onPress={() => setModalVisible(true)}>

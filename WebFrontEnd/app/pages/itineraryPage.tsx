@@ -31,22 +31,28 @@ export default function ItineraryPage() {
   const dateRange = getDateRangeArray(travellingPreferences.startDate, travellingPreferences.endDate);
 
   return (
-    <View style={tw`h-full`}>
+    <View>
       <TopBar />
-      <ScrollView horizontal={true}>
-        <View>
-          <View style={tw`flex-row`}>
-            {timeSlots.map(time =>
-              <Text key={time} style={tw`w-20`}>{time}</Text>
-            )}
-          </View>
-          <View style={tw`flex-row my-10`}>
-            {finalItinerary.map(item =>
-              <DestinationInSchedule key={item.destination.id} destinationNotes={destinationNotes[item.destination.name]} firstTimeSlot={travellingPreferences.startTime} destination={item.destination} startingTime={item.startingTime} endingTime={item.endingTime} />
-            )}
-          </View>
+      <View style={tw`w-full items-center justify-center`}>
+        <View style={tw`w-11/12 h-5/6 bg-slate-100 rounded`}>
+          <ScrollView>
+            <View style={tw`flex-row`}>
+              <View style={tw`w-1/12 border-r border-dashed`}>
+                {timeSlots.map(time =>
+                  <Text key={time} style={tw`h-20 text-center`}>{time}</Text>
+                )}
+              </View>
+              <View>
+                {finalItinerary.map(item =>
+                  <DestinationInSchedule key={item.destination.id} destinationNotes={destinationNotes[item.destination.name]} firstTimeSlot={travellingPreferences.startTime} destination={item.destination} startingTime={item.startingTime} endingTime={item.endingTime} />
+                )}
+              </View>
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
+
+
 }

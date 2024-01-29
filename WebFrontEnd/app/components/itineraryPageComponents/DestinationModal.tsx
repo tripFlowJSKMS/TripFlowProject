@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import tw from "twrnc";
 import { DestinationType } from "../../../../Shared/types";
