@@ -36,9 +36,9 @@ export async function startPlanning({
     },
   );
 
-  if (!isValidBody(response.data.destinations, startPlanningOutputSchema)) {
+  if (!isValidBody(response.data, startPlanningOutputSchema)) {
     throw new Error("Invalid response");
   }
-  const destinations: DestinationType[] = response.data.destinations;
+  const destinations = response.data.destinations;
   return destinations;
 }

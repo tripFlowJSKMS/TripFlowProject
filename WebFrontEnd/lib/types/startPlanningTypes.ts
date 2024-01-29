@@ -17,4 +17,6 @@ export const areasOfInterestEnum = z.enum([
   "Culture"
 ]);
 
-export const startPlanningOutputSchema = z.array(destinationType);
+export const startPlanningOutputSchema = z.object({
+  destinations: z.array(destinationType)
+})
