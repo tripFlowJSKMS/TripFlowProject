@@ -4,4 +4,4 @@ Hosting server locally for now. Must start the server so that the API calls can 
 
 ## Project setup
 
-Navigate to BackEnd and run ts-node app.ts 
+Navigate to BackEnd and run `npm run dev`
