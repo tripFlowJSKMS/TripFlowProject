@@ -20,7 +20,7 @@ export function calculateTotalTravellingDays(startDate: string, endDate: string)
 }
 
 // Javascript Date object is time-zone sensitive when we do the math. 
-export function addDaysToStringDate(dateStr, daysToAdd) {
+export function addDaysToStringDate(dateStr: string, daysToAdd: number) {
   const date = new Date(`${dateStr}T00:00:00Z`);
   date.setUTCDate(date.getUTCDate() + daysToAdd);
   // Format the year, month, and day in YYYY-MM-DD format using UTC values
