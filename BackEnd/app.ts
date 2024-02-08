@@ -38,6 +38,10 @@ import { GPTScrapedEventType } from "../Shared/types/callGPT";
 app.use(express.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+  res.json("BACKEND IS RUNNING ON AWS!")
+});
+
 // Registration Page API
 app.post("/api/register", async (req, res) => {
   try {
