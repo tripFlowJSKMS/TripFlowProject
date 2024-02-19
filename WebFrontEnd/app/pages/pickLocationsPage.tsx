@@ -3,7 +3,6 @@ import tw from "twrnc";
 import TopBar from "../components/topBar";
 import DashBoard from "../components/dashBoard";
 import LocationComponent from "../components/locationComponent";
-import ItineraryComponent from "../components/itineraryComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/reducers/reducers";
 import { StartPlanningOutputType } from "../../../Shared/types/startPlanning";
@@ -13,6 +12,7 @@ import { setPickLocationsOutputDestinations } from "@/lib/reducers/pickLocations
 import { setEditLocationsInputDestinations } from "@/lib/reducers/editLocationsInputDestinationReducer";
 import { pickLocations } from "@/api/pickLocations";
 import React from "react";
+import ItineraryCard from "../components/itineraryCard";
 
 export default function PickLocationsPage({ navigation }) {
   const destinationsData: StartPlanningOutputType = useSelector(
@@ -87,9 +87,9 @@ export default function PickLocationsPage({ navigation }) {
             Itineraries to check out!
           </Text>
           <View style={tw`flex flex-row flex-wrap`}>
-            <ItineraryComponent />
-            <ItineraryComponent />
-            <ItineraryComponent />
+            <ItineraryCard title={"Cultural tour in Cambodia"} image_url={"https://picsum.photos/700"}/>
+            <ItineraryCard title={"Food hunt in Shanghai"} image_url={"https://picsum.photos/701"}/>
+            <ItineraryCard title={"Adventure trail in Spain"} image_url={"https://picsum.photos/702"}/>
           </View>
         </View>
         <View style={tw`w-2/12 justify-center h-3/6 items-center`}>
