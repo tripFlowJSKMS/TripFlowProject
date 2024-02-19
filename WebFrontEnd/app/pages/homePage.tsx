@@ -1,25 +1,29 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { Text } from "react-native-paper";
 import tw from "twrnc";
 import HomePageTopBar from '../components/homePageComponents/HomePageTopBar'
 import HomePageDashboard from "../components/homePageComponents/HomePageDashboard";
-import ItineraryComponent from "../components/itineraryComponent";
 import FileUpload from "../components/homePageComponents/FileUpload";
+import ItineraryCard from "../components/itineraryCard";
 
 export default function HomePage() {
     return (
-        <View style={tw`flex items-center`}>
+        <View style={tw`flex-1 items-center`}>
           <HomePageTopBar />
-          <HomePageDashboard />
-          <View style={tw`flex flex-row w-9/12 justify-between items-center`}>
-            <View style={tw`w-9/12`}>
-              <Text style={tw`text-xl font-bold mt-4 mb-4`}>Check Out These Itineraries</Text>
-              <View style={tw`flex flex-row flex-wrap`}>
-                <ItineraryComponent />
-                <ItineraryComponent />
-                <ItineraryComponent />
+          <View style={tw`w-[80%] mt-[3%]`}>
+            <HomePageDashboard />
+            <View>
+              <Text variant="headlineLarge" style={tw`text-black font-bold pt-[3%]`} >Check Out These Itineraries</Text>
+              <View style={tw`flex-row`}>
+                <ItineraryCard title={"Cultural tour in Cambodia"} image_url={"https://picsum.photos/700"}/>
+                <ItineraryCard title={"Food hunt in Shanghai"} image_url={"https://picsum.photos/701"}/>
+                <ItineraryCard title={"Adventure trail in Spain"} image_url={"https://picsum.photos/702"}/>
               </View>
             </View>
-            <FileUpload/>
+            <View>
+              <Text variant="headlineSmall" style={tw`text-black font-bold pt-[1%] pb-[2%]`} >If you have an existing itinerary, upload it here!</Text>
+              <FileUpload/>
+            </View>
           </View>
         </View>
       );
