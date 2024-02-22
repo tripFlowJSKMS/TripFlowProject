@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { Destination } from "./Algorithm/Destination";
 import {
   RegistrationDetailsType,
@@ -10,21 +9,21 @@ import { GenerateDesirableDestinationsType } from "../Shared/types/startPlanning
 import { generateDesirableDestinationsSchema } from "../Shared/types/startPlanning";
 import { EditLocationsInputType, tripFlowAlgorithmType } from "../Shared/types/pickLocations";
 import { editLocationsInputSchema } from "../Shared/types/pickLocations";
-import xlsx from 'xlsx';
+// import xlsx from 'xlsx';
 import express from "express";
-import multer from "multer";
+// import multer from "multer";
 import { recalibrate, storePrePlannedEvents, tripFlowAlgorithm } from "./Algorithm/main";
-import OpenAI from "openai";
+// import OpenAI from "openai";
 
 var cors = require("cors");
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });
 
 
-// On Mac, go BackEnd and run export OPENAI_API_KEY=...
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// // On Mac, go BackEnd and run export OPENAI_API_KEY=...
+// const openai = new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
 
 import {
   generateDesirableDestinations,
@@ -121,94 +120,94 @@ app.post("/api/recalibrate", async (req, res) => {
 });
 
 // Takes in user-uploaded file and parses the text content 
-app.post("/api/processFile", upload.single("file"), async (req, res) => {
-  try {
-    const uploadedFile = req.file;
-    if (!uploadedFile) {
-      return res.status(500).send('Uploaded file is undefined in backend');
-    } 
-    const fileName = uploadedFile.originalname
-    if (!fileName) {
-      return res.status(500).send('Uploaded file name is undefined in backend');
-    }
-    const fileType = fileName.split('.').pop()?.toLowerCase();
+// app.post("/api/processFile", upload.single("file"), async (req, res) => {
+//   try {
+//     const uploadedFile = req.file;
+//     if (!uploadedFile) {
+//       return res.status(500).send('Uploaded file is undefined in backend');
+//     } 
+//     const fileName = uploadedFile.originalname
+//     if (!fileName) {
+//       return res.status(500).send('Uploaded file name is undefined in backend');
+//     }
+//     const fileType = fileName.split('.').pop()?.toLowerCase();
 
-    let textContent = "";
-    if (fileType === 'xlsx' || fileType === 'xls') {
-      const workbook = xlsx.readFile(uploadedFile.path);
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = xlsx.utils.sheet_to_json(worksheet);
-      textContent = JSON.stringify(jsonData, null, 2);
-    } else if (fileType === 'docx') {
-      // Process Word file
-    } else if (fileType === 'pdf') {
-      // Process PDF file
-    } else {
-      res.status(500).send('Unsupported file type');
-      return;
-    }
+//     let textContent = "";
+//     if (fileType === 'xlsx' || fileType === 'xls') {
+//       const workbook = xlsx.readFile(uploadedFile.path);
+//       const sheetName = workbook.SheetNames[0];
+//       const worksheet = workbook.Sheets[sheetName];
+//       const jsonData = xlsx.utils.sheet_to_json(worksheet);
+//       textContent = JSON.stringify(jsonData, null, 2);
+//     } else if (fileType === 'docx') {
+//       // Process Word file
+//     } else if (fileType === 'pdf') {
+//       // Process PDF file
+//     } else {
+//       res.status(500).send('Unsupported file type');
+//       return;
+//     }
 
-    res.json({ textContent });
-    // // ...file processing logic...
+//     res.json({ textContent });
+//     // // ...file processing logic...
 
-  } catch (error) {
-    console.error("Error receiving uploaded file:", error);
-    res.status(500).send('Error receiving uploaded file');
-  }
-});
+//   } catch (error) {
+//     console.error("Error receiving uploaded file:", error);
+//     res.status(500).send('Error receiving uploaded file');
+//   }
+// });
 
-// File Upload into GPT API 
-app.post("/api/callGPT", async (req, res) => {
-  try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        {
-          "role": "system",
-          "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date (YYYY-MM-DD format), Timeslot (HH:MM-HH:MM format), Event. Infer the details if any information is unavailable and never leave a field empty. Start time and End time should never be the same. Enumerate the items with a dash."
-        },
-        {
-          "role": "user",
-          "content": JSON.stringify(req.body)
-        }
-      ],
-      temperature: 0.1,
-      max_tokens: 500,
-    });
+// // File Upload into GPT API 
+// app.post("/api/callGPT", async (req, res) => {
+//   try {
+//     const response = await openai.chat.completions.create({
+//       model: "gpt-4",
+//       messages: [
+//         {
+//           "role": "system",
+//           "content": "You will be given an itinerary plan. List down each itinerary item in the following format: Date (YYYY-MM-DD format), Timeslot (HH:MM-HH:MM format), Event. Infer the details if any information is unavailable and never leave a field empty. Start time and End time should never be the same. Enumerate the items with a dash."
+//         },
+//         {
+//           "role": "user",
+//           "content": JSON.stringify(req.body)
+//         }
+//       ],
+//       temperature: 0.1,
+//       max_tokens: 500,
+//     });
 
-    let message: string = '';
-    let individualEventArr: GPTScrapedEventType[] = [];
-    if (response.choices) {
-      if (response.choices[0].message.content) {
-        message = response.choices[0].message.content;
-      }
-    }
+//     let message: string = '';
+//     let individualEventArr: GPTScrapedEventType[] = [];
+//     if (response.choices) {
+//       if (response.choices[0].message.content) {
+//         message = response.choices[0].message.content;
+//       }
+//     }
 
-    const responseSegmented: string[] = message.split("\n");
-    responseSegmented.forEach((item) => {
-      const itemSegmented: string[] = item.split(",").map(item => item.trim());
-      // remove the leading '- '
-      let date: string = itemSegmented[0].substring(2,);
-      // Can deal with the (.approx) more meaningfully after MVP
-      let time: string = itemSegmented[1].replace(/\(\.approx\)/g, "");
-      let event: string = itemSegmented[2];
-      const individualEvent: GPTScrapedEventType = {date, time, event};
-      individualEventArr.push(individualEvent);
-    });
+//     const responseSegmented: string[] = message.split("\n");
+//     responseSegmented.forEach((item) => {
+//       const itemSegmented: string[] = item.split(",").map(item => item.trim());
+//       // remove the leading '- '
+//       let date: string = itemSegmented[0].substring(2,);
+//       // Can deal with the (.approx) more meaningfully after MVP
+//       let time: string = itemSegmented[1].replace(/\(\.approx\)/g, "");
+//       let event: string = itemSegmented[2];
+//       const individualEvent: GPTScrapedEventType = {date, time, event};
+//       individualEventArr.push(individualEvent);
+//     });
 
-    console.log(individualEventArr);
+//     console.log(individualEventArr);
 
-    storePrePlannedEvents(individualEventArr);
-    // dispatch(setIndividualEventArr(individualEventArr));
-    // console.log("successfully dispatched");
-    // res.json(message);
+//     storePrePlannedEvents(individualEventArr);
+//     // dispatch(setIndividualEventArr(individualEventArr));
+//     // console.log("successfully dispatched");
+//     // res.json(message);
 
-  } catch (error) {
-    console.error("Error calling GPT:", error);
-    res.status(400).json({ error: "Invalid input or API error" });
-  }
-});
+//   } catch (error) {
+//     console.error("Error calling GPT:", error);
+//     res.status(400).json({ error: "Invalid input or API error" });
+//   }
+// });
 
 
 app.listen(3000, () => {

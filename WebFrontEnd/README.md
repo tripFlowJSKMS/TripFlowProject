@@ -8,5 +8,5 @@ Run the following commands in the terminal (make sure you cd into the WebFrontEn
 
 ```
 npm i
-npx run start
+npm run start
 ```
